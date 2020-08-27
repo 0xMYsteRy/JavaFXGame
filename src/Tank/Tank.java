@@ -147,39 +147,5 @@ public class Tank {
                 speed = 80;
         }
     }
-}public class Tank {
-    private int speed;
-    private boolean alive;
-    private int health;
-    private int defense;
-    private int speed;
-
-    Tank(int tankOption) {
-        this.tankOption = tankOption;
-    }
-
-    getTank() {
-        switch (tankOption) {
-            case 1:
-                speed = 50;
-                health = 50;
-                defense = 50;
-                speed = 50;
-            case 2:
-                speed = 60;
-                health = 60;
-                defense = 60;
-                speed = 60;
-            case 3:
-                speed = 70;
-                health = 70;
-                defense = 70;
-                speed = 70;
-            case 4:
-                speed = 80;
-                health = 80;
-                defense = 80;
-                speed = 80;
-        }
-    }
 }
+
