@@ -1,7 +1,17 @@
 package Tank;
 
-import java.util.Optional;
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Optional;
+/*MAC: --module-path "/Users/s3757937/Downloads/javafx-sdk-11.0.2/lib" --add-modules javafx.controls,javafx.fxml*/
 class Hull {
     private int color;
     private int type;
@@ -112,7 +122,49 @@ class Bullet {
     public void SetDamage(int Value){
 
     }
+    public String getBullet(){
+        return "a";
+    }
 }
 
-public class Tank {
+public class Tank extends Application {
+    public Tank(){
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        //Setting title to the Stage
+        stage.setTitle("Loading an image");
+
+        //Adding scene to the stage
+        stage.setScene(createTank(1,1));
+
+        //Displaying the contents of the stage
+        stage.show();
+
+
+    }
+
+    public Scene createTank(int choice, int color) throws FileNotFoundException {
+        Hull hull= new Hull(color,choice);
+        Bullet bullet= new Bullet(choice);
+        Weapon weapon= new Weapon(color,choice);
+        Track track= new Track(choice);
+
+        Image weaponI= new Image(weapon.getWeapon());
+        Image HullI= new Image(hull.getHull());
+        Image trackI_A= new Image(track.getTrack("A"));
+        Image trackI_B= new Image(track.getTrack("B"));
+
+        ImageView TankView= new ImageView(HullI);
+        TankView.setX(50);
+        TankView.setY(25);
+        TankView.setFitHeight(455);
+        TankView.setFitWidth(500);
+        Group root = new Group(TankView);
+        //Creating a scene object
+        Scene scene = new Scene(root, 600, 500);
+        return scene;
+    }
+
 }
