@@ -1,5 +1,8 @@
 package Tank;
 
+import javafx.animation.PauseTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.SequentialTransition;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -10,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -136,37 +140,38 @@ class Bullet {
 }
 
 public class Tank extends Application {
-    private  int color=3;
-    private  int choice=1;
-    Hull hull = new Hull(color, choice);
-    Bullet bullet = new Bullet(choice);
-    Weapon weapon = new Weapon(color, choice);
-    Track track = new Track(choice);
-    private  Group tank= new Group();
-//
 
+    private Group tank = new Group();
+    private Hull hull;
+    private Bullet bullet;
+    private Weapon weapon;
+    private Track track;
+    public Tank() throws FileNotFoundException {
+
+    }
     public Tank(int choice, int color) throws FileNotFoundException {
-        this.color=color;
-        this.choice=choice;
+        hull = new Hull(color, choice);
+        bullet = new Bullet(choice);
+        weapon = new Weapon(color, choice);
+        track = new Track(choice);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
         //Setting title to the Stage
         stage.setTitle("Loading an image");
-
+        Tank tankObj = new Tank(1,1);
         //Adding scene to the stage
-        Pane tankPane = new Pane();
-        Tank tankObj= new Tank(1,1);
-        tank = createTank( 10);
-
-        tankPane.getChildren().addAll(tank);
+        Pane tankkk = new Pane();
+        tank=tankObj.createTank( 10);
+        tankkk.getChildren().addAll(tank);
         tank.setTranslateX(500);
         tank.setTranslateY(500);
         //Displaying the contents of the stage
         tank.setRotate(0);
-        Scene scene = new Scene(tankPane, 1000, 800);
-//        Move(scene);
+        Scene scene = new Scene(tankkk, 1000,
+                800);
+        Move(scene);
 
         stage.setScene(scene);
         stage.show();
@@ -174,11 +179,13 @@ public class Tank extends Application {
 
     }
 
-    public Group createTank( int x) throws FileNotFoundException {
+    public Group createTank(int x) throws FileNotFoundException {
+
 
         Image weaponI = new Image(weapon.getWeapon());
         Image HullI = new Image(hull.getHull());
         Image trackI_A = new Image(track.getTrack("A"));
+        Image trackI_B = new Image(track.getTrack("B"));
 
         ImageView TankView = new ImageView(HullI);
         ImageView TrackViewA1 = new ImageView(trackI_A);
@@ -186,7 +193,7 @@ public class Tank extends Application {
         ImageView TrackViewA3 = new ImageView(trackI_A);
         ImageView TrackViewA4 = new ImageView(trackI_A);
         ImageView WeaponView = new ImageView(weaponI);
-
+        ImageView TrackviewB = new ImageView(trackI_B);
         TrackViewA1.setX(2.2 * x);
         TrackViewA1.setY(0.2 * x);
         TrackViewA1.setFitHeight(4 * x);
@@ -205,6 +212,10 @@ public class Tank extends Application {
         TrackViewA4.setFitHeight(4 * x);
         TrackViewA4.setFitWidth(1.5 * x);
 
+        TrackviewB.setX(0);
+        TrackviewB.setFitHeight(9 * x);
+        TrackviewB.setFitWidth(7 * x);
+
         TankView.setX(1.5 * x);
         TankView.setY(0.5 * x);
         TankView.setFitHeight(8 * x);
@@ -214,8 +225,9 @@ public class Tank extends Application {
         WeaponView.setFitHeight(7 * x);
         WeaponView.setFitWidth(3 * x);
 
+        Group root = new Group(TrackViewA1, TrackViewA2, TrackViewA3, TrackViewA4, TankView, WeaponView);
         //Creating a scene object
-        return new Group(TrackViewA1, TrackViewA2, TrackViewA3, TrackViewA4, TankView, WeaponView);
+        return root;
     }
 
     public void Move(Scene scene) {
@@ -223,10 +235,13 @@ public class Tank extends Application {
             switch (e.getCode()) {
                 case DOWN:
                     tank.setRotate(180);
-                    tank.setTranslateY(tank.getTranslateY() + 10);
+                for(int i =0; i <5; i ++)        {
+                    tank.setTranslateY(tank.getTranslateY() + 2);
+                }
                     break;
-                case LEFT:
-                    tank.setRotate(270);
+                case LEFT:if (tank.getRotate()!=270) {
+
+                }
                     tank.setTranslateX(tank.getTranslateX() - 10);
                     break;
                 case UP:
