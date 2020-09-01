@@ -136,11 +136,18 @@ class Bullet {
 }
 
 public class Tank extends Application {
-
-    private Group tank = new Group(createTank(3, 1, 10));
+    private  int color=3;
+    private  int choice=1;
+    Hull hull = new Hull(color, choice);
+    Bullet bullet = new Bullet(choice);
+    Weapon weapon = new Weapon(color, choice);
+    Track track = new Track(choice);
+    private  Group tank= new Group();
 //
 
-    public Tank() throws FileNotFoundException {
+    public Tank(int choice, int color) throws FileNotFoundException {
+        this.color=color;
+        this.choice=choice;
     }
 
     @Override
@@ -149,16 +156,17 @@ public class Tank extends Application {
         stage.setTitle("Loading an image");
 
         //Adding scene to the stage
-        Pane tankkk = new Pane();
+        Pane tankPane = new Pane();
+        Tank tankObj= new Tank(1,1);
+        tank = createTank( 10);
 
-        tankkk.getChildren().addAll(tank);
+        tankPane.getChildren().addAll(tank);
         tank.setTranslateX(500);
         tank.setTranslateY(500);
         //Displaying the contents of the stage
         tank.setRotate(0);
-        Scene scene = new Scene(tankkk, 1000,
-                800);
-        Move(scene);
+        Scene scene = new Scene(tankPane, 1000, 800);
+//        Move(scene);
 
         stage.setScene(scene);
         stage.show();
@@ -166,16 +174,11 @@ public class Tank extends Application {
 
     }
 
-    public Group createTank(int choice, int color, int x) throws FileNotFoundException {
-        Hull hull = new Hull(color, choice);
-        Bullet bullet = new Bullet(choice);
-        Weapon weapon = new Weapon(color, choice);
-        Track track = new Track(choice);
+    public Group createTank( int x) throws FileNotFoundException {
 
         Image weaponI = new Image(weapon.getWeapon());
         Image HullI = new Image(hull.getHull());
         Image trackI_A = new Image(track.getTrack("A"));
-        Image trackI_B = new Image(track.getTrack("B"));
 
         ImageView TankView = new ImageView(HullI);
         ImageView TrackViewA1 = new ImageView(trackI_A);
@@ -183,7 +186,7 @@ public class Tank extends Application {
         ImageView TrackViewA3 = new ImageView(trackI_A);
         ImageView TrackViewA4 = new ImageView(trackI_A);
         ImageView WeaponView = new ImageView(weaponI);
-        ImageView TrackviewB = new ImageView(trackI_B);
+
         TrackViewA1.setX(2.2 * x);
         TrackViewA1.setY(0.2 * x);
         TrackViewA1.setFitHeight(4 * x);
@@ -202,10 +205,6 @@ public class Tank extends Application {
         TrackViewA4.setFitHeight(4 * x);
         TrackViewA4.setFitWidth(1.5 * x);
 
-        TrackviewB.setX(0);
-        TrackviewB.setFitHeight(9 * x);
-        TrackviewB.setFitWidth(7 * x);
-
         TankView.setX(1.5 * x);
         TankView.setY(0.5 * x);
         TankView.setFitHeight(8 * x);
@@ -215,9 +214,8 @@ public class Tank extends Application {
         WeaponView.setFitHeight(7 * x);
         WeaponView.setFitWidth(3 * x);
 
-        Group root = new Group(TrackViewA1, TrackViewA2, TrackViewA3, TrackViewA4, TankView, WeaponView);
         //Creating a scene object
-        return root;
+        return new Group(TrackViewA1, TrackViewA2, TrackViewA3, TrackViewA4, TankView, WeaponView);
     }
 
     public void Move(Scene scene) {
