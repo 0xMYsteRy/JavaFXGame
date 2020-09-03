@@ -26,6 +26,7 @@ public class testAnimationpath extends Application {
         var path = new Path();
         path.getElements().add(new MoveTo(20, 120));
         path.getElements().add(new CubicCurveTo(180, 60, 250, 340, 420, 240));
+        int x=100,y=100,Direction=90, Scale =20, Range=20;
 
         var circle = new Circle(20, 120, 10);
         circle.setFill(Color.CADETBLUE);

@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.transform.Scale;
@@ -179,8 +180,8 @@ class Bullet {
         System.out.println("HEllo1");
         Bullet.setX(x);
         Bullet.setY(y);
-        Bullet.setFitWidth(Scale);
-        Bullet.setFitHeight(Scale);
+        Bullet.setFitWidth(Scale*9);
+        Bullet.setFitHeight(Scale*9);
         Bullet.setRotate(Direction);
         return Bullet;
     }
@@ -236,10 +237,9 @@ public class Tank extends Application {
 
         //Adding scene to the stage
         tankkk = new Pane();
-        bullet=new Bullet(1);
+
         tank = tankObj.createTank(10);
         tankkk.getChildren().addAll(tank);
-        tankkk.getChildren().addAll(new ImageView(new Image("file:src/SCML/Effects/Exhaust_Fire.png")));
         tank.setTranslateX(500);
         tank.setTranslateY(500);
         //Displaying the contents of the stage
@@ -251,44 +251,48 @@ public class Tank extends Application {
         scene.setOnKeyPressed(e -> {
             Move(e);
             if (e.getCode() == KeyCode.SPACE) {
-                System.out.println(1);
+                bullet=new Bullet(1);
                 double x=tank.getTranslateX();
                 double y=tank.getTranslateY();
                 double Direction=tank.getRotate();
                 int Scale=10;
-                var path = new Path();
+
                 int Speed=bullet.getSpeed();
-                int Range= bullet.getRange();
-                System.out.println(2);
+                int Range= 1;
+//                System.out.println(2);
+                var ptr = new TranslateTransition();
                 switch ((int) Direction) {
                     case 0:
-                        y = (int) (y - Scale * 4);
-                        path.getElements().add(new MoveTo(x, y - Scale * Range));
+                        y = (int) (y - Scale * 5);
+
+                        ptr.setByY(-y);
                         break;
                     case 90:
-                        x = (int) (x + Scale * 4);
-                        path.getElements().add(new MoveTo(x + Scale * Range, y));
+                        x = (int) (x + Scale * 5);
+                        ptr.setByX(x);
+
                         break;
                     case 180:
-                        y = (int) (y + Scale * 4);
-                        path.getElements().add(new MoveTo(x, y + Scale * Range));
+                        y = (int) (y + Scale * 5);
+
+                        ptr.setByY(y );
                         break;
                     case 270:
-                        x = (int) (x - Scale * 4);
-                        path.getElements().add(new MoveTo(x - Scale * Range, y));
+                        x = (int) (x - Scale * 5);
+                        ptr.setByX(-x);
+
                         break;
                 }
-//        AnimationTimer timer = new BulletTimer();
+////        AnimationTimer timer = new BulletTimer();
 //        timer.start();
 
-                var ptr = new PathTransition();
 
-                ptr.setDuration(Duration.seconds((100 - Speed) / 60));
-                ptr.setDuration(Duration.seconds(6));
+                ptr.setDuration(Duration.millis(100*Speed));
+
                 ptr.setCycleCount(1);
-                ptr.setPath(path);
-                ptr.setNode(bullet.getBullet(x,y,Direction,Scale));
-                tankkk.getChildren().addAll(bullet.getBullet(x,y,Direction,Scale));
+                ImageView bulletImg=bullet.getBullet(x,y,Direction,Scale);
+                tankkk.getChildren().addAll(bulletImg);
+                ptr.setNode(bulletImg);
                 System.out.println("Before Shooting");
                 ptr.play();
             }
