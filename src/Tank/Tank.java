@@ -288,7 +288,7 @@ public class Tank extends Application {
                 ptr.setCycleCount(1);
                 ptr.setPath(path);
                 ptr.setNode(bullet.getBullet(x,y,Direction,Scale));
-                tankkk.getChildren().addAll(bullet.getBullet(x,y,Direction,Scale));
+                tankkk.getChildren().addAll(bullet.getBullet(x,y,Direction,Scale)'');
                 System.out.println("Before Shooting");
                 ptr.play();
             }
