@@ -140,7 +140,7 @@ class Bullet {
 class Object {
     private int Option;
 
-    public String getImage(String Option) throws FileNotFoundException {
+    public String getImage(String Option) {
         return "file:" + "src/Brick/brick" + Option + ".png";
     }
 }
@@ -148,8 +148,7 @@ class Object {
 public class Tank extends Application {
     private Group tank = new Group(createTank(3, 1, 7));
     private Object objectImage = new Object();
-
-
+    Pane tankPane;
     public Tank() throws FileNotFoundException {
     }
 
@@ -157,88 +156,182 @@ public class Tank extends Application {
     public void start(Stage stage) throws Exception {
         //Setting title to the Stage
         stage.setTitle("Java Game");
-
-
-        // Create a map
         // Image
-        Image Image1 = new Image(objectImage.getImage("2"));
-        Image Image2 = new Image(objectImage.getImage("2"));
-        Image Image3 = new Image(objectImage.getImage("2"));
-        Image Image4 = new Image(objectImage.getImage("2"));
-        Image Image5 = new Image(objectImage.getImage("2"));
-        Image Image6 = new Image(objectImage.getImage("2"));
-        Image Image7 = new Image(objectImage.getImage("2"));
-        Image Image8 = new Image(objectImage.getImage("2"));
-
-
+        // Image Image1 = new Image(objectImage.getImage("2"));
         //ImageView
-        ImageView wall1 = new ImageView(Image1);
-        ImageView wall2 = new ImageView(Image2);
-        ImageView wall3 = new ImageView(Image3);
-        ImageView wall4 = new ImageView(Image4);
-        ImageView wall5 = new ImageView(Image5);
-        ImageView wall6 = new ImageView(Image6);
-        ImageView wall7 = new ImageView(Image7);
-        ImageView wall8 = new ImageView(Image8);
+        // ImageView wall1 = new ImageView(Image1);
+
 
         //Adding scene to the stage
-        Pane tankPane = new Pane();
-        // Add object to display to the scence
-        // tankPane.getChildren().add(object);
+        tankPane = new Pane();
 
-        wall1.setFitHeight(4.0*6);
-        wall1.setFitWidth(4.0*6);
-        wall1.setTranslateX(0);
-        wall1.setTranslateY(600);
-
-        wall2.setFitHeight(4.0*6);
-        wall2.setFitWidth(4.0*6);
-        wall2.setTranslateX(20);
-        wall2.setTranslateY(600);
-
-        wall3.setFitHeight(4.0*6);
-        wall3.setFitWidth(4.0*6);
-        wall3.setTranslateX(40);
-        wall3.setTranslateY(600);
-
-        wall4.setFitHeight(4.0*6);
-        wall4.setFitWidth(4.0*6);
-        wall4.setTranslateX(60);
-        wall4.setTranslateY(600);
-
-        wall5.setFitHeight(4.0*6);
-        wall5.setFitWidth(4.0*6);
-        wall5.setTranslateX(80);
-        wall5.setTranslateY(600);
-
-        wall6.setFitHeight(4.0*6);
-        wall6.setFitWidth(4.0*6);
-        wall6.setTranslateX(100);
-        wall6.setTranslateY(600);
-
-        wall7.setFitHeight(4.0*6);
-        wall7.setFitWidth(4.0*6);
-        wall7.setTranslateX(120);
-        wall7.setTranslateY(600);
-
-        wall8.setFitHeight(4.0*6);
-        wall8.setFitWidth(4.0*6);
-        wall8.setTranslateX(140);
-        wall8.setTranslateY(600);
-
-        tank.setTranslateX(500);
-        tank.setTranslateY(500);
+        loadImage();
+        tank.setTranslateX(600);
+        tank.setTranslateY(600);
         // Add tank to display to the scence
-        tankPane.getChildren().addAll(tank,wall1, wall2, wall3, wall4, wall5, wall6, wall7, wall8);
+        tankPane.getChildren().addAll(tank);
 
         //Displaying the contents of the stage
         tank.setRotate(0);
-        Scene scene = new Scene(tankPane, 1440, 1080);
+        Scene scene = new Scene(tankPane, 1400, 1050);
         Move(scene);
 
         stage.setScene(scene);
         stage.show();
     }
+    public void loadImage(){
+        // Load image
+        Image image1 = new Image("file:src/Ultilities/PNG/Ground_Tile_01_C.png");
+        Image image2= new Image("file:src/Ultilities/PNG/Ground_Tile_02_C.png");
+        Image[] img = {image1,image2};
+
+        // Create imageview
+        // 10 rows at the bottomn
+        ImageView[] imageView = new ImageView[20];
+        for (int i = 0; i < 20; i++)
+        {
+            imageView[i] = new ImageView();
+            imageView[i].setImage(image1);
+            imageView[i].setFitHeight(70);
+            imageView[i].setFitWidth(70);
+            imageView[i].setTranslateX(70 * i);
+            imageView[i].setTranslateY(700);
+        }
+
+        //10 row upwards
+        ImageView[] imageView2 = new ImageView[20];
+        for (int i = 0; i < 20; i++)
+        {
+            imageView2[i] = new ImageView();
+            imageView2[i].setImage(image1);
+            imageView2[i].setFitHeight(70);
+            imageView2[i].setFitWidth(70);
+            imageView2[i].setTranslateX(70 * i);
+            imageView2[i].setTranslateY(630);
+        }
+
+        // y = 560
+        ImageView[] imageView3 = new ImageView[20];
+        for (int i = 0; i < 20; i++)
+        {
+            imageView3[i] = new ImageView();
+            imageView3[i].setImage(image1);
+            imageView3[i].setFitHeight(70);
+            imageView3[i].setFitWidth(70);
+            imageView3[i].setTranslateX(70 * i);
+            imageView3[i].setTranslateY(560);
+        }
+
+        // y = 490
+        ImageView[] imageView4 = new ImageView[20];
+        for (int i = 0; i < 20; i++)
+        {
+            imageView4[i] = new ImageView();
+            imageView4[i].setImage(image1);
+            imageView4[i].setFitHeight(70);
+            imageView4[i].setFitWidth(70);
+            imageView4[i].setTranslateX(70 * i);
+            imageView4[i].setTranslateY(490);
+        }
+
+        // y = 420
+        ImageView[] imageView5 = new ImageView[20];
+        for (int i = 0; i < 20; i++)
+        {
+            imageView5[i] = new ImageView();
+            imageView5[i].setImage(image1);
+            imageView5[i].setFitHeight(70);
+            imageView5[i].setFitWidth(70);
+            imageView5[i].setTranslateX(70 * i);
+            imageView5[i].setTranslateY(420);
+        }
+
+        // y = 350
+        ImageView[] imageView6 = new ImageView[20];
+        for (int i = 0; i < 20; i++)
+        {
+            imageView6[i] = new ImageView();
+            imageView6[i].setImage(image1);
+            imageView6[i].setFitHeight(70);
+            imageView6[i].setFitWidth(70);
+            imageView6[i].setTranslateX(70 * i);
+            imageView6[i].setTranslateY(350);
+        }
+
+        // y = 280
+        ImageView[] imageView7 = new ImageView[20];
+        for (int i = 0; i < 20; i++)
+        {
+            imageView7[i] = new ImageView();
+            imageView7[i].setImage(image1);
+            imageView7[i].setFitHeight(70);
+            imageView7[i].setFitWidth(70);
+            imageView7[i].setTranslateX(70 * i);
+            imageView7[i].setTranslateY(280);
+        }
+
+        // y = 210
+        ImageView[] imageView8 = new ImageView[20];
+        for (int i = 0; i < 20; i++)
+        {
+            imageView8[i] = new ImageView();
+            imageView8[i].setImage(image1);
+            imageView8[i].setFitHeight(70);
+            imageView8[i].setFitWidth(70);
+            imageView8[i].setTranslateX(70 * i);
+            imageView8[i].setTranslateY(210);
+        }
+
+        // y = 140
+        ImageView[] imageView9 = new ImageView[20];
+        for (int i = 0; i < 20; i++)
+        {
+            imageView9[i] = new ImageView();
+            imageView9[i].setImage(image1);
+            imageView9[i].setFitHeight(70);
+            imageView9[i].setFitWidth(70);
+            imageView9[i].setTranslateX(70 * i);
+            imageView9[i].setTranslateY(140);
+        }
+
+        // y = 70
+        ImageView[] imageView10 = new ImageView[20];
+        for (int i = 0; i < 20; i++)
+        {
+            imageView10[i] = new ImageView();
+            imageView10[i].setImage(image1);
+            imageView10[i].setFitHeight(70);
+            imageView10[i].setFitWidth(70);
+            imageView10[i].setTranslateX(70 * i);
+            imageView10[i].setTranslateY(70);
+        }
+
+        // Top position
+        ImageView[] imageView11 = new ImageView[20];
+        for (int i = 0; i < 20; i++)
+        {
+            imageView11[i] = new ImageView();
+            imageView11[i].setImage(image1);
+            imageView11[i].setFitHeight(70);
+            imageView11[i].setFitWidth(70);
+            imageView11[i].setTranslateX(70 * i);
+            imageView11[i].setTranslateY(0);
+        }
+
+        tankPane.getChildren().addAll(imageView);
+        tankPane.getChildren().addAll(imageView2);
+        tankPane.getChildren().addAll(imageView3);
+        tankPane.getChildren().addAll(imageView4);
+        tankPane.getChildren().addAll(imageView5);
+        tankPane.getChildren().addAll(imageView6);
+        tankPane.getChildren().addAll(imageView7);
+        tankPane.getChildren().addAll(imageView8);
+        tankPane.getChildren().addAll(imageView9);
+        tankPane.getChildren().addAll(imageView10);
+        tankPane.getChildren().addAll(imageView11);
+    }
+
+
 
     public Group createTank(int choice, int color, int x) throws FileNotFoundException {
         Hull hull = new Hull(color, choice);
