@@ -229,6 +229,7 @@ public class Tank extends Application {
 
     public Tank(int choice, int color) throws FileNotFoundException {
         hull = new Hull(color, choice);
+
         weapon = new Weapon(color, choice);
         track = new Track(choice);
         bullet = new Bullet(choice);
@@ -316,18 +317,22 @@ public class Tank extends Application {
 
     public void TankStep(double x, double y) {
         var ptr = new PathTransition();
-        var path = new Path();
-        path.getElements().add(new MoveTo(x, y));
 
         ptr.setDuration(Duration.seconds(0.2));
         ptr.setCycleCount(1);
-        ptr.setPath(path);
         ptr.setNode(tank);
         System.out.println("Before Shooting" + x + y);
         ptr.play();
     }
 
     public void Move(KeyEvent e) {
+        var ptr = new TranslateTransition();
+        int Step = 100;
+        ptr.setDuration(Duration.millis(500));
+
+        ptr.setCycleCount(1);
+        ptr.setNode(tank);
+        ptr.setDelay(Duration.millis(1));
 
         switch (e.getCode()) {
             case DOWN:
@@ -339,9 +344,9 @@ public class Tank extends Application {
                     rt.play();
                     break;
                 }
-                tank.setTranslateY(tank.getTranslateY() + 10);
-//                TankStep(tank.getTranslateX(),tank.getTranslateY() + 10);
+                ptr.setToY(tank.getTranslateY() + Step);
 
+                ptr.play();
                 break;
             case LEFT:
                 if (tank.getRotate() != 270) {
@@ -351,8 +356,8 @@ public class Tank extends Application {
                     rt.play();
                     break;
                 }
-                tank.setTranslateX(tank.getTranslateX() - 10);
-//                TankStep(tank.getTranslateX()-10,tank.getTranslateY());
+                ptr.setToX(tank.getTranslateX() - Step);
+                ptr.play();
                 break;
             case UP:
                 if (tank.getRotate() != 0) {
@@ -363,8 +368,8 @@ public class Tank extends Application {
                     rt.play();
                     break;
                 }
-                tank.setTranslateY(tank.getTranslateY() - 10);
-//                TankStep(tank.getTranslateX(),tank.getTranslateY() - 10);
+                ptr.setToY(tank.getTranslateY() - Step);
+                ptr.play();
                 break;
             case RIGHT:
                 if (tank.getRotate() != 90) {
@@ -375,8 +380,9 @@ public class Tank extends Application {
                     rt.play();
                     break;
                 }
-                tank.setTranslateX(tank.getTranslateX() + 10);
-//                TankStep(tank.getTranslateX() + 10,tank.getTranslateY());
+
+                ptr.setToX(tank.getTranslateX() + Step);
+                ptr.play();
                 break;
 
         }
@@ -411,9 +417,6 @@ public class Tank extends Application {
 
                     break;
             }
-////        AnimationTimer timer = new BulletTimer();
-//        timer.start();
-
 
             ptr.setDuration(Duration.millis(100 * Speed));
 
@@ -427,8 +430,6 @@ public class Tank extends Application {
             ptr.play();
             System.out.println(ptr.getToX() + " " + ptr.getByX());
             ptr.setOnFinished(event -> tankkk.getChildren().remove(bulletImg));
-
-            //            tankkk.getChildren().remove(bulletImg);
         }
     }
 }
