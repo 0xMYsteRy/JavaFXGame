@@ -86,17 +86,17 @@ class Track {
     private int Option;
 
     Track(int Option) {
-        Option = (Option - 1) % 3 + 1;
+        this.Option = (Option - 1) % 3 + 1;
 
     }
 
     public String getTrackPath(int TrackPathOption) {
 
-        return "file:" + "src/PNG/Effects/Tire_Track_0" + TrackPathOption + ".png";
+        return "file:src/PNG/Effects/Tire_Track_0" + TrackPathOption + ".png";
     }
 
-    public String getTrack(String Animation) {
-        return "file:" + "src/PNG/Tracks/Track_" + Option + "_" + Animation + ".png";
+    public String getTrack() {
+        return "file:src/PNG/Tracks/Track_" + Option + "_A.png";
     }
 }
 
@@ -240,6 +240,7 @@ public class Tank extends Application {
         //Load the map
         Map map = new Map();
         map.loadMap(tankPane);
+        //
         tank = tankObj.createTank(10);
         tankPane.getChildren().addAll(tank);
         tank.setTranslateX(500);
@@ -267,8 +268,7 @@ public class Tank extends Application {
 
         Image weaponI = new Image(weapon.getWeapon());
         Image HullI = new Image(hull.getHull());
-        Image trackI_A = new Image(track.getTrack("A"));
-        Image trackI_B = new Image(track.getTrack("B"));
+        Image trackI_A = new Image(track.getTrack());
 
         ImageView TankView = new ImageView(HullI);
         ImageView TrackViewA1 = new ImageView(trackI_A);
