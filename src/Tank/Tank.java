@@ -2,6 +2,7 @@ package Tank;
 
 import javafx.animation.*;
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.skin.TextInputControlSkin;
@@ -115,7 +116,7 @@ class Bullet {
     private int Ammunition = 0;
     private int Range = 0;
     private String ImagePath = "file:src/SCML/Effects/Exhaust_Fire.png";
-    private ImageView Bullet=new ImageView(new Image(ImagePath));
+    private ImageView Bullet = new ImageView(new Image(ImagePath));
 
     public Bullet() {
 
@@ -180,23 +181,27 @@ class Bullet {
         System.out.println("HEllo1");
         Bullet.setX(x);
         Bullet.setY(y);
-        Bullet.setFitWidth(Scale*9);
-        Bullet.setFitHeight(Scale*9);
+        Bullet.setFitWidth(Scale * 9);
+        Bullet.setFitHeight(Scale * 9);
         Bullet.setRotate(Direction);
         return Bullet;
     }
-    public int getRange(){
+
+    public int getRange() {
         return Range;
     }
-    public int getSpeed(){
+
+    public int getSpeed() {
         return Speed;
     }
+
     public class BulletTimer extends AnimationTimer {
 
         @Override
         public void handle(long now) {
             doHandle();
         }
+
         private void doHandle() {
             Range -= 1;
             if (Range <= 0) {
@@ -218,6 +223,7 @@ public class Tank extends Application {
     private RotateTransition rt;
     private Scene scene;
     private Pane tankkk;
+
     public Tank() {
     }
 
@@ -225,7 +231,7 @@ public class Tank extends Application {
         hull = new Hull(color, choice);
         weapon = new Weapon(color, choice);
         track = new Track(choice);
-        bullet= new Bullet(choice);
+        bullet = new Bullet(choice);
     }
 
     @Override
@@ -249,54 +255,12 @@ public class Tank extends Application {
         //
         rt = new RotateTransition(Duration.millis(300), tank);
         scene.setOnKeyPressed(e -> {
-            Move(e);
-            if (e.getCode() == KeyCode.SPACE) {
-                bullet=new Bullet(1);
-                double x=tank.getTranslateX();
-                double y=tank.getTranslateY();
-                double Direction=tank.getRotate();
-                int Scale=10;
-
-                int Speed=bullet.getSpeed();
-                int Range= 1;
-//                System.out.println(2);
-                var ptr = new TranslateTransition();
-                switch ((int) Direction) {
-                    case 0:
-                        y = (int) (y - Scale * 5);
-
-                        ptr.setByY(-y);
-                        break;
-                    case 90:
-                        x = (int) (x + Scale * 5);
-                        ptr.setByX(x);
-
-                        break;
-                    case 180:
-                        y = (int) (y + Scale * 5);
-
-                        ptr.setByY(y );
-                        break;
-                    case 270:
-                        x = (int) (x - Scale * 5);
-                        ptr.setByX(-x);
-
-                        break;
+                    Move(e);
+                    if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
+                        shootBullet(e);
+                    }
                 }
-////        AnimationTimer timer = new BulletTimer();
-//        timer.start();
-
-
-                ptr.setDuration(Duration.millis(100*Speed));
-
-                ptr.setCycleCount(1);
-                ImageView bulletImg=bullet.getBullet(x,y,Direction,Scale);
-                tankkk.getChildren().addAll(bulletImg);
-                ptr.setNode(bulletImg);
-                System.out.println("Before Shooting");
-                ptr.play();
-            }
-        });
+        );
         stage.setScene(scene);
         stage.show();
 
@@ -350,18 +314,19 @@ public class Tank extends Application {
         return root;
     }
 
-    public void TankStep(double x,double y){
+    public void TankStep(double x, double y) {
         var ptr = new PathTransition();
         var path = new Path();
-        path.getElements().add(new MoveTo(x, y ));
+        path.getElements().add(new MoveTo(x, y));
 
         ptr.setDuration(Duration.seconds(0.2));
         ptr.setCycleCount(1);
         ptr.setPath(path);
         ptr.setNode(tank);
-        System.out.println("Before Shooting"+x+y);
+        System.out.println("Before Shooting" + x + y);
         ptr.play();
     }
+
     public void Move(KeyEvent e) {
 
         switch (e.getCode()) {
@@ -419,7 +384,51 @@ public class Tank extends Application {
 
     }
 
-    public void shootBullet(KeyEvent e, Bullet bullet) {
+    public void shootBullet(KeyEvent e) {
+        var ptr = new TranslateTransition();
+        if (e.getCode() == KeyCode.SPACE) {
+            bullet = new Bullet(1);
+            double x = tank.getTranslateX();
+            double y = tank.getTranslateY();
+            double Direction = tank.getRotate();
+            int Scale = 10;
+            int Range = 10;
+            int Speed = bullet.getSpeed() / 10 * Range;
+//                System.out.println(2);
 
+            switch ((int) Direction) {
+                case 0:
+                    ptr.setToY(-Scale * Range * 4);
+                    break;
+                case 90:
+                    ptr.setToX(Scale * Range * 4);
+                    break;
+                case 180:
+                    ptr.setToY(Scale * Range * 4);
+                    break;
+                case 270:
+                    ptr.setToX(-Scale * Range * 4);
+
+                    break;
+            }
+////        AnimationTimer timer = new BulletTimer();
+//        timer.start();
+
+
+            ptr.setDuration(Duration.millis(100 * Speed));
+
+            ptr.setCycleCount(1);
+            ImageView bulletImg = bullet.getBullet(x, y, Direction, Scale);
+
+            tankkk.getChildren().addAll(bulletImg);
+            ptr.setNode(bulletImg);
+            System.out.println("Before Shooting");
+            ptr.setDelay(Duration.millis(1));
+            ptr.play();
+            System.out.println(ptr.getToX() + " " + ptr.getByX());
+            ptr.setOnFinished(event -> tankkk.getChildren().remove(bulletImg));
+
+            //            tankkk.getChildren().remove(bulletImg);
+        }
     }
 }
