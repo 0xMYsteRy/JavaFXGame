@@ -1,4 +1,4 @@
-//package Tank;
+//package Tank_JAVA;
 //
 //import java.util.concurrent.Executors;
 //import java.util.concurrent.ScheduledExecutorService;
@@ -59,7 +59,7 @@
 //        menuBox.setTranslateX(360);
 //        menuBox.setTranslateY(300);
 //
-//        Text logo = new Text("Tank Battle\n\t by \n Blanc Production");
+//        Text logo = new Text("Tank_JAVA Battle\n\t by \n Blanc Production");
 //        logo.setTranslateX(50);
 //        logo.setTranslateY(500);
 //        logo.setFill(Color.WHITE);
