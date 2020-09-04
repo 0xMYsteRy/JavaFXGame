@@ -1,4 +1,4 @@
-package Tank;
+package Menu_JAVA;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -66,7 +66,7 @@ public class mainMenu extends Application {
         menuBox.setTranslateY(300);
 
         // we can replace this one with the game logo
-        Text about = new Text("Tank battle\n\tby\n    Blanc studio");
+        Text about = new Text("Tank_JAVA battle\n\tby\n    Blanc studio");
         about.setTranslateX(50);
         about.setTranslateY(500);
         about.setFill(Color.WHITE);
