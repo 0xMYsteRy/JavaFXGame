@@ -1,5 +1,6 @@
 package Tank;
 
+
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -37,6 +38,7 @@ class Hull {
             case 4:
                 colorPath = "D";
         }
+
         return "file:" + "src/PNG/Hulls_Color_" + colorPath + "/Hull_0" + type + ".png";
     }
 }
@@ -62,6 +64,7 @@ class Weapon {
             case 4:
                 colorPath = "D";
         }
+
         return "file:" + "src/PNG/Weapon_Color_" + colorPath + "/Gun_0" + Option + ".png";
     }
 }
@@ -72,10 +75,11 @@ class Track {
 
     Track(int Option) {
         Option = (Option - 1) % 3 + 1;
-        this.Option = Option;
+
     }
 
     public String getTrackPath(int TrackPathOption) {
+
         return "file:" + "src/PNG/Effects/Tire_Track_0" + TrackPathOption + ".png";
     }
 
