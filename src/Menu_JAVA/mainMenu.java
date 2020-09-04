@@ -1,15 +1,18 @@
 package Menu_JAVA;
 
+import java.io.FileNotFoundException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import Tank_JAVA.Tank;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -38,13 +41,13 @@ public class mainMenu extends Application {
 
     private ScheduledExecutorService bgThread = Executors.newSingleThreadScheduledExecutor();
 
-    private Parent createContent() {
+    private Parent createContent() throws FileNotFoundException {
         Pane root = new Pane();
         root.setPrefSize(900, 600);
 
         Rectangle bg = new Rectangle(900, 600);
 
-        ContentFrame frame1 = new ContentFrame(createLeftContent());
+        ContentFrame frame1 = new ContentFrame(createLeftContent(1));
         ContentFrame frame2 = new ContentFrame(createMiddleContent());
         ContentFrame frame3 = new ContentFrame(createRightContent());
 
@@ -79,27 +82,26 @@ public class mainMenu extends Application {
         return root;
     }
 
-    private Node createLeftContent() {
-        final Text inbox = new Text("test");
-        inbox.setFill(Color.WHITE);
+    private Node createLeftContent(int x) throws FileNotFoundException {
+        Tank tank = new Tank();
+        Group tank1 = new Group(tank.createTank(x));
 
         bgThread.scheduleAtFixedRate(() -> {
             Platform.runLater(() -> {
-                TranslateTransition tt = new TranslateTransition(Duration.seconds(0.5), inbox);
+                TranslateTransition tt = new TranslateTransition(Duration.seconds(0.5), tank1);
                 tt.setToY(150);
 
-                FadeTransition ft = new FadeTransition(Duration.seconds(0.5), inbox);
+                FadeTransition ft = new FadeTransition(Duration.seconds(0.5), tank1);
                 ft.setToValue(0);
 
                 ParallelTransition pt = new ParallelTransition(tt, ft);
                 pt.setOnFinished(e -> {
-                    inbox.setTranslateY(-150);
-                    inbox.setText("test");
+                    tank1.setTranslateY(-150);
 
-                    TranslateTransition tt2 = new TranslateTransition(Duration.seconds(0.5), inbox);
+                    TranslateTransition tt2 = new TranslateTransition(Duration.seconds(0.5), tank1);
                     tt2.setToY(0);
 
-                    FadeTransition ft2 = new FadeTransition(Duration.seconds(0.5), inbox);
+                    FadeTransition ft2 = new FadeTransition(Duration.seconds(0.5), tank1);
                     ft2.setToValue(1);
 
                     ParallelTransition pt2 = new ParallelTransition(tt2, ft2);
@@ -109,7 +111,7 @@ public class mainMenu extends Application {
             });
         }, 2, 5, TimeUnit.SECONDS);
 
-        return inbox;
+        return tank1;
     }
 
     private Node createMiddleContent() {
