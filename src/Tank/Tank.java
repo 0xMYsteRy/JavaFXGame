@@ -1,6 +1,10 @@
 package Tank;
 
+<<<<<<< HEAD
 import javafx.animation.*;
+=======
+
+>>>>>>> master
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.scene.Group;
@@ -55,6 +59,7 @@ class Hull {
             default:
                 throw new IllegalStateException("Unexpected value: " + color);
         }
+
         return "file:" + "src/PNG/Hulls_Color_" + colorPath + "/Hull_0" + type + ".png";
     }
 }
@@ -86,6 +91,7 @@ class Weapon {
             default:
                 throw new IllegalStateException("Unexpected value: " + color);
         }
+
         return "file:" + "src/PNG/Weapon_Color_" + colorPath + "/Gun_0" + Option + ".png";
     }
 }
@@ -96,10 +102,11 @@ class Track {
 
     Track(int Option) {
         Option = (Option - 1) % 3 + 1;
-        this.Option = Option;
+
     }
 
     public String getTrackPath(int TrackPathOption) {
+
         return "file:" + "src/PNG/Effects/Tire_Track_0" + TrackPathOption + ".png";
     }
 
@@ -282,7 +289,7 @@ public class Tank extends Application {
         ImageView TrackViewA3 = new ImageView(trackI_A);
         ImageView TrackViewA4 = new ImageView(trackI_A);
         ImageView WeaponView = new ImageView(weaponI);
-        ImageView TrackviewB = new ImageView(trackI_B);
+
         TrackViewA1.setX(2.2 * x);
         TrackViewA1.setY(0.2 * x);
         TrackViewA1.setFitHeight(4 * x);
@@ -313,16 +320,6 @@ public class Tank extends Application {
         Group root = new Group(TrackViewA1, TrackViewA2, TrackViewA3, TrackViewA4, TankView, WeaponView);
         //Creating a scene object
         return root;
-    }
-
-    public void TankStep(double x, double y) {
-        var ptr = new PathTransition();
-
-        ptr.setDuration(Duration.seconds(0.2));
-        ptr.setCycleCount(1);
-        ptr.setNode(tank);
-        System.out.println("Before Shooting" + x + y);
-        ptr.play();
     }
 
     public void Move(KeyEvent e) {
