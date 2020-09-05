@@ -385,14 +385,18 @@ public class Tank extends Application {
 
 
     }
+
     public void loadMap() {
         // Load image
         Image backgroundImage1 = new Image("file:src/Ultilities/PNG/Ground_Tile_01_C.png");
         Image backgroundImage2 = new Image("file:src/Ultilities/PNG/Ground_Tile_02_C.png");
+        Image backgroundImage3 = new Image("file:src/Ultilities/PNG/Water_Tile.jpg");
+        Image backgroundImage4 = new Image("file:src/Ultilities/PNG/Sand.png");
+        Image backgroundImage5 = new Image("file:src/Ultilities/PNG/Sand2.png");
 
         //Pipe
         Image objectPipe = new Image("file:src/Ultilities/PNG/Decor_Items/Decor_Pipe_B.png");
-        Image objectPipeHeadLeft = new Image("file: src/Ultilities/PNG/Decor_Items/Decor_Pipe_A_02.png");
+        Image objectPipeHeadLeft = new Image("file:src/Ultilities/PNG/Decor_Items/Decor_Pipe_A_01.png");
         Image objectPipeHeadRight = new Image("file:src/Ultilities/PNG/Decor_Items/Decor_Pipe_C_01.png");
 
         Image[] img = {backgroundImage1, backgroundImage2};
@@ -402,7 +406,7 @@ public class Tank extends Application {
         ImageView[] imageView = new ImageView[20];
         for (int i = 0; i < 20; i++) {
             imageView[i] = new ImageView();
-            imageView[i].setImage(backgroundImage1);
+            imageView[i].setImage(backgroundImage4);
             imageView[i].setFitHeight(70);
             imageView[i].setFitWidth(70);
             imageView[i].setTranslateX(70 * i);
@@ -413,7 +417,7 @@ public class Tank extends Application {
         ImageView[] imageView2 = new ImageView[20];
         for (int i = 0; i < 20; i++) {
             imageView2[i] = new ImageView();
-            imageView2[i].setImage(backgroundImage1);
+            imageView2[i].setImage(backgroundImage4);
             imageView2[i].setFitHeight(70);
             imageView2[i].setFitWidth(70);
             imageView2[i].setTranslateX(70 * i);
@@ -424,7 +428,7 @@ public class Tank extends Application {
         ImageView[] imageView3 = new ImageView[20];
         for (int i = 0; i < 20; i++) {
             imageView3[i] = new ImageView();
-            imageView3[i].setImage(backgroundImage1);
+            imageView3[i].setImage(backgroundImage4);
             imageView3[i].setFitHeight(70);
             imageView3[i].setFitWidth(70);
             imageView3[i].setTranslateX(70 * i);
@@ -435,7 +439,7 @@ public class Tank extends Application {
         ImageView[] imageView4 = new ImageView[20];
         for (int i = 0; i < 20; i++) {
             imageView4[i] = new ImageView();
-            imageView4[i].setImage(backgroundImage1);
+            imageView4[i].setImage(backgroundImage4);
             imageView4[i].setFitHeight(70);
             imageView4[i].setFitWidth(70);
             imageView4[i].setTranslateX(70 * i);
@@ -447,18 +451,18 @@ public class Tank extends Application {
         ImageView[] imageView5 = new ImageView[20];
         for (int i = 0; i < 20; i++) {
             imageView5[i] = new ImageView();
-            imageView5[i].setImage(backgroundImage1);
+            imageView5[i].setImage(backgroundImage4);
             imageView5[i].setFitHeight(70);
             imageView5[i].setFitWidth(70);
             imageView5[i].setTranslateX(70 * i);
             imageView5[i].setTranslateY(420);
         }
 
-        // y = 350
+        // y = 350, midpoint
         ImageView[] imageView6 = new ImageView[20];
         for (int i = 0; i < 20; i++) {
             imageView6[i] = new ImageView();
-            imageView6[i].setImage(backgroundImage1);
+            imageView6[i].setImage(backgroundImage3);
             imageView6[i].setFitHeight(70);
             imageView6[i].setFitWidth(70);
             imageView6[i].setTranslateX(70 * i);
@@ -469,7 +473,7 @@ public class Tank extends Application {
         ImageView[] imageView7 = new ImageView[20];
         for (int i = 0; i < 20; i++) {
             imageView7[i] = new ImageView();
-            imageView7[i].setImage(backgroundImage1);
+            imageView7[i].setImage(backgroundImage5);
             imageView7[i].setFitHeight(70);
             imageView7[i].setFitWidth(70);
             imageView7[i].setTranslateX(70 * i);
@@ -480,7 +484,7 @@ public class Tank extends Application {
         ImageView[] imageView8 = new ImageView[20];
         for (int i = 0; i < 20; i++) {
             imageView8[i] = new ImageView();
-            imageView8[i].setImage(backgroundImage1);
+            imageView8[i].setImage(backgroundImage5);
             imageView8[i].setFitHeight(70);
             imageView8[i].setFitWidth(70);
             imageView8[i].setTranslateX(70 * i);
@@ -491,7 +495,7 @@ public class Tank extends Application {
         ImageView[] imageView9 = new ImageView[20];
         for (int i = 0; i < 20; i++) {
             imageView9[i] = new ImageView();
-            imageView9[i].setImage(backgroundImage1);
+            imageView9[i].setImage(backgroundImage5);
             imageView9[i].setFitHeight(70);
             imageView9[i].setFitWidth(70);
             imageView9[i].setTranslateX(70 * i);
@@ -502,7 +506,7 @@ public class Tank extends Application {
         ImageView[] imageView10 = new ImageView[20];
         for (int i = 0; i < 20; i++) {
             imageView10[i] = new ImageView();
-            imageView10[i].setImage(backgroundImage1);
+            imageView10[i].setImage(backgroundImage5);
             imageView10[i].setFitHeight(70);
             imageView10[i].setFitWidth(70);
             imageView10[i].setTranslateX(70 * i);
@@ -513,38 +517,75 @@ public class Tank extends Application {
         ImageView[] imageView11 = new ImageView[20];
         for (int i = 0; i < 20; i++) {
             imageView11[i] = new ImageView();
-            imageView11[i].setImage(backgroundImage1);
+            imageView11[i].setImage(backgroundImage5);
             imageView11[i].setFitHeight(70);
             imageView11[i].setFitWidth(70);
             imageView11[i].setTranslateX(70 * i);
             imageView11[i].setTranslateY(0);
         }
 
-        //Add object to the scence
-//        ImageView[] objectView2 = new ImageView[20];
-//        for (int i = 0; i < 20; i++) {
-//
-//            imageView2[i] = new ImageView();
-//            if (i == 0) {
-//                objectView2[i].setImage(objectPipe);
-//                objectView2[i].setFitHeight(70);
-//                objectView2[i].setFitWidth(70);
-//                objectView2[i].setTranslateX(70 * i);
-//                objectView2[i].setTranslateY(490);
-//            } else if (i == 1) {
-//                objectView2[i].setImage(objectPipe);
-//                objectView2[i].setFitHeight(70);
-//                objectView2[i].setFitWidth(70);
-//                objectView2[i].setTranslateX(70 * i);
-//                objectView2[i].setTranslateY(490);
-//            } else {
-//                objectView2[i].setImage(objectPipe);
-//                objectView2[i].setFitHeight(70);
-//                objectView2[i].setFitWidth(70);
-//                objectView2[i].setTranslateX(70 * i);
-//                objectView2[i].setTranslateY(490);
-//            }
-//        }
+        // Add object to the map
+        // Left pipe on the screen
+        ImageView[] objectView = new ImageView[20];
+        for (int i = 0; i < 20; i++) {
+            objectView[i] = new ImageView();
+            if (i == 0) {
+                objectView[i].setImage(objectPipe);
+                objectView[i].setScaleY(1.5);
+                objectView[i].setFitHeight(70);
+                objectView[i].setFitWidth(70);
+                objectView[i].setTranslateX(70 * i);
+                objectView[i].setTranslateY(490);
+            }
+            if (i == 1) {
+                objectView[i].setImage(objectPipe);
+                objectView[i].setScaleY(1.5);
+                objectView[i].setFitHeight(70);
+                objectView[i].setFitWidth(70);
+                objectView[i].setTranslateX(70 * i);
+                objectView[i].setTranslateY(490);
+            }
+            if (i == 2) {
+                objectView[i].setImage(objectPipeHeadRight);
+                objectView[i].setScaleX(2.0);
+                objectView[i].setScaleY(1.5);
+                objectView[i].setFitHeight(70);
+                objectView[i].setFitWidth(70);
+                objectView[i].setTranslateX(70 * i);
+                objectView[i].setTranslateY(490);
+            }
+        }
+
+        // Right top pipe on the screen
+        ImageView[] objectView2 = new ImageView[20];
+        for (int i = 0; i < 20; i++) {
+            objectView2[i] = new ImageView();
+            if (i == 19) {
+                objectView2[i].setImage(objectPipe);
+                objectView2[i].setScaleY(1.5);
+                objectView2[i].setFitHeight(70);
+                objectView2[i].setFitWidth(70);
+                objectView2[i].setTranslateX(70 * i);
+                objectView2[i].setTranslateY(210);
+            }
+            if (i == 18) {
+                objectView2[i].setImage(objectPipe);
+                objectView2[i].setScaleY(1.5);
+                objectView2[i].setFitHeight(70);
+                objectView2[i].setFitWidth(70);
+                objectView2[i].setTranslateX(70 * i);
+                objectView2[i].setTranslateY(210);
+            }
+            if (i == 17) {
+                objectView2[i].setImage(objectPipeHeadLeft);
+                objectView2[i].setScaleX(2.0);
+                objectView2[i].setScaleY(1.5);
+                objectView2[i].setFitHeight(70);
+                objectView2[i].setFitWidth(70);
+                objectView2[i].setTranslateX(70 * i);
+                objectView2[i].setTranslateY(210);
+            }
+        }
 
         // Add all background components to the map
         tankkk.getChildren().addAll(imageView);
@@ -560,8 +601,10 @@ public class Tank extends Application {
         tankkk.getChildren().addAll(imageView11);
 
         // Add objects to the map
-        //tankPane.getChildren().addAll(objectView2);
+        tankkk.getChildren().addAll(objectView);
+        tankkk.getChildren().addAll(objectView2);
     }
+
     public void shootBullet(KeyEvent e) {
         var ptr = new TranslateTransition();
         if (e.getCode() == KeyCode.SPACE) {
