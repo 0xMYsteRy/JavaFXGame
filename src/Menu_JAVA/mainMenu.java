@@ -16,7 +16,10 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -34,7 +37,8 @@ import javafx.util.Duration;
 
 public class mainMenu extends Application {
 
-    private static final Font FONT = Font.font("", FontWeight.BOLD, 18);
+    private static final Font FONT = Font.font("", FontWeight.BOLD, 40);
+    private static final Font FONT2 = Font.font("", FontWeight.BOLD, 100);
 
     private VBox menuBox;
     private int currentItem = 0;
@@ -43,46 +47,51 @@ public class mainMenu extends Application {
 
     private Parent createContent() throws FileNotFoundException {
         Pane root = new Pane();
-        root.setPrefSize(900, 600);
+        root.setPrefSize(1280, 720);
 
-        Rectangle bg = new Rectangle(900, 600);
+        String imagePath = "file:src/Menu_JAVA/background.png";
+        ImageView background = new ImageView(new Image(imagePath));
 
-        ContentFrame frame1 = new ContentFrame(createLeftContent(20,1,1));
-        ContentFrame frame2 = new ContentFrame(createLeftContent(20,2,2));
-        ContentFrame frame3 = new ContentFrame(createLeftContent(20,3,4));
+        ContentFrame frame1 = new ContentFrame(createTankContent(20,1,1));
+        ContentFrame frame2 = new ContentFrame(createTankContent(20,2,2));
+        ContentFrame frame3 = new ContentFrame(createTankContent(20,3,3));
+        ContentFrame frame4 = new ContentFrame(createTankContent(20,4,4));
 
-        HBox hbox = new HBox(15, frame1, frame2, frame3);
-        hbox.setTranslateX(120);
+        HBox hbox = new HBox(20, frame1, frame2, frame3, frame4);
+        hbox.setTranslateX(20);
         hbox.setTranslateY(50);
+
+        // Tank User choice
+        ContentFrame frame5 = new ContentFrame(createTankContent(20,1, 1));
+        frame5.setTranslateX(30);
+        frame5.setTranslateY(450);
 
         MenuItem itemExit = new MenuItem("EXIT");
         itemExit.setOnActivate(() -> System.exit(0));
 
-        menuBox = new VBox(10,
+        menuBox = new VBox(15,
                 new MenuItem("Start"),
                 new MenuItem("Campaign"),
                 new MenuItem("Multiplayer"),
                 new MenuItem("Setting"),
                 itemExit);
         menuBox.setAlignment(Pos.BOTTOM_CENTER);
-        menuBox.setTranslateX(360);
-        menuBox.setTranslateY(300);
+        menuBox.setTranslateX(950);
+        menuBox.setTranslateY(330);
 
-        // we can replace this one with the game logo
-        Text about = new Text("Tank_JAVA battle\n\tby\n    Blanc studio");
-        about.setTranslateX(50);
-        about.setTranslateY(500);
-        about.setFill(Color.WHITE);
-        about.setFont(FONT);
-        about.setOpacity(0.2);
+        Text name = new Text("  TANK \nBATTLE");
+        name.setTranslateX(900);
+        name.setTranslateY(120);
+        name.setFill(Color.BLUE);
+        name.setFont(FONT2);
 
         getMenuItem(0).setActive(true);
 
-        root.getChildren().addAll(bg, hbox, menuBox, about);
+        root.getChildren().addAll(background, hbox, menuBox, name, frame5);
         return root;
     }
 
-    private Node createLeftContent(int x,int choice, int color) throws FileNotFoundException {
+    private Node createTankContent(int x,int choice, int color) throws FileNotFoundException {
         Tank tank = new Tank(choice,color );
         Group tank1 = new Group(tank.createTank(x));
         bgThread.scheduleAtFixedRate(() -> {
@@ -113,48 +122,48 @@ public class mainMenu extends Application {
         return tank1;
     }
 
-    private Node createMiddleContent() {
-        String title = "";
-        HBox letters = new HBox(0);
-        letters.setAlignment(Pos.CENTER);
-        for (int i = 0; i < title.length(); i++) {
-            Text letter = new Text(title.charAt(i) + "");
-            letter.setFont(FONT);
-            letter.setFill(Color.WHITE);
-            letters.getChildren().add(letter);
-
-            TranslateTransition tt = new TranslateTransition(Duration.seconds(2), letter);
-            tt.setDelay(Duration.millis(i * 50));
-            tt.setToY(-25);
-            tt.setAutoReverse(true);
-            tt.setCycleCount(TranslateTransition.INDEFINITE);
-            tt.play();
-        }
-
-        return letters;
-    }
-
-    private Node createRightContent() {
-        String title = "";
-        HBox letters = new HBox(0);
-        letters.setAlignment(Pos.CENTER);
-        for (int i = 0; i < title.length(); i++) {
-            Text letter = new Text(title.charAt(i) + "");
-            letter.setFont(FONT);
-            letter.setFill(Color.WHITE);
-            letter.setOpacity(0);
-            letters.getChildren().add(letter);
-
-            FadeTransition ft = new FadeTransition(Duration.seconds(2), letter);
-            ft.setDelay(Duration.millis(i * 50));
-            ft.setToValue(1);
-            ft.setAutoReverse(true);
-            ft.setCycleCount(TranslateTransition.INDEFINITE);
-            ft.play();
-        }
-
-        return letters;
-    }
+//    private Node createMiddleContent() {
+//        String title = "";
+//        HBox letters = new HBox(0);
+//        letters.setAlignment(Pos.CENTER);
+//        for (int i = 0; i < title.length(); i++) {
+//            Text letter = new Text(title.charAt(i) + "");
+//            letter.setFont(FONT);
+//            letter.setFill(Color.WHITE);
+//            letters.getChildren().add(letter);
+//
+//            TranslateTransition tt = new TranslateTransition(Duration.seconds(2), letter);
+//            tt.setDelay(Duration.millis(i * 50));
+//            tt.setToY(-25);
+//            tt.setAutoReverse(true);
+//            tt.setCycleCount(TranslateTransition.INDEFINITE);
+//            tt.play();
+//        }
+//
+//        return letters;
+//    }
+//
+//    private Node createRightContent() {
+//        String title = "";
+//        HBox letters = new HBox(0);
+//        letters.setAlignment(Pos.CENTER);
+//        for (int i = 0; i < title.length(); i++) {
+//            Text letter = new Text(title.charAt(i) + "");
+//            letter.setFont(FONT);
+//            letter.setFill(Color.WHITE);
+//            letter.setOpacity(0);
+//            letters.getChildren().add(letter);
+//
+//            FadeTransition ft = new FadeTransition(Duration.seconds(2), letter);
+//            ft.setDelay(Duration.millis(i * 50));
+//            ft.setToValue(1);
+//            ft.setAutoReverse(true);
+//            ft.setCycleCount(TranslateTransition.INDEFINITE);
+//            ft.play();
+//        }
+//
+//        return letters;
+//    }
 
     private MenuItem getMenuItem(int index) {
         return (MenuItem)menuBox.getChildren().get(index);
