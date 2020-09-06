@@ -216,6 +216,73 @@ public class Tank extends Application {
     private Scene scene;
     private Pane tankPane;
 
+    //Getter and setter methods, incase usefull to call those property from other classes.
+    public Group getTank() {
+        return tank;
+    }
+
+    public void setTank(Group tank) {
+        this.tank = tank;
+    }
+
+    public Hull getHull() {
+        return hull;
+    }
+
+    public void setHull(Hull hull) {
+        this.hull = hull;
+    }
+
+    public Bullet getBullet() {
+        return bullet;
+    }
+
+    public void setBullet(Bullet bullet) {
+        this.bullet = bullet;
+    }
+
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
+    }
+
+    public Track getTrack() {
+        return track;
+    }
+
+    public void setTrack(Track track) {
+        this.track = track;
+    }
+
+    public RotateTransition getRt() {
+        return rt;
+    }
+
+    public void setRt(RotateTransition rt) {
+        this.rt = rt;
+    }
+
+    public Scene getScene() {
+        return scene;
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
+
+    public Pane getTankPane() {
+        return tankPane;
+    }
+
+    public void setTankPane(Pane tankPane) {
+        this.tankPane = tankPane;
+    }
+    // Finish calling setter and getter methods
+
+    // Constructor
     public Tank() {
     }
 
