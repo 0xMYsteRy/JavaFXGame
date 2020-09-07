@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.FileNotFoundException;
+import java.util.Objects;
 
 /*MAC: --module-path "/Users/s3757937/Downloads/javafx-sdk-11.0.2/lib" --add-modules javafx.controls,javafx.fxml*/
 class Hull {
@@ -213,73 +214,12 @@ public class Tank extends Application {
     private Weapon weapon;
     private Track track;
     private RotateTransition rt;
+    private FadeTransition ft,ft2;
     private Scene scene;
     private Pane tankPane;
 
     //Getter and setter methods, incase usefull to call those property from other classes.
-    public Group getTank() {
-        return tank;
-    }
 
-    public void setTank(Group tank) {
-        this.tank = tank;
-    }
-
-    public Hull getHull() {
-        return hull;
-    }
-
-    public void setHull(Hull hull) {
-        this.hull = hull;
-    }
-
-    public Bullet getBullet() {
-        return bullet;
-    }
-
-    public void setBullet(Bullet bullet) {
-        this.bullet = bullet;
-    }
-
-    public Weapon getWeapon() {
-        return weapon;
-    }
-
-    public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
-    }
-
-    public Track getTrack() {
-        return track;
-    }
-
-    public void setTrack(Track track) {
-        this.track = track;
-    }
-
-    public RotateTransition getRt() {
-        return rt;
-    }
-
-    public void setRt(RotateTransition rt) {
-        this.rt = rt;
-    }
-
-    public Scene getScene() {
-        return scene;
-    }
-
-    public void setScene(Scene scene) {
-        this.scene = scene;
-    }
-
-    public Pane getTankPane() {
-        return tankPane;
-    }
-
-    public void setTankPane(Pane tankPane) {
-        this.tankPane = tankPane;
-    }
     // Finish calling setter and getter methods
 
     // Constructor
@@ -311,16 +251,20 @@ public class Tank extends Application {
         //
         tank = tankObj.createTank(10);
         tankPane.getChildren().addAll(tank);
-        tank.setTranslateX(500);
-        tank.setTranslateY(500);
+        tank.setTranslateX(350);
+        tank.setTranslateY(350);
         //Displaying the contents of the stage
         tank.setRotate(0);
         scene = new Scene(tankPane, 1400, 750);//1400x750
         //
         rt = new RotateTransition(Duration.millis(300), tank);
         scene.setOnKeyPressed(e -> {
-                    Move(e);
-                    if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
+            try {
+                Move(e);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
                         shootBullet(e);
                     }
                 }
@@ -376,12 +320,91 @@ public class Tank extends Application {
         //Creating a scene object
         return root;
     }
-
-    public void Move(KeyEvent e) {
+    ImageView pathTrack,pathTrack2;
+    public void callPathTrack(double x, double y,double direction){
         var ptr = new TranslateTransition();
-        int Step = 100;
         ptr.setDuration(Duration.millis(500));
+        ptr.setCycleCount(1);
+        ptr.setDelay(Duration.millis(1));
+        var ptr2 = new TranslateTransition();
+        ptr2.setDuration(Duration.millis(500));
+        ptr2.setCycleCount(1);
+        ptr2.setDelay(Duration.millis(1));
+        track= new Track(1);
+        pathTrack= new ImageView(new Image(track.getTrackPath(2)));
+        pathTrack.setFitHeight(50);
+        pathTrack.setFitWidth(50);
+        pathTrack.setRotate(tank.getRotate());
+        pathTrack2= new ImageView(new Image(track.getTrackPath(2)));
+        pathTrack2.setFitHeight(50);
+        pathTrack2.setFitWidth(50);
+        pathTrack2.setRotate(tank.getRotate());
+        tankPane.getChildren().addAll(pathTrack,pathTrack2);
+        switch ((int) direction){
+            case 0:
 
+                pathTrack.setX(x+38);
+                pathTrack.setY(y+85);
+                pathTrack2.setX(x+3);
+                pathTrack2.setY(y+85);
+                ptr.setNode(pathTrack);
+                ptr.setToX(0);
+                ptr.setToY(-70);
+                ptr2.setNode(pathTrack2);
+                ptr2.setToX(0);
+                ptr2.setToY(-70);
+                break;
+            case 90:
+                pathTrack.setX(x-45);
+                pathTrack.setY(y+38);
+                pathTrack2.setX(x-45);
+                pathTrack2.setY(y+1);
+                ptr.setNode(pathTrack);
+                ptr.setToX(70);
+                ptr.setToY(0);
+                ptr2.setNode(pathTrack2);
+                ptr2.setToX(70);
+                ptr2.setToY(0);
+                break;
+            case 180:
+                pathTrack.setX(x+38);
+                pathTrack.setY(y-40);
+                pathTrack2.setX(x+1);
+                pathTrack2.setY(y-40);
+                ptr.setNode(pathTrack);
+                ptr.setToX(0);
+                ptr.setToY(70);
+                ptr2.setNode(pathTrack2);
+                ptr2.setToX(0);
+                ptr2.setToY(70);
+                break;
+            case 270:
+                pathTrack.setX(x+85);
+                pathTrack.setY(y+38);
+                pathTrack2.setX(x+85);
+                pathTrack2.setY(y+1);
+                ptr.setNode(pathTrack);
+                ptr.setToX(-70);
+                ptr.setToY(0);
+                ptr2.setNode(pathTrack2);
+                ptr2.setToX(-70);
+                ptr2.setToY(0);
+                break;
+        }
+
+        ft= new FadeTransition(Duration.millis(800),pathTrack);
+        ft.setFromValue(1.0);
+        ft.setToValue(0);
+        ft2= new FadeTransition(Duration.millis(800),pathTrack2);
+        ft2.setFromValue(1.0);
+        ft2.setToValue(0);
+        ptr.play();
+        ptr2.play();
+    }
+    public void Move(KeyEvent e) throws InterruptedException {
+        var ptr = new TranslateTransition();
+        int Step = 70;
+        ptr.setDuration(Duration.millis(500));
         ptr.setCycleCount(1);
         ptr.setNode(tank);
         ptr.setDelay(Duration.millis(1));
@@ -392,12 +415,13 @@ public class Tank extends Application {
                     rt.setByAngle(180 - tank.getRotate());
                     rt.setCycleCount(1);
                     rt.setAutoReverse(true);
-
                     rt.play();
                     break;
                 }
                 ptr.setToY(tank.getTranslateY() + Step);
-
+                callPathTrack(tank.getTranslateX(),tank.getTranslateY(),tank.getRotate());
+                ft.play();
+                ft2.play();
                 ptr.play();
                 break;
             case LEFT:
@@ -409,6 +433,9 @@ public class Tank extends Application {
                     break;
                 }
                 ptr.setToX(tank.getTranslateX() - Step);
+                callPathTrack(tank.getTranslateX(),tank.getTranslateY(),tank.getRotate());
+                ft.play();
+                ft2.play();
                 ptr.play();
                 break;
             case UP:
@@ -421,6 +448,9 @@ public class Tank extends Application {
                     break;
                 }
                 ptr.setToY(tank.getTranslateY() - Step);
+                callPathTrack(tank.getTranslateX(),tank.getTranslateY(),tank.getRotate());
+                ft.play();
+                ft2.play();
                 ptr.play();
                 break;
             case RIGHT:
@@ -434,6 +464,9 @@ public class Tank extends Application {
                 }
 
                 ptr.setToX(tank.getTranslateX() + Step);
+                callPathTrack(tank.getTranslateX(),tank.getTranslateY(),tank.getRotate());
+                ft.play();
+                ft2.play();
                 ptr.play();
                 break;
 
