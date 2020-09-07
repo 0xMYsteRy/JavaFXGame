@@ -283,6 +283,7 @@ public class Tank extends Application {
     // Finish calling setter and getter methods
 
     // Constructor
+
     public Tank() {
     }
 

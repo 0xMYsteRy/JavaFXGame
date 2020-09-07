@@ -205,5 +205,6 @@ public class Map extends Application {
                 pane.getChildren().addAll(CircleTile);
             }
         }
+
     }
 }
