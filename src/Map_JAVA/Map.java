@@ -4,6 +4,9 @@ import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class Map extends Application {
@@ -38,8 +41,8 @@ public class Map extends Application {
                 {4, 1, 3, 1, 1, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 4},
                 {1, 1, 3, 1, 1, 1, 5, 5, 1, 1, 1, 1, 1, 1, 2, 1, 1, 3, 1, 1},
                 {3, 3, 3, 1, 1, 6, 1, 5, 1, 1, 1, 1, 1, 1, 6, 1, 1, 3, 3, 3},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 5, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 5, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 8, 10,10},
+                {1, 5, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 11,11},
                 {7, 5, 5, 5, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 5, 5, 5, 7},
                 {1, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -63,22 +66,37 @@ public class Map extends Application {
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
         };
-        //drawCircleObject(tankPane, circleMap);
+//        drawCircleObject(tankPane, circleMap);
 
-        // Draw castle
+        // Draw castled
         int[][] castleMap = {
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
         };
+
+        //test
+        for (int i = 0; i < 11; i++) {
+            for (int j = 0; j < 20; j++) {
+                Rectangle rect = new Rectangle();
+                double x = 70 / 9.0;
+                rect.setHeight(x * 9);
+                rect.setWidth(x * 9);
+                rect.setFill(Color.rgb(10, 10, 10, 0));
+                rect.setStroke(Paint.valueOf("green"));
+                rect.setTranslateX(70 * j);
+                rect.setTranslateY(70 * i);
+                tankPane.getChildren().addAll(rect);
+            }
+        }
         drawCastleObject(tankPane, castleMap);
     }
 
@@ -103,7 +121,7 @@ public class Map extends Application {
                 return "file:src/Ultilities/PNG/Background_Snow.png";
             case 2:
                 return "file:src/Ultilities/PNG/Background_DarkSnow.png";
-            case 3 :
+            case 3:
                 return "file:src/Ultilities/PNG/bigcircle.png";
             default:
                 return "";
@@ -127,6 +145,15 @@ public class Map extends Application {
                 return "file:src/Ultilities/PNG/bighouse.png";
             case 7:
                 return "file:src/Ultilities/PNG/Tower.png";
+            case 8:
+                return "file:src/GuttyKreumNatureTilesvol1/rivertopleft64x64transparent.gif";
+            case 9:
+                return "file:src/GuttyKreumNatureTilesvol1/riverbottomleft64x64.gif";
+            case 10:
+                return "file:src/GuttyKreumNatureTilesvol1/rivertop64x64transparentanimated.gif";
+
+            case 11:
+                return "file:src/GuttyKreumNatureTilesvol1/riverbottom64x64transparentanimatednotbright.gif";
             default:
                 return "";
         }
@@ -143,6 +170,7 @@ public class Map extends Application {
                 objectTile.setTranslateX(70 * j);
                 objectTile.setTranslateY(70 * i);
                 pane.getChildren().addAll(objectTile);
+
             }
         }
     }
@@ -155,6 +183,8 @@ public class Map extends Application {
                 return "file:";
             case 2:
                 return "file:src/Ultilities/PNG/Background_Castle.png";
+            case 4:
+                return "file:src/GuttyKreumNatureTilesvol1/tree96x96transparentanimated.gif";
             default:
                 return "file:src/Ultilities/PNG/ObjectBase.png";
         }
@@ -166,6 +196,7 @@ public class Map extends Application {
                 String imagePath = getCastleImagePath(map[i][j]);
                 ImageView CastleTile = new ImageView();
                 CastleTile.setImage(new Image(imagePath));
+
                 CastleTile.setScaleX(1.5);
                 CastleTile.setScaleY(1.5);
                 CastleTile.setFitHeight(140);
