@@ -4,17 +4,24 @@ import Map_JAVA.Map;
 import javafx.animation.*;
 
 import javafx.application.Application;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.FileNotFoundException;
+import java.util.Objects;
 
 /*MAC: --module-path "/Users/s3757937/Downloads/javafx-sdk-11.0.2/lib" --add-modules javafx.controls,javafx.fxml*/
 class Hull {
@@ -117,36 +124,36 @@ class Bullet {
     public Bullet(int bulletOption) {
         switch (bulletOption) {
             case 1:
-                Damage = 15;
-                Speed = 12;
-                Effect = 1;
-                RealoadRate = 0.2;
-                Ammunition = 20;
-                Range = 10;
+                this.Damage = 15;
+                this.Speed = 12;
+                this.Effect = 1;
+                this.RealoadRate = 0.2;
+                this.Ammunition = 20;
+                this.Range = 10;
                 break;
             case 2:
-                Damage = 30;
-                Speed = 10;
-                Effect = 1;
-                RealoadRate = 0.5;
-                Ammunition = 10;
-                Range = 12;
+                this.Damage = 30;
+                this.Speed = 10;
+                this.Effect = 1;
+                this.RealoadRate = 0.5;
+                this.Ammunition = 10;
+                this.Range = 12;
                 break;
             case 3:
-                Damage = 50;
-                Speed = 15;
-                Effect = 1;
-                RealoadRate = 1;
-                Ammunition = 5;
-                Range = 15;
+                this.Damage = 50;
+                this.Speed = 15;
+                this.Effect = 1;
+                this.RealoadRate = 1;
+                this.Ammunition = 5;
+                this.Range = 15;
                 break;
             case 4:
-                Damage = 90;
-                Speed = 0;
-                Effect = 2;
-                RealoadRate = 0;
-                Ammunition = 0;
-                Range = 1;
+                this.Damage = 90;
+                this.Speed = 0;
+                this.Effect = 2;
+                this.RealoadRate = 0;
+                this.Ammunition = 0;
+                this.Range = 1;
                 break;
             default:
                 System.out.println("Damn, Wrong option");
@@ -169,7 +176,7 @@ class Bullet {
         return Bullet;
     }
 
-    public ImageView getBullet(double x, double y, double Direction, int Scale) {
+    public ImageView getBullet(double x, double y, double Direction, double Scale) {
         System.out.println("HEllo1");
         Bullet.setX(x);
         Bullet.setY(y);
@@ -206,80 +213,19 @@ class Bullet {
 }
 
 public class Tank extends Application {
-
-    private Group tank = new Group();
+    private Group tank, tank2;
     private Hull hull;
     private Bullet bullet;
     private Weapon weapon;
     private Track track;
     private RotateTransition rt;
+    private FadeTransition ft, ft2;
     private Scene scene;
     private Pane tankPane;
+    double scale=70/9.0;
 
     //Getter and setter methods, incase usefull to call those property from other classes.
-    public Group getTank() {
-        return tank;
-    }
 
-    public void setTank(Group tank) {
-        this.tank = tank;
-    }
-
-    public Hull getHull() {
-        return hull;
-    }
-
-    public void setHull(Hull hull) {
-        this.hull = hull;
-    }
-
-    public Bullet getBullet() {
-        return bullet;
-    }
-
-    public void setBullet(Bullet bullet) {
-        this.bullet = bullet;
-    }
-
-    public Weapon getWeapon() {
-        return weapon;
-    }
-
-    public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
-    }
-
-    public Track getTrack() {
-        return track;
-    }
-
-    public void setTrack(Track track) {
-        this.track = track;
-    }
-
-    public RotateTransition getRt() {
-        return rt;
-    }
-
-    public void setRt(RotateTransition rt) {
-        this.rt = rt;
-    }
-
-    public Scene getScene() {
-        return scene;
-    }
-
-    public void setScene(Scene scene) {
-        this.scene = scene;
-    }
-
-    public Pane getTankPane() {
-        return tankPane;
-    }
-
-    public void setTankPane(Pane tankPane) {
-        this.tankPane = tankPane;
-    }
     // Finish calling setter and getter methods
 
     // Constructor
@@ -300,7 +246,7 @@ public class Tank extends Application {
         //Setting title to the Stage
         stage.setTitle("Loading an image");
         Tank tankObj = new Tank(1, 2);
-
+        Tank tankObj2= new Tank(3, 4);
 
         //Adding scene to the stage
         tankPane = new Pane();
@@ -308,20 +254,31 @@ public class Tank extends Application {
         //Load the map
         Map map = new Map();
         map.loadMap(tankPane);
+        tank2 = new Group(tankObj2.createTank(scale));
+        tank2.setTranslateX(0);
+        tank2.setTranslateY(0);
+        tank2.setCache(true);
         //
-        tank = tankObj.createTank(10);
-        tankPane.getChildren().addAll(tank);
-        tank.setTranslateX(500);
-        tank.setTranslateY(500);
+        tank = tankObj.createTank(scale);
+        tankPane.getChildren().addAll(tank, tank2);
+        tank.setTranslateX(350);
+        tank.setTranslateY(350);
+        tank.setCache(true);
         //Displaying the contents of the stage
         tank.setRotate(0);
         scene = new Scene(tankPane, 1400, 750);//1400x750
         //
         rt = new RotateTransition(Duration.millis(300), tank);
         scene.setOnKeyPressed(e -> {
-                    Move(e);
+                    try {
+                        if (tank.getTranslateX() % 70 == 0 & tank.getTranslateY() % 70 == 0) {
+                            Move(e, tankPane,scale);
+                        }
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
                     if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
-                        shootBullet(e);
+                        shootBullet(e,scale);
                     }
                 }
         );
@@ -331,13 +288,17 @@ public class Tank extends Application {
 
     }
 
-    public Group createTank(int x) throws FileNotFoundException {
+    public Group createTank(double x) throws FileNotFoundException {
 
 
         Image weaponI = new Image(weapon.getWeapon());
         Image HullI = new Image(hull.getHull());
         Image trackI_A = new Image(track.getTrack());
-
+        Rectangle rect= new Rectangle();
+        rect.setHeight(x*9);
+        rect.setWidth(x*9);
+        rect.setFill(Color.rgb(10,10,10,0));
+        rect.setStroke(Paint.valueOf("green"));
         ImageView TankView = new ImageView(HullI);
         ImageView TrackViewA1 = new ImageView(trackI_A);
         ImageView TrackViewA2 = new ImageView(trackI_A);
@@ -349,7 +310,7 @@ public class Tank extends Application {
         TrackViewA1.setY(0.2 * x);
         TrackViewA1.setFitHeight(4 * x);
         TrackViewA1.setFitWidth(1.3 * x);
-        TrackViewA2.setX(2.1 * x);
+        TrackViewA2.setX(2 * x);
         TrackViewA2.setY(5 * x);
         TrackViewA2.setFitHeight(4 * x);
         TrackViewA2.setFitWidth(1.5 * x);
@@ -372,33 +333,118 @@ public class Tank extends Application {
         WeaponView.setFitHeight(7 * x);
         WeaponView.setFitWidth(3 * x);
 
-        Group root = new Group(TrackViewA1, TrackViewA2, TrackViewA3, TrackViewA4, TankView, WeaponView);
+        Group root = new Group(rect,TrackViewA1, TrackViewA2, TrackViewA3, TrackViewA4, TankView, WeaponView);
         //Creating a scene object
         return root;
     }
 
-    public void Move(KeyEvent e) {
-        var ptr = new TranslateTransition();
-        int Step = 100;
-        ptr.setDuration(Duration.millis(500));
+    ImageView pathTrack, pathTrack2;
 
+    public void callPathTrack(double x, double y, double direction, double scale,int step) {
+        var ptr = new TranslateTransition();
+        ptr.setDuration(Duration.millis(500));
+        ptr.setCycleCount(1);
+        ptr.setDelay(Duration.millis(1));
+        var ptr2 = new TranslateTransition();
+        ptr2.setDuration(Duration.millis(500));
+        ptr2.setCycleCount(1);
+        ptr2.setDelay(Duration.millis(1));
+        track = new Track(1);
+        pathTrack = new ImageView(new Image(track.getTrackPath(2)));
+        pathTrack.setFitHeight(50 * scale / 10.0);
+        pathTrack.setFitWidth(50 * scale / 10.0);
+        pathTrack.setRotate(tank.getRotate());
+        pathTrack2 = new ImageView(new Image(track.getTrackPath(2)));
+        pathTrack2.setFitHeight(50 * scale / 10.0);
+        pathTrack2.setFitWidth(50 * scale / 10.0);
+        pathTrack2.setRotate(tank.getRotate());
+        tankPane.getChildren().addAll(pathTrack, pathTrack2);
+        switch ((int) direction) {
+            case 0:
+
+                pathTrack.setX(x + 39 * scale / 10.0);
+                pathTrack.setY(y + 85 * scale / 10.0);
+                pathTrack2.setX(x + 2 * scale / 10.0);
+                pathTrack2.setY(y + 85 * scale / 10.0);
+                ptr.setNode(pathTrack);
+                ptr.setToX(0);
+                ptr.setToY(-step);
+                ptr2.setNode(pathTrack2);
+                ptr2.setToX(0);
+                ptr2.setToY(-step);
+                break;
+            case 90:
+                pathTrack.setX(x - 45 * scale / 10.0);
+                pathTrack.setY(y + 39 * scale / 10.0);
+                pathTrack2.setX(x - 45 * scale / 10.0);
+                pathTrack2.setY(y + 2 * scale / 10.0);
+                ptr.setNode(pathTrack);
+                ptr.setToX(step);
+                ptr.setToY(0);
+                ptr2.setNode(pathTrack2);
+                ptr2.setToX(step);
+                ptr2.setToY(0);
+                break;
+            case 180:
+                pathTrack.setX(x + 38 * scale / 10.0);
+                pathTrack.setY(y - 40 * scale / 10.0);
+                pathTrack2.setX(x + 2 * scale / 10.0);
+                pathTrack2.setY(y - 40 * scale / 10.0);
+                ptr.setNode(pathTrack);
+                ptr.setToX(0);
+                ptr.setToY(step);
+                ptr2.setNode(pathTrack2);
+                ptr2.setToX(0);
+                ptr2.setToY(step);
+                break;
+            case 270:
+                pathTrack.setX(x + 85 * scale / 10.0);
+                pathTrack.setY(y + 37 * scale / 10.0);
+                pathTrack2.setX(x + 85 * scale / 10.0);
+                pathTrack2.setY(y + 2 * scale / 10.0);
+                ptr.setNode(pathTrack);
+                ptr.setToX(-step);
+                ptr.setToY(0);
+                ptr2.setNode(pathTrack2);
+                ptr2.setToX(-step);
+                ptr2.setToY(0);
+                break;
+        }
+
+        ft = new FadeTransition(Duration.millis(800), pathTrack);
+        ft.setFromValue(1.0);
+        ft.setToValue(0);
+        ft2 = new FadeTransition(Duration.millis(800), pathTrack2);
+        ft2.setFromValue(1.0);
+        ft2.setToValue(0);
+        ptr.play();
+        ptr2.play();
+    }
+
+    public void Move(KeyEvent e, Pane tankPane,double scale) throws InterruptedException {
+        var ptr = new TranslateTransition();
+        int Step = 70;
+        ptr.setDuration(Duration.millis(500));
         ptr.setCycleCount(1);
         ptr.setNode(tank);
         ptr.setDelay(Duration.millis(1));
-
         switch (e.getCode()) {
             case DOWN:
                 if (tank.getRotate() != 180) {
                     rt.setByAngle(180 - tank.getRotate());
                     rt.setCycleCount(1);
                     rt.setAutoReverse(true);
-
                     rt.play();
                     break;
                 }
                 ptr.setToY(tank.getTranslateY() + Step);
+                if (!tank.getBoundsInParent().intersects(tank2.getBoundsInParent())) {
+                    callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate(), scale,Step);
+                    ft.play();
+                    ft2.play();
+                    ptr.play();
+                }
 
-                ptr.play();
                 break;
             case LEFT:
                 if (tank.getRotate() != 270) {
@@ -409,7 +455,12 @@ public class Tank extends Application {
                     break;
                 }
                 ptr.setToX(tank.getTranslateX() - Step);
-                ptr.play();
+                if (!tank.getBoundsInParent().intersects(tank2.getBoundsInParent())) {
+                    callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate(),scale,Step);
+                    ft.play();
+                    ft2.play();
+                    ptr.play();
+                }
                 break;
             case UP:
                 if (tank.getRotate() != 0) {
@@ -421,7 +472,12 @@ public class Tank extends Application {
                     break;
                 }
                 ptr.setToY(tank.getTranslateY() - Step);
-                ptr.play();
+                if (!tank.getBoundsInParent().intersects(tank2.getBoundsInParent())) {
+                    callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate(), scale,Step);
+                    ft.play();
+                    ft2.play();
+                    ptr.play();
+                }
                 break;
             case RIGHT:
                 if (tank.getRotate() != 90) {
@@ -434,7 +490,12 @@ public class Tank extends Application {
                 }
 
                 ptr.setToX(tank.getTranslateX() + Step);
-                ptr.play();
+                if (!tank.getBoundsInParent().intersects(tank2.getBoundsInParent())) {
+                    callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate(), scale,Step);
+                    ft.play();
+                    ft2.play();
+                    ptr.play();
+                }
                 break;
 
         }
@@ -442,47 +503,58 @@ public class Tank extends Application {
 
     }
 
-    public void shootBullet(KeyEvent e) {
+    public void shootBullet(KeyEvent e, double scale) {
         var ptr = new TranslateTransition();
         if (e.getCode() == KeyCode.SPACE) {
             bullet = new Bullet(1);
-            double x = tank.getTranslateX();
-            double y = tank.getTranslateY();
+            double x ;
+            double y ;
             double Direction = tank.getRotate();
-            int Scale = 10;
             int Range = 10;
             int Speed = bullet.getSpeed() / 10 * Range;
 //                System.out.println(2);
 
+            ImageView bulletImg ;
             switch ((int) Direction) {
                 case 0:
-                    ptr.setToY(-Scale * Range * 4);
+                    x=tank.getTranslateX();
+                    y = tank.getTranslateY()- scale*4.0;
+                    ptr.setToY(-scale * Range * 4);
+                    bulletImg = bullet.getBullet(x, y, Direction, scale);
                     break;
                 case 90:
-                    ptr.setToX(Scale * Range * 4);
+                    x=tank.getTranslateX()+scale*4.0;
+                    y = tank.getTranslateY();
+                    ptr.setToX(scale * Range * 4);
+                    bulletImg = bullet.getBullet(x, y, Direction, scale);
                     break;
                 case 180:
-                    ptr.setToY(Scale * Range * 4);
+                    x=tank.getTranslateX();
+                    y = tank.getTranslateY()+scale*4.0;
+                    ptr.setToY(scale * Range * 4);
+                    bulletImg = bullet.getBullet(x, y, Direction, scale);
                     break;
                 case 270:
-                    ptr.setToX(-Scale * Range * 4);
+                    x=tank.getTranslateX()-scale*4.0;
+                    y = tank.getTranslateY();
+                    ptr.setToX(-scale * Range * 4);
+                    bulletImg = bullet.getBullet(x, y, Direction, scale);
 
                     break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + (int) Direction);
             }
 
             ptr.setDuration(Duration.millis(100 * Speed));
 
             ptr.setCycleCount(1);
-            ImageView bulletImg = bullet.getBullet(x, y, Direction, Scale);
 
             tankPane.getChildren().addAll(bulletImg);
             ptr.setNode(bulletImg);
             System.out.println("Before Shooting");
             ptr.setDelay(Duration.millis(1));
             ptr.play();
-            System.out.println(ptr.getToX() + " " + ptr.getByX());
             ptr.setOnFinished(event -> tankPane.getChildren().remove(bulletImg));
         }
     }
 }
-
