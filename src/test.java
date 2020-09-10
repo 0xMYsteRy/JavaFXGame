@@ -1,12 +1,19 @@
 
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class test extends Application {
 
@@ -16,7 +23,21 @@ public class test extends Application {
     @Override
     public void start(Stage stage) {
 
-        initUI(stage);
+        final Rectangle rectBasicTimeline = new Rectangle(100, 50, 100, 50);
+        rectBasicTimeline.setFill(Color.RED);
+
+        final Timeline timeline = new Timeline();
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.setAutoReverse(true);
+        final KeyValue kv = new KeyValue(rectBasicTimeline.xProperty(), 300);
+        final KeyFrame kf = new KeyFrame(Duration.millis(2000), kv);
+        timeline.getKeyFrames().add(kf);
+        timeline.play();
+        Pane pane= new Pane(rectBasicTimeline);
+        Scene scene= new Scene(pane);
+        stage.setScene(scene);
+        stage.show();
+
     }
 
     private void initUI(Stage stage) {
@@ -30,7 +51,8 @@ public class test extends Application {
         AnimationTimer timer = new MyTimer();
         timer.start();
 
-        var scene = new Scene(root, 300, 250);
+        var scene = new Scene(root, 1000, 1000);
+
 
         stage.setTitle("AnimationTimer");
         stage.setScene(scene);
@@ -47,7 +69,8 @@ public class test extends Application {
 
         private void doHandle() {
 
-            opacity -= 0.01;
+            opacity -= 0.1;
+
             lbl.opacityProperty().set(opacity);
 
             if (opacity <= 0) {
