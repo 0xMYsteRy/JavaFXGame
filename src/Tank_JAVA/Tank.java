@@ -1,13 +1,10 @@
 package Tank_JAVA;
 
 import Map_JAVA.MapJungle;
-import Map_JAVA.MapJungle;
 import javafx.animation.*;
 
 import javafx.application.Application;
-import javafx.geometry.Bounds;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,7 +16,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import java.util.concurrent.atomic.AtomicInteger;
+
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -176,7 +173,7 @@ class Bullet {
 
         return ImagePath;
 
-
+    }
     public int getRange() {
         return Range;
     }
@@ -288,7 +285,7 @@ public class Tank extends Application {
 
         //
         rt = new RotateTransition(Duration.millis(300), tank);
-        scene.setOnKeyPressed(e ->{
+        scene.setOnKeyPressed(e -> {
             try {
                 if ((tank.getTranslateX() - gap) % 70 == 0 & (tank.getTranslateY() - gap) % 70 == 0) {
                     Move(e, scale);
@@ -477,12 +474,13 @@ public class Tank extends Application {
                         }
                 );
                 timeLineMoveTank = new Timeline(kf);
-                timeLineMoveTank.setOnFinished(evt ->{
-                    if(tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                timeLineMoveTank.setOnFinished(evt -> {
+                    if (tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
                         System.out.println("COLLLLIDED");
                         tank.setTranslateX(prevX);
                         tank.setTranslateY(prevY);
-                    }});
+                    }
+                });
                 timeLineMoveTank.setCycleCount(35);
                 callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate(), scale, Step);
                 ft.play();
@@ -507,12 +505,13 @@ public class Tank extends Application {
                         }
                 );
                 timeLineMoveTank = new Timeline(kf);
-                timeLineMoveTank.setOnFinished(evt ->{
-                    if(tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                timeLineMoveTank.setOnFinished(evt -> {
+                    if (tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
                         System.out.println("COLLLLIDED");
                         tank.setTranslateX(prevX);
                         tank.setTranslateY(prevY);
-                    }});
+                    }
+                });
                 timeLineMoveTank.setCycleCount(35);
                 callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate(), scale, Step);
                 ft.play();
@@ -538,12 +537,13 @@ public class Tank extends Application {
                         }
                 );
                 timeLineMoveTank = new Timeline(kf);
-                timeLineMoveTank.setOnFinished(evt ->{
-                    if(tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                timeLineMoveTank.setOnFinished(evt -> {
+                    if (tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
                         System.out.println("COLLLLIDED");
                         tank.setTranslateX(prevX);
                         tank.setTranslateY(prevY);
-                    }});
+                    }
+                });
                 timeLineMoveTank.setCycleCount(35);
                 callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate(), scale, Step);
                 ft.play();
@@ -570,12 +570,13 @@ public class Tank extends Application {
                         }
                 );
                 timeLineMoveTank = new Timeline(kf);
-                timeLineMoveTank.setOnFinished(evt ->{
-                    if(tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
-                    System.out.println("COLLLLIDED");
-                    tank.setTranslateX(prevX);
-                    tank.setTranslateY(prevY);
-                }});
+                timeLineMoveTank.setOnFinished(evt -> {
+                    if (tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                        System.out.println("COLLLLIDED");
+                        tank.setTranslateX(prevX);
+                        tank.setTranslateY(prevY);
+                    }
+                });
                 timeLineMoveTank.setCycleCount(35);
                 callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate(), scale, Step);
                 ft.play();
@@ -584,6 +585,7 @@ public class Tank extends Application {
                 break;
         }
     }
+
     public void shootBullet(KeyEvent e, double scale) throws NullPointerException {
 
         if (e.getCode() == KeyCode.SPACE) {
