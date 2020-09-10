@@ -5,7 +5,9 @@ import Map_JAVA.MapJungle;
 import javafx.animation.*;
 
 import javafx.application.Application;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,9 +19,9 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+
 
 /*MAC: --module-path "/Users/s3757937/Downloads/javafx-sdk-11.0.2/lib" --add-modules javafx.controls,javafx.fxml*/
 class Hull {
@@ -173,7 +175,7 @@ class Bullet {
         System.out.printf("Shot %d bullets\n", counting);
 
         return ImagePath;
-    }
+
 
     public int getRange() {
         return Range;
@@ -203,6 +205,7 @@ class Bullet {
 
 public class Tank extends Application {
     private Group tank;
+
     private Hull hull;
     private Bullet bullet;
     private Weapon weapon;
@@ -253,6 +256,7 @@ public class Tank extends Application {
         //Setting title to the Stage
         stage.setTitle("Loading an image");
         Pane tankPane;
+
         tankPane = new Pane();
         //Load the map
         MapJungle map = new MapJungle();
@@ -277,6 +281,7 @@ public class Tank extends Application {
         tankPane.getChildren().addAll(tank);
         tank.setTranslateX(x + gap);
         tank.setTranslateY(y + gap);
+
         tank.setCache(true);
         //Displaying the contents of the stage
         tank.setRotate(0);
@@ -296,6 +301,7 @@ public class Tank extends Application {
 
                     if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
                         shootBullet(e, scale);
+
                     }
                 }
         );
@@ -310,6 +316,7 @@ public class Tank extends Application {
         rect.setHeight(x * 9);
         rect.setWidth(x * 9);
         rect.setFill(Color.rgb(10, 10, 10, 0));
+
         rect.setStroke(Paint.valueOf("green"));
         ImageView TankView = new ImageView(HullI);
         ImageView TrackViewA1 = new ImageView(trackI_A);
@@ -346,6 +353,7 @@ public class Tank extends Application {
         WeaponView.setFitWidth(3 * x);
 
         Group root = new Group(rect, TrackViewA1, TrackViewA2, TrackViewA3, TrackViewA4, TankView, WeaponView);
+
         //Creating a scene object
         return root;
     }
@@ -450,6 +458,7 @@ public class Tank extends Application {
         // Testing
         Timeline timeLineMoveTank;
         KeyFrame kf = null;
+
         switch (e.getCode()) {
             case DOWN:
                 if (tank.getRotate() != 180) {
@@ -479,6 +488,7 @@ public class Tank extends Application {
                 ft.play();
                 ft2.play();
                 timeLineMoveTank.play();
+
                 break;
             case LEFT:
                 if (tank.getRotate() != 270) {
@@ -508,6 +518,7 @@ public class Tank extends Application {
                 ft.play();
                 ft2.play();
                 timeLineMoveTank.play();
+
                 break;
             case UP:
                 if (tank.getRotate() != 0) {
@@ -518,7 +529,6 @@ public class Tank extends Application {
                     rt.play();
                     break;
                 }
-
                 kf = new KeyFrame(
                         Duration.millis(stepDuration),
                         (evt) -> {
@@ -539,6 +549,7 @@ public class Tank extends Application {
                 ft.play();
                 ft2.play();
                 timeLineMoveTank.play();
+
 
                 break;
             case RIGHT:
@@ -570,11 +581,9 @@ public class Tank extends Application {
                 ft.play();
                 ft2.play();
                 timeLineMoveTank.play();
-
                 break;
         }
     }
-
     public void shootBullet(KeyEvent e, double scale) throws NullPointerException {
 
         if (e.getCode() == KeyCode.SPACE) {
@@ -657,14 +666,13 @@ public class Tank extends Application {
                     BulletW.setX(x);
                     BulletW.setY(y);
                     bulletAnimation.play();
+
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + (int) Direction);
             }
             tankPane.getChildren().addAll(BulletW);
 
-
         }
     }
 }
-

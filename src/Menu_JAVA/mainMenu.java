@@ -1,88 +1,233 @@
 package Menu_JAVA;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import Tank_JAVA.Tank;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Effect;
 import javafx.scene.effect.GaussianBlur;
-import javafx.scene.input.KeyCode;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
+import javafx.scene.shape.*;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.util.Pair;
 
 public class mainMenu extends Application {
-
-    private static final Font FONT = Font.font("", FontWeight.BOLD, 18);
-
-    private VBox menuBox;
-    private int currentItem = 0;
+    private Pane root = new Pane();
+    private VBox menuBox = new VBox(-5);
+    private int type;
+    private int color;
+    private List<Pair<String, Runnable>> menuData = Arrays.asList(
+            new Pair<String, Runnable>("Start", () -> {
+                System.out.println("Start activated");
+            }),
+            new Pair<String, Runnable>("Campaign",() -> {
+                System.out.println("Campaign activated");
+            }),
+            new Pair<String, Runnable>("Multiplayer", () -> {
+                System.out.println("Multiplayer activated");
+            }),
+            new Pair<String, Runnable>("Game Options", () -> {
+                System.out.println("Game options activated");
+            }),
+            new Pair<String, Runnable>("Credits", () -> {
+                System.out.println("Credits");
+            }),
+            new Pair<String, Runnable>("Exit", Platform::exit)
+    );
 
     private ScheduledExecutorService bgThread = Executors.newSingleThreadScheduledExecutor();
 
     private Parent createContent() throws FileNotFoundException {
         Pane root = new Pane();
-        root.setPrefSize(900, 600);
+        root.setPrefSize(1280, 720);
 
-        Rectangle bg = new Rectangle(900, 600);
+        String imagePath = "file:src/Menu_JAVA/res/background.png";
+        ImageView background = new ImageView(new Image(imagePath));
 
-        ContentFrame frame1 = new ContentFrame(createLeftContent(20,1,1));
-        ContentFrame frame2 = new ContentFrame(createLeftContent(20,2,2));
-        ContentFrame frame3 = new ContentFrame(createLeftContent(20,3,4));
+        // Tank selection display
+        ContentFrame frame1 = new ContentFrame(createTankContent(20,1,1));
+        frame1.setOnMouseClicked(e -> {
+            ContentFrame frame5 = null;
+            try {
+                frame5 = new ContentFrame(createTankContent2(20, 1, 1));
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+            assert frame5 != null;
+            frame5.setTranslateX(20);
+            frame5.setTranslateY(300);
+            root.getChildren().add(frame5);
+            type = 1;
+        });
+        ContentFrame frame2 = new ContentFrame(createTankContent(20,2,2));
+        frame2.setOnMouseClicked(e -> {
+            ContentFrame frame5 = null;
+            try {
+                frame5 = new ContentFrame(createTankContent2(20, 2, 1));
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+            assert frame5 != null;
+            frame5.setTranslateX(20);
+            frame5.setTranslateY(300);
+            root.getChildren().add(frame5);
+            type = 2;
+        });
+        ContentFrame frame3 = new ContentFrame(createTankContent(20,3,3));
+        frame3.setOnMouseClicked(e -> {
+            ContentFrame frame5 = null;
+            try {
+                frame5 = new ContentFrame(createTankContent2(20, 3, 1));
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+            assert frame5 != null;
+            frame5.setTranslateX(20);
+            frame5.setTranslateY(300);
+            root.getChildren().add(frame5);
+            type = 3;
+        });
+        ContentFrame frame4 = new ContentFrame(createTankContent(20,4,4));
+        frame4.setOnMouseClicked(e -> {
+            ContentFrame frame5 = null;
+            try {
+                frame5 = new ContentFrame(createTankContent2(20, 4, 1));
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+            assert frame5 != null;
+            frame5.setTranslateX(20);
+            frame5.setTranslateY(300);
+            root.getChildren().add(frame5);
+            type = 4;
+        });
 
-        HBox hbox = new HBox(15, frame1, frame2, frame3);
-        hbox.setTranslateX(120);
+        HBox hbox = new HBox(20, frame1, frame2, frame3, frame4);
+        hbox.setTranslateX(20);
         hbox.setTranslateY(50);
 
-        MenuItem itemExit = new MenuItem("EXIT");
+//        ContentFrame frame5 = new ContentFrame(createTankContent2(20,getType(type), 1));
+//        frame5.setTranslateX(20);
+//        frame5.setTranslateY(300);
+
+        // Color pane
+        Rectangle red = new Rectangle(40, 40);
+        red.setFill(Color.RED);
+        red.setStroke(Color.WHITESMOKE);
+        red.setOnMouseClicked(e -> {
+            ContentFrame frame5 = null;
+            try {
+                frame5 = new ContentFrame(createTankContent2(20, type, 1));
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+            assert frame5 != null;
+            frame5.setTranslateX(20);
+            frame5.setTranslateY(300);
+            root.getChildren().add(frame5);
+            color = 1;
+        });
+        Rectangle yellow = new Rectangle(40, 40);
+        yellow.setFill(Color.YELLOW);
+        yellow.setStroke(Color.WHITESMOKE);
+        yellow.setOnMouseClicked(e -> {
+            ContentFrame frame5 = null;
+            try {
+                frame5 = new ContentFrame(createTankContent2(20, type, 2));
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+            assert frame5 != null;
+            frame5.setTranslateX(20);
+            frame5.setTranslateY(300);
+            root.getChildren().add(frame5);
+            color = 2;
+        });
+        Rectangle green = new Rectangle(40, 40);
+        green.setFill(Color.GREEN);
+        green.setStroke(Color.WHITESMOKE);
+        green.setOnMouseClicked(e -> {
+            ContentFrame frame5 = null;
+            try {
+                frame5 = new ContentFrame(createTankContent2(20, type, 3));
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+            assert frame5 != null;
+            frame5.setTranslateX(20);
+            frame5.setTranslateY(300);
+            root.getChildren().add(frame5);
+            color = 3;
+        });
+        Rectangle blue = new Rectangle(40, 40);
+        blue.setFill(Color.BLUE);
+        blue.setStroke(Color.WHITESMOKE);
+        blue.setOnMouseClicked(e -> {
+            ContentFrame frame5 = null;
+            try {
+                frame5 = new ContentFrame(createTankContent2(20, type, 4));
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+            assert frame5 != null;
+            frame5.setTranslateX(20);
+            frame5.setTranslateY(300);
+            root.getChildren().add(frame5);
+            color = 4;
+        });
+        VBox colorPane = new VBox(5, red, yellow, green, blue);
+        colorPane.setTranslateX(240);
+        colorPane.setTranslateY(300);
+
+        addMenu(900,300);
+        startAnimation();
+
+        Text name = new Text("  TANK \nBATTLE");
+        name.setTranslateX(900);
+        name.setTranslateY(120);
+        name.setFill(Color.GREY);
+        name.setStroke(Color.WHITE);
+        name.setOnMouseClicked(e->{
+            name.setFill(Color.BLACK);
+        });
+        name.setFont(Font.loadFont(mainMenu.class.getResource("res/Penumbra-HalfSerif-Std_35114.ttf").toExternalForm(), 100));
+
+        MenuItem itemExit = new MenuItem("Exit");
         itemExit.setOnActivate(() -> System.exit(0));
 
-        menuBox = new VBox(10,
-                new MenuItem("Start"),
-                new MenuItem("Campaign"),
-                new MenuItem("Multiplayer"),
-                new MenuItem("Setting"),
-                itemExit);
-        menuBox.setAlignment(Pos.BOTTOM_CENTER);
-        menuBox.setTranslateX(360);
-        menuBox.setTranslateY(300);
-
-        // we can replace this one with the game logo
-        Text about = new Text("Tank_JAVA battle\n\tby\n    Blanc studio");
-        about.setTranslateX(50);
-        about.setTranslateY(500);
-        about.setFill(Color.WHITE);
-        about.setFont(FONT);
-        about.setOpacity(0.2);
-
-        getMenuItem(0).setActive(true);
-
-        root.getChildren().addAll(bg, hbox, menuBox, about);
+        root.getChildren().addAll(background, hbox, menuBox, name, colorPane);
         return root;
     }
 
-    private Node createLeftContent(int x,int choice, int color) throws FileNotFoundException {
+    private Node createTankContent(int x,int choice, int color) throws FileNotFoundException {
         Tank tank = new Tank(choice,color );
         Group tank1 = new Group(tank.createTank(x));
         bgThread.scheduleAtFixedRate(() -> {
@@ -113,51 +258,10 @@ public class mainMenu extends Application {
         return tank1;
     }
 
-    private Node createMiddleContent() {
-        String title = "";
-        HBox letters = new HBox(0);
-        letters.setAlignment(Pos.CENTER);
-        for (int i = 0; i < title.length(); i++) {
-            Text letter = new Text(title.charAt(i) + "");
-            letter.setFont(FONT);
-            letter.setFill(Color.WHITE);
-            letters.getChildren().add(letter);
-
-            TranslateTransition tt = new TranslateTransition(Duration.seconds(2), letter);
-            tt.setDelay(Duration.millis(i * 50));
-            tt.setToY(-25);
-            tt.setAutoReverse(true);
-            tt.setCycleCount(TranslateTransition.INDEFINITE);
-            tt.play();
-        }
-
-        return letters;
-    }
-
-    private Node createRightContent() {
-        String title = "";
-        HBox letters = new HBox(0);
-        letters.setAlignment(Pos.CENTER);
-        for (int i = 0; i < title.length(); i++) {
-            Text letter = new Text(title.charAt(i) + "");
-            letter.setFont(FONT);
-            letter.setFill(Color.WHITE);
-            letter.setOpacity(0);
-            letters.getChildren().add(letter);
-
-            FadeTransition ft = new FadeTransition(Duration.seconds(2), letter);
-            ft.setDelay(Duration.millis(i * 50));
-            ft.setToValue(1);
-            ft.setAutoReverse(true);
-            ft.setCycleCount(TranslateTransition.INDEFINITE);
-            ft.play();
-        }
-
-        return letters;
-    }
-
-    private MenuItem getMenuItem(int index) {
-        return (MenuItem)menuBox.getChildren().get(index);
+    private Node createTankContent2(int x, int choice, int color) throws FileNotFoundException {
+        Tank tank = new Tank(choice, color);
+        Group tank2 = new Group(tank.createTank(x));
+        return tank2;
     }
 
     private static class ContentFrame extends StackPane {
@@ -173,84 +277,96 @@ public class mainMenu extends Application {
         }
     }
 
-    private static class MenuItem extends HBox {
-        private TriCircle c1 = new TriCircle(), c2 = new TriCircle();
-        private Text text;
+    public static class MenuItem extends Pane {
         private Runnable script;
 
         public MenuItem(String name) {
-            super(15);
-            setAlignment(Pos.CENTER);
+            Polygon bg = new Polygon(0, 0, 200, 0, 215, 15, 200, 30, 0, 30);
+            bg.setStroke(Color.color(1, 1, 1, 0.75));
+            bg.setEffect(new GaussianBlur());
 
-            text = new Text(name);
-            text.setFont(FONT);
-            text.setEffect(new GaussianBlur(2));
+            bg.fillProperty().bind(
+                    Bindings.when(pressedProperty())
+                            .then(Color.color(0, 0, 0, 0.75))
+                            .otherwise(Color.color(0, 0, 0, 0.25))
+            );
 
-            getChildren().addAll(c1, text, c2);
-            setActive(false);
-            setOnActivate(() -> System.out.println(name + " activated"));
+            Text text = new Text(name);
+            text.setTranslateX(5);
+            text.setTranslateY(20);
+            text.setFont(Font.loadFont(mainMenu.class.getResource("res/Penumbra-HalfSerif-Std_35114.ttf").toExternalForm(), 30));
+            text.setFill(Color.WHITE);
+
+            Effect blur = new BoxBlur(1, 1, 3);
+            Effect shadow = new DropShadow(5, Color.BLACK);
+            text.effectProperty().bind(
+                    Bindings.when(hoverProperty())
+                            .then(shadow)
+                            .otherwise(blur)
+            );
+
+            getChildren().addAll(bg, text);
         }
 
-        public void setActive(boolean b) {
-            c1.setVisible(b);
-            c2.setVisible(b);
-            text.setFill(b ? Color.WHITE : Color.GREY);
+        public void setOnAction(Runnable action) {
+            setOnMouseClicked(e -> action.run());
         }
 
         public void setOnActivate(Runnable r) {
             script = r;
         }
-
-        public void activate() {
-            if (script != null)
-                script.run();
-        }
     }
 
-    private static class TriCircle extends Parent {
-        public TriCircle() {
-            Shape shape1 = Shape.subtract(new Circle(5), new Circle(2));
-            shape1.setFill(Color.WHITE);
+    private void startAnimation() {
+        ScaleTransition st = new ScaleTransition(Duration.seconds(1));
+        st.setToY(1);
+        st.setOnFinished(e -> {
 
-            Shape shape2 = Shape.subtract(new Circle(5), new Circle(2));
-            shape2.setFill(Color.WHITE);
-            shape2.setTranslateX(5);
+            for (int i = 0; i < menuBox.getChildren().size(); i++) {
+                Node n = menuBox.getChildren().get(i);
 
-            Shape shape3 = Shape.subtract(new Circle(5), new Circle(2));
-            shape3.setFill(Color.WHITE);
-            shape3.setTranslateX(2.5);
-            shape3.setTranslateY(-5);
+                TranslateTransition tt = new TranslateTransition(Duration.seconds(1 + i * 0.15), n);
+                tt.setToX(0);
+                tt.setOnFinished(e2 -> n.setClip(null));
+                tt.play();
+            }
+        });
+        st.play();
+    }
 
-            getChildren().addAll(shape1, shape2, shape3);
+    private void addMenu(double x, double y) {
+        menuBox.setTranslateX(x);
+        menuBox.setTranslateY(y);
+        menuData.forEach(data -> {
+            MenuItem item = new MenuItem(data.getKey());
+            item.setOnAction(data.getValue());
+            item.setTranslateX(-200);
 
-            setEffect(new GaussianBlur(2));
-        }
+            Rectangle clip = new Rectangle(300, 30);
+            clip.translateXProperty().bind(item.translateXProperty().negate());
+
+            item.setClip(clip);
+
+            menuBox.getChildren().addAll(item);
+        });
+
+        root.getChildren().add(menuBox);
+    }
+
+    public void setType(int type1) {
+        this.type = type1;
+    }
+
+    public int getType() {
+        return this.type;
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         Scene scene = new Scene(createContent());
-        scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.UP) {
-                if (currentItem > 0) {
-                    getMenuItem(currentItem).setActive(false);
-                    getMenuItem(--currentItem).setActive(true);
-                }
-            }
-
-            if (event.getCode() == KeyCode.DOWN) {
-                if (currentItem < menuBox.getChildren().size() - 1) {
-                    getMenuItem(currentItem).setActive(false);
-                    getMenuItem(++currentItem).setActive(true);
-                }
-            }
-
-            if (event.getCode() == KeyCode.ENTER) {
-                getMenuItem(currentItem).activate();
-            }
-        });
-
+        primaryStage.setTitle("Tank battle");
         primaryStage.setScene(scene);
+
         primaryStage.setOnCloseRequest(event -> {
             bgThread.shutdownNow();
         });
@@ -261,3 +377,4 @@ public class mainMenu extends Application {
         launch(args);
     }
 }
+

@@ -37,6 +37,7 @@ public class test extends Application {
         Scene scene= new Scene(pane);
         stage.setScene(scene);
         stage.show();
+
     }
 
     private void initUI(Stage stage) {
@@ -51,6 +52,7 @@ public class test extends Application {
         timer.start();
 
         var scene = new Scene(root, 1000, 1000);
+
 
         stage.setTitle("AnimationTimer");
         stage.setScene(scene);
@@ -68,6 +70,7 @@ public class test extends Application {
         private void doHandle() {
 
             opacity -= 0.1;
+
             lbl.opacityProperty().set(opacity);
 
             if (opacity <= 0) {
