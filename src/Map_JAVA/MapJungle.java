@@ -11,9 +11,9 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-public class Map extends Application {
+public class MapJungle extends Application {
     // Constructor
-    public Map() {
+    public MapJungle() {
     }
 
     @Override

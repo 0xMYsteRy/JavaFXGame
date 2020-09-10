@@ -1,6 +1,7 @@
 package Tank_JAVA;
 
-import Map_JAVA.Map;
+import Map_JAVA.MapJungle;
+import Map_JAVA.MapJungle;
 import javafx.animation.*;
 
 import javafx.application.Application;
@@ -254,7 +255,7 @@ public class Tank extends Application {
         Pane tankPane;
         tankPane = new Pane();
         //Load the map
-        Map map = new Map();
+        MapJungle map = new MapJungle();
         map.loadMap(tankPane);
         scene = new Scene(tankPane, 1400, 750);//1400x750
         //Create Player
@@ -432,10 +433,7 @@ public class Tank extends Application {
         ptr.play();
         ptr2.play();
     }
-    public void moveBack(double prevX, double prevY){
-        tank.setTranslateX(prevX);
-        tank.setTranslateY(prevY);
-    }
+
     public void Move(KeyEvent e, double scale) throws InterruptedException {
         double prevX = tank.getTranslateX(), prevY = tank.getTranslateY();
         int Step = 70;
@@ -650,6 +648,8 @@ public class Tank extends Application {
                                         BulletW.setTranslateX(BulletW.getTranslateX() - 2);
                                     }
                             ));
+                    bulletAnimation.setOnFinished(evt -> tankPane.getChildren().remove(BulletW));
+
                     bulletAnimation.setCycleCount((int) steps);
                     BulletW.setX(x);
                     BulletW.setY(y);
