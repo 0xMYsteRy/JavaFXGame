@@ -283,14 +283,17 @@ public class Tank extends Application {
 
         //
         rt = new RotateTransition(Duration.millis(300), tank);
-        scene.setOnKeyPressed(e -> {
-                    try {
-                        if ((tank.getTranslateX() - gap) % 70 == 0 & (tank.getTranslateY() - gap) % 70 == 0) {
-                            Move(e, scale);
-                        }
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
+        scene.setOnKeyPressed(e ->{
+            try {
+                if ((tank.getTranslateX() - gap) % 70 == 0 & (tank.getTranslateY() - gap) % 70 == 0) {
+                    Move(e, scale);
+                }
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        });
+        scene.setOnKeyReleased(e -> {
+
                     if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
                         shootBullet(e, scale);
                     }
