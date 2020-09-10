@@ -1,6 +1,8 @@
 package Map_JAVA;
 
+import Tank_JAVA.Tank;
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -16,6 +18,7 @@ public class Map extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+
     }
 
     public void loadMap(Pane tankPane) {
