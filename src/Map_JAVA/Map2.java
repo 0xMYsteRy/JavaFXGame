@@ -6,9 +6,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class    Map extends Application {
+
+
+
+
+
+public class   Map2 extends Application {
     // Constructor
-    public Map() {
+    public Map2() {
     }
 
     @Override
@@ -19,33 +24,33 @@ public class    Map extends Application {
 
         //Draw background
         int[][] pvpMap = {
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 1, 1, 1, 1,2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2},
+                {2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 2,2, 2},
+                {2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2},
+                {2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2},
+                {2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2},
         };
         drawMap(tankPane, pvpMap);
 
-        //Draw object
+        //  Draw object
         int[][] objectMap = {
-                {1, 1, 1, 1, 1, 8, 8, 8, 14, 8, 8, 8, 1, 1, 1, 1, 1, 11, 1, 1},
-                {1, 1, 1, 5, 1, 1, 1, 1, 8, 8, 1, 1, 1, 1, 6, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 14, 1, 1},
-                {1, 14, 1, 1, 1, 1, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 8},
-                {8, 8, 1, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 8, 8},
-                {8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 13, 1, 8, 8},
-                {8, 8, 1, 1, 1, 1, 6, 1, 1, 1, 1, 1, 11, 1, 1, 1, 1, 1, 8, 8},
-                {1, 1, 1, 1, 1, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 8, 8, 8, 14, 8, 8, 8, 1, 1, 1, 1, 1, 1},
+                {1, 1, 8, 8, 13, 1, 9, 1, 1, 8, 1, 3, 1, 11, 8, 1, 7, 15, 1, 1},
+                {1, 1, 7, 7, 1, 6, 1, 10, 10, 8, 11, 7, 1, 1, 14, 1, 13, 11, 1, 1},
+                {10, 10, 1, 13, 1, 1, 1, 1, 13,7 , 7, 1, 13, 1, 1, 3, 1, 11, 8, 1},
+                {11, 11, 18, 1, 1, 1, 1, 1, 1, 8, 3, 1, 1, 1, 1, 1, 1, 1, 13, 10},
+                {15, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5},
+                {1, 15, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {8, 8, 1, 24, 1, 1, 1, 1, 1, 1, 1,1, 1, 1, 1, 12, 3, 1, 13, 8},
+                {1, 7, 15, 1, 25, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 16, 10, 11, 1},
+                {1, 1, 10, 4, 1, 20, 1, 1, 1, 1, 1, 1, 1, 1, 15, 2, 1, 10, 1, 1},
+                {1, 1, 7, 11, 1, 1, 9, 1, 5, 5, 5, 5, 1, 9, 1, 20, 11, 15, 1, 1},
         };
         drawObject(tankPane, objectMap);
 
@@ -55,28 +60,28 @@ public class    Map extends Application {
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
         };
-        drawCircleObject(tankPane, circleMap);
+        //drawCircleObject(tankPane, circleMap);
 
         // Draw castle
         int[][] castleMap = {
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 12, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 8, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
         };
         drawCastleObject(tankPane, castleMap);
@@ -100,10 +105,10 @@ public class    Map extends Application {
     public String getImagePath(int choice) {
         switch (choice) {
             case 1:
-                return "file:src\\Map_JAVA\\PNG1\\background\\snow.png";
+                return "file:src/Ultilities/PNG/glassground2.png";
+            case 2:
+                return "file:src/Ultilities/PNG/glass ground .png";
             case 3:
-                return "file:src\\Map_JAVA\\PNG1\\background\\snow4.png";
-            case 4 :
                 return "file:src/Ultilities/PNG/bigcircle.png";
             default:
                 return "";
@@ -116,31 +121,56 @@ public class    Map extends Application {
                 //return nothing if the no need to add object on that tile.
                 return "file:";
             case 2:
-                return "file:src\\Map_JAVA\\PNG1\\object\\glass.png";
+                return "file:src/Ultilities/PNG/strawman.png";
             case 3:
-                return "file:src\\Map_JAVA\\PNG1\\object\\boom.png";
+                return "file:src/Ultilities/PNG/straw2.png";
             case 4:
-                return "file:src\\Map_JAVA\\PNG1\\object\\snowman.png";
+                return "file:src/Ultilities/PNG/mushroom.png";
             case 5:
-                return "file:src\\Map_JAVA\\PNG1\\object\\reindeer.png";
+                return "file:src/Ultilities/PNG/flowers.png";
             case 6:
-                return "file:src\\Map_JAVA\\PNG1\\object\\socks.png";
+                return "file:src/Ultilities/PNG/barrel.png";
             case 7:
-                return "file:src\\Map_JAVA\\PNG1\\object\\gift.png";
+                return "file:src/Ultilities/PNG/smaltree2.png";
             case 8:
-                return "file:src\\Map_JAVA\\PNG1\\object\\tree.png";
+                return "file:src/Ultilities/PNG/smalltree4.png";
             case 9:
-                return "file:src\\Map_JAVA\\PNG1\\object\\penguin2.png";
+                return "file:src/Ultilities/PNG/bigmountain.png";
             case 10:
-                return "file:src\\Map_JAVA\\PNG1\\object\\santa2.png";
+                return "file:src/Ultilities/PNG/smalltree3.png";
             case 11:
-                return "file:src\\Map_JAVA\\PNG1\\object\\snowman.png";
+                return "file:src/Ultilities/PNG/smalltree1.png";
             case 12:
-                return "file:src\\Map_JAVA\\PNG1\\object\\ObjectTree.png";
+                return "file:src/Ultilities/PNG/smallhouse2.png";
             case 13:
-                return "file:src\\Map_JAVA\\PNG1\\object\\Background_Castle.png";
+                return "file:src/Ultilities/PNG/smallrock.png";
             case 14:
-                return "file:src\\Map_JAVA\\PNG1\\object\\Puddle.png";
+                return "file:src/Ultilities/PNG/smallhouse.png";
+            case 15:
+                return "file:src/Ultilities/PNG/spawnposition.png";
+            case 16:
+                return "file:src/Ultilities/PNG/well.png";
+            case 17:
+                return "file:src/Ultilities/PNG/rock2.png";
+            case 18:
+                return "file:src/Ultilities/PNG/longrock.png";
+            case 19:
+                return "file:src/Ultilities/PNG/grass1.png";
+            case 20:
+                return "file:src/Ultilities/PNG/grass2.png";
+            case 21:
+                return "file:src/Ultilities/PNG/rock3.png";
+            case 22:
+                return "file:src/Ultilities/PNG/rock4.png";
+            case 23:
+                return "file:src/Ultilities/PNG/barn.png";
+            case 24:
+                return "file:src/Ultilities/PNG/glass castle.png";
+            case 25:
+                return "file:src/Ultilities/PNG/windmill.png";
+            case 26:
+                return "file:src/Ultilities/PNG/grass.png";
+
             default:
                 return "";
         }
@@ -168,31 +198,18 @@ public class    Map extends Application {
                 //return nothing if the no need to add object on that tile.
                 return "file:";
             case 2:
-                return "file:src\\Map_JAVA\\PNG1\\object\\HouseObject.png";
+                return "file:src/Ultilities/PNG/straw2.png";
             case 3:
-                return "file:src\\Map_JAVA\\PNG1\\object\\snowman2.png";
-            case 4:
-                return "file:src\\Map_JAVA\\PNG1\\object\\tree2.png";
+                return "file:src/Ultilities/PNG/windmill.png";
             case 5:
-                return "file:src\\Map_JAVA\\PNG1\\object\\santa2.png";
-            case 6:
-                return "file:src\\Map_JAVA\\PNG1\\object\\santa.png";
-            case 7:
-                return "file:src\\Map_JAVA\\PNG1\\object\\penguin2.png";
-            case 8:
-                return "file:src\\Map_JAVA\\PNG1\\object\\penguin.png";
-            case 9:
-                    return "file:src\\Map_JAVA\\PNG1\\object\\pine.png";
-            case 10:
-                return "file:src\\Map_JAVA\\PNG1\\object\\tree.png";
-            case 11:
-                return "file:src\\Map_JAVA\\PNG1\\object\\gift.png";
-            case 12:
-                return "file:src\\Map_JAVA\\PNG1\\object\\reindeer.png";
-            default:
+                return "file:src/Ultilities/PNG/barn.png";
+            case 4:
                 return "file:";
+            default:
+                return "";
         }
     }
+
 
     public void drawCastleObject(Pane pane, int[][] map) {
         for (int i = 0; i < 11; i++) {
@@ -202,8 +219,8 @@ public class    Map extends Application {
                 CastleTile.setImage(new Image(imagePath));
                 CastleTile.setScaleX(1.5);
                 CastleTile.setScaleY(1.5);
-                CastleTile.setFitHeight(140);
-                CastleTile.setFitWidth(140);
+                CastleTile.setFitHeight(150);
+                CastleTile.setFitWidth(150);
                 CastleTile.setTranslateX(70 * j - 70);
                 CastleTile.setTranslateY(70 * i - 70);
                 pane.getChildren().addAll(CastleTile);
@@ -217,8 +234,8 @@ public class    Map extends Application {
             case 1:
                 //return nothing if the no need to add object on that tile.
                 return "file:";
-            case 6:
-                return "file:src\\Map_JAVA\\PNG1\\object\\santa.png";
+            case 2:
+                return "file:src/Ultilities/PNG/bigcircle.png";
             default:
                 return "file:";
         }
@@ -230,10 +247,10 @@ public class    Map extends Application {
                 String imagePath = getCircleImagePath(map[i][j]);
                 ImageView CircleTile = new ImageView();
                 CircleTile.setImage(new Image(imagePath));
-                CircleTile.setScaleX(1.75);
-                CircleTile.setScaleY(1.75);
-                CircleTile.setFitHeight(140);
-                CircleTile.setFitWidth(140);
+                CircleTile.setScaleX(1.5);
+                CircleTile.setScaleY(1.5);
+                CircleTile.setFitHeight(300);
+                CircleTile.setFitWidth(300);
                 CircleTile.setTranslateX(70 * j - 70);
                 CircleTile.setTranslateY(70 * i - 70);
                 pane.getChildren().addAll(CircleTile);

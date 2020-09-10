@@ -103,27 +103,27 @@ public class   Map3 extends Application {
     public String getImagePath(int choice) {
         switch (choice) {
             case 1:
-                return "file:src\\Map_JAVA\\PNG3\\Background\\beach.png";
+                return "file:src/Map_JAVA/PNG3/Background/beach.png";
             case 2:
-                return "file:src\\Map_JAVA\\PNG3\\Background\\beach2.png";
+                return "file:src/Map_JAVA/PNG3/Background/beach2.png";
             case 3:
-                return "file:src\\Map_JAVA\\PNG3\\Background\\beach3.png";
+                return "file:src/Map_JAVA/PNG3/Background/beach3.png";
             case 4:
-                return "file:src\\Map_JAVA\\PNG3\\Background\\grass.png";
+                return "file:src/Map_JAVA/PNG3/Background/grass.png";
             case 5:
-                return "file:src\\Map_JAVA\\PNG3\\Background\\beacha.png";
+                return "file:src/Map_JAVA/PNG3/Background/beacha.png";
             case 6:
-                return "file:src\\Map_JAVA\\PNG3\\Background\\beachb.png";
+                return "file:src/Map_JAVA/PNG3/Background/beachb.png";
             case 7:
-                return "file:src\\Map_JAVA\\PNG3\\Background\\beachc.png";
+                return "file:src/Map_JAVA/PNG3/Background/beachc.png";
             case 8:
-                return "file:src\\Map_JAVA\\PNG3\\Background\\sea.png";
+                return "file:src/Map_JAVA/PNG3/Background/sea.png";
             case 9:
-                return "file:src\\Map_JAVA\\PNG3\\Background\\seax.png";
+                return "file:src/Map_JAVA/PNG3/Background/seax.png";
             case 10:
-                return "file:src\\Map_JAVA\\PNG3\\Background\\seay.png";
+                return "file:src/Map_JAVA/PNG3/Background/seay.png";
             case 11:
-                return "file:src\\Map_JAVA\\PNG3\\Background\\seaz.png";
+                return "file:src/Map_JAVA/PNG3/Background/seaz.png";
 
             default:
                 return "";
@@ -136,61 +136,61 @@ public class   Map3 extends Application {
                 //return nothing if the no need to add object on that tile.
                 return "file:";
             case 2:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\ball.png";
+                return "file:src/Map_JAVA/PNG3/Object/ball.png";
             case 3:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\ball1.png";
+                return "file:src/Map_JAVA/PNG3/Object/ball1.png";
             case 4:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\ball2.png";
+                return "file:src/Map_JAVA/PNG3/Object/ball2.png";
             case 5:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\ball3.png";
+                return "file:src/Map_JAVA/PNG3/Object/ball3.png";
             case 6:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\big starfish.png";
+                return "file:src/Map_JAVA/PNG3/Object/big starfish.png";
             case 7:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\boat.png";
+                return "file:src/Map_JAVA/PNG3/Object/boat.png";
             case 8:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\boat2.png";
+                return "file:src/Map_JAVA/PNG3/Object/boat2.png";
             case 9:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\boat3.png";
+                return "file:src/Map_JAVA/PNG3/Object/boat3.png";
             case 10:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\boat4.png";
+                return "file:src/Map_JAVA/PNG3/Object/boat4.png";
             case 11:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\boat5.png";
+                return "file:src/Map_JAVA/PNG3/Object/boat5.png";
             case 12:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\castle.png";
+                return "file:src/Map_JAVA/PNG3/Object/castle.png";
             case 13:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\coconut tree 1.png";
+                return "file:src/Map_JAVA/PNG3/Object/coconut tree 1.png";
             case 14:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\coconut tree 2.png";
+                return "file:src/Map_JAVA/PNG3/Object/coconut tree 2.png";
             case 15:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\coconut tree 3.png";
+                return "file:src/Map_JAVA/PNG3/Object/coconut tree 3.png";
             case 16:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\coconut tree 4.png";
+                return "file:src/Map_JAVA/PNG3/Object/coconut tree 4.png";
             case 17:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\hat.png";
+                return "file:src/Map_JAVA/PNG3/Object/hat.png";
             case 18:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\hot air ballon.png";
+                return "file:src/Map_JAVA/PNG3/Object/hot air ballon.png";
             case 19:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\sand.png";
+                return "file:src/Map_JAVA/PNG3/Object/sand.png";
             case 20:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\shell.png";
+                return "file:src/Map_JAVA/PNG3/Object/shell.png";
             case 21:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\showel.png";
+                return "file:src/Map_JAVA/PNG3/Object/showel.png";
             case 22:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\star fish 2.png";
+                return "file:src/Map_JAVA/PNG3/Object/star fish 2.png";
             case 23:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\tube.png";
+                return "file:src/Map_JAVA/PNG3/Object/tube.png";
             case 24:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\umbrella.png";
+                return "file:src/Map_JAVA/PNG3/Object/umbrella.png";
             case 25:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\umbrella2.png";
+                return "file:src/Map_JAVA/PNG3/Object/umbrella2.png";
             case 26:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\sandal.png";
+                return "file:src/Map_JAVA/PNG3/Object/sandal.png";
             case 27:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\whale.png";
+                return "file:src/Map_JAVA/PNG3/Object/whale.png";
             case 28:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\sunglasses.png";
+                return "file:src/Map_JAVA/PNG3/Object/sunglasses.png";
             case 29:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\coconut tree 5.png";
+                return "file:src/Map_JAVA/PNG3/Object/coconut tree 5.png";
 
             default:
                 return "";
@@ -219,25 +219,25 @@ public class   Map3 extends Application {
                 //return nothing if the no need to add object on that tile.
                 return "file:";
             case 2:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\boat4.png";
+                return "file:src/Map_JAVA/PNG3/Object/boat4.png";
             case 3:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\coconut tree 3.png";
+                return "file:src/Map_JAVA/PNG3/Object/coconut tree 3.png";
             case 5:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\coconut tree 2.png";
+                return "file:src/Map_JAVA/PNG3/Object/coconut tree 2.png";
             case 4:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\coconut tree 5.png";
+                return "file:src/Map_JAVA/PNG3/Object/coconut tree 5.png";
             case 6:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\umbrella combo.png";
+                return "file:src/Map_JAVA/PNG3/Object/umbrella combo.png";
             case 7:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\boat2.png";
+                return "file:src/Map_JAVA/PNG3/Object/boat2.png";
             case 8:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\big chair.png";
+                return "file:src/Map_JAVA/PNG3/Object/big chair.png";
             case 9:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\castle.png";
+                return "file:src/Map_JAVA/PNG3/Object/castle.png";
             case 10:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\sand.png";
+                return "file:src/Map_JAVA/PNG3/Object/sand.png";
             case 11:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\showel.png";
+                return "file:src/Map_JAVA/PNG3/Object/showel.png";
             default:
                 return "";
         }
@@ -268,7 +268,7 @@ public class   Map3 extends Application {
                 //return nothing if the no need to add object on that tile.
                 return "file:";
             case 2:
-                return "file:src\\Map_JAVA\\PNG3\\Object\\showel.png";
+                return "file:src/Map_JAVA/PNG3/Object/showel.png";
             default:
                 return "file:";
         }

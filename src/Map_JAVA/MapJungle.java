@@ -11,17 +11,70 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 public class MapJungle extends Application {
     // Constructor
+    Scene scene;
+
     public MapJungle() {
     }
 
     @Override
     public void start(Stage stage) throws Exception {
+        stage.setTitle("Loading an image");
+        Pane tankPane;
 
+        tankPane = new Pane();
+        //Load the map
+        MapJungle map = new MapJungle();
+        map.loadGround(tankPane);
+        scene = new Scene(tankPane, 1400, 750);//1400x750
+        //Create Player
+        Tank b = new Tank(1, 2);
+        b.createPlayer(350, 350, tankPane, scene, RectList, objectList);
+        map.loadObject(tankPane);
+        //Adding scene to the stage
+        stage.setScene(scene);
+        stage.show();
     }
 
-    public void loadMap(Pane tankPane) {
+    public void loadObject(Pane pane) {
+
+        //Draw object
+        int[][] circleMap = {
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 8, 10, 10, 10, 10, 10, 10, 10, 10},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 11, 11, 11, 11, 11, 11, 11, 11},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+        };
+        drawObject(pane, circleMap);
+
+        // Draw castle
+        int[][] castleMap = {
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+        };
+        drawCastleObject(pane, castleMap);
+    }
+
+    public void loadGround(Pane tankPane) {
 
         //Draw background
         int[][] pvpMap = {
@@ -39,52 +92,6 @@ public class MapJungle extends Application {
         };
         drawMap(tankPane, pvpMap);
 
-        //Draw object
-        int[][] circleMap = {
-                {4, 1, 3, 1, 1, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 4},
-                {1, 1, 3, 1, 1, 1, 5, 5, 1, 1, 1, 1, 1, 1, 2, 1, 1, 3, 1, 1},
-                {3, 3, 3, 1, 1, 6, 1, 5, 1, 1, 1, 1, 1, 1, 6, 1, 1, 3, 3, 3},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 8, 10,10 ,10,10 ,10,10 , 10,10},
-                {1, 5, 7, 1, 1, 1, 1, 1, 1, 1, 1, 9, 11, 11, 11,11, 11,11, 11,11},
-                {7, 5, 5, 5, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 5, 5, 5, 7},
-                {1, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {3, 3, 3, 1, 1, 6, 1, 1, 1, 1, 1, 1, 1, 5, 6, 1, 1, 3, 3, 3},
-                {1, 1, 3, 1, 1, 2, 1, 1, 1, 1, 1, 1, 5, 5, 1, 1, 1, 3, 1, 1},
-                {4, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 1, 1, 3, 1, 4},
-        };
-
-        // Draw Circle
-        int[][] objectMap = {
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 8, 10,10 ,10,10 ,10,10 , 10,10},
-                {1, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 11, 11, 11,11, 11,11, 11,11},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-        };
-        drawObject(tankPane, objectMap);
-//        drawCircleObject(tankPane, circleMap);
-
-        // Draw castled
-        int[][] castleMap = {
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-        };
 
         //test
         for (int i = 0; i < 11; i++) {
@@ -100,7 +107,7 @@ public class MapJungle extends Application {
                 tankPane.getChildren().addAll(rect);
             }
         }
-        drawCastleObject(tankPane, castleMap);
+
     }
 
     public void drawMap(Pane pane, int[][] map) {
@@ -162,6 +169,9 @@ public class MapJungle extends Application {
         }
     }
 
+    private final ArrayList<ImageView> objectList = new ArrayList<ImageView>();
+    private final ArrayList<Rectangle> RectList = new ArrayList<Rectangle>();
+
     public void drawObject(Pane pane, int[][] map) {
         for (int i = 0; i < 11; i++) {
             for (int j = 0; j < 20; j++) {
@@ -173,9 +183,19 @@ public class MapJungle extends Application {
                 objectTile.setTranslateX(70 * j);
                 objectTile.setTranslateY(70 * i);
                 pane.getChildren().addAll(objectTile);
-
+                if (map[i][j] > 1) {
+                    objectList.add(objectTile);
+                }
             }
         }
+    }
+
+    public ArrayList<Rectangle> getRectList() {
+        return RectList;
+    }
+
+    public ArrayList<ImageView> getobjectList() {
+        return objectList;
     }
 
     //Draw Castle
@@ -198,15 +218,27 @@ public class MapJungle extends Application {
             for (int j = 0; j < 20; j++) {
                 String imagePath = getCastleImagePath(map[i][j]);
                 ImageView CastleTile = new ImageView();
-                CastleTile.setImage(new Image(imagePath));
+                Rectangle rect = new Rectangle();
 
+                CastleTile.setImage(new Image(imagePath));
                 CastleTile.setScaleX(1.5);
                 CastleTile.setScaleY(1.5);
                 CastleTile.setFitHeight(140);
                 CastleTile.setFitWidth(140);
                 CastleTile.setTranslateX(70 * j - 70);
-                CastleTile.setTranslateY(70 * i - 70);
+                CastleTile.setTranslateY(70 * i - 35);
                 pane.getChildren().addAll(CastleTile);
+                if (map[i][j] > 1) {
+                    double x = 70 / 9.0;
+                    rect.setHeight(x * 9);
+                    rect.setWidth(x * 9 * 2);
+                    rect.setFill(Color.rgb(10, 10, 10, 0));
+                    rect.setStroke(Color.rgb(10, 10, 10, 0));
+                    rect.setTranslateX(70 * j - 70);
+                    rect.setTranslateY(70 * i + 70);
+                    pane.getChildren().addAll(rect);
+                    RectList.add(rect);
+                }
             }
         }
     }
@@ -224,21 +256,4 @@ public class MapJungle extends Application {
         }
     }
 
-    public void drawCircleObject(Pane pane, int[][] map) {
-        for (int i = 0; i < 11; i++) {
-            for (int j = 0; j < 20; j++) {
-                String imagePath = getCircleImagePath(map[i][j]);
-                ImageView CircleTile = new ImageView();
-                CircleTile.setImage(new Image(imagePath));
-                CircleTile.setScaleX(1.5);
-                CircleTile.setScaleY(1.5);
-                CircleTile.setFitHeight(300);
-                CircleTile.setFitWidth(300);
-                CircleTile.setTranslateX(70 * j - 70);
-                CircleTile.setTranslateY(70 * i - 70);
-                pane.getChildren().addAll(CircleTile);
-            }
-        }
-
-    }
 }

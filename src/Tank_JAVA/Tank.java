@@ -17,7 +17,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.ArrayList;
 
 
 /*MAC: --module-path "/Users/s3757937/Downloads/javafx-sdk-11.0.2/lib" --add-modules javafx.controls,javafx.fxml*/
@@ -174,6 +174,7 @@ class Bullet {
         return ImagePath;
 
     }
+
     public int getRange() {
         return Range;
     }
@@ -218,11 +219,12 @@ public class Tank extends Application {
     private double speed = 10;
 
     //Getter and setter methods, incase usefull to call those property from other classes.
-
     // Finish calling setter and getter methods
+    private ArrayList<Rectangle> RectList;
+    private ArrayList<ImageView> ObjList;
+
 
     // Constructor
-
     public Tank() {
     }
 
@@ -257,19 +259,23 @@ public class Tank extends Application {
         tankPane = new Pane();
         //Load the map
         MapJungle map = new MapJungle();
-        map.loadMap(tankPane);
+
+        map.loadGround(tankPane);
         scene = new Scene(tankPane, 1400, 750);//1400x750
         //Create Player
         Tank b = new Tank(1, 2);
-        b.createPlayer(350, 350, tankPane, scene);
+        b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList());
         //Adding scene to the stage
+        map.loadObject(tankPane);
         stage.setScene(scene);
         stage.show();
 
 
     }
 
-    public void createPlayer(int x, int y, Pane tankPane, Scene scene) {
+    public void createPlayer(int x, int y, Pane tankPane, Scene scene, ArrayList<Rectangle> rectList, ArrayList<ImageView> objList) {
+        this.ObjList = objList;
+        this.RectList = rectList;
         this.tankPane = tankPane;
         this.scene = scene;
 
@@ -359,7 +365,6 @@ public class Tank extends Application {
         return bullet;
     }
 
-    ImageView pathTrack, pathTrack2;
 
     public void callPathTrack(double x, double y, double direction, double scale, int step) {
         var ptr = new TranslateTransition();
@@ -371,11 +376,11 @@ public class Tank extends Application {
         ptr2.setCycleCount(1);
 
         track = new Track(1);
-        pathTrack = new ImageView(new Image(track.getTrackPath(2)));
+        ImageView pathTrack = new ImageView(new Image(track.getTrackPath(2)));
         pathTrack.setFitHeight(50 * scale / 10.0);
         pathTrack.setFitWidth(50 * scale / 10.0);
         pathTrack.setRotate(tank.getRotate());
-        pathTrack2 = new ImageView(new Image(track.getTrackPath(2)));
+        ImageView pathTrack2 = new ImageView(new Image(track.getTrackPath(2)));
         pathTrack2.setFitHeight(50 * scale / 10.0);
         pathTrack2.setFitWidth(50 * scale / 10.0);
         pathTrack2.setRotate(tank.getRotate());
@@ -446,15 +451,9 @@ public class Tank extends Application {
         double prevX = tank.getTranslateX(), prevY = tank.getTranslateY();
         int Step = 70;
         double stepDuration = (500 - 50 * (speed / 10.0 - 1)) / 35.0;
-        AtomicReference<Boolean> collided = new AtomicReference<Boolean>(false);
-        // Testing
-        Rectangle rect = new Rectangle(60, 60);
-        rect.setTranslateX(210);
-        rect.setTranslateY(210);
-        tankPane.getChildren().addAll(rect);
         // Testing
         Timeline timeLineMoveTank;
-        KeyFrame kf = null;
+        KeyFrame kf ;
 
         switch (e.getCode()) {
             case DOWN:
@@ -468,17 +467,41 @@ public class Tank extends Application {
                 kf = new KeyFrame(
                         Duration.millis(stepDuration),
                         (evt) -> {
-                            if (!tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                            int check = 0;
+                            for (Rectangle rectV : RectList) {
+                                if (tank.getBoundsInParent().intersects(rectV.getBoundsInParent())) {
+                                    check = 1;
+                                    break;
+                                }
+                            }
+                            for (ImageView imgW : ObjList) {
+                                if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                    check = 1;
+                                    break;
+                                }
+                            }
+                            if (check == 0) {
                                 tank.setTranslateY(tank.getTranslateY() + 2);
                             }
                         }
                 );
                 timeLineMoveTank = new Timeline(kf);
                 timeLineMoveTank.setOnFinished(evt -> {
-                    if (tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
-                        System.out.println("COLLLLIDED");
-                        tank.setTranslateX(prevX);
-                        tank.setTranslateY(prevY);
+                    for (Rectangle rectW : RectList) {
+                        if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                            System.out.println("COLLLLIDED");
+                            tank.setTranslateX(prevX);
+                            tank.setTranslateY(prevY);
+                            break;
+                        }
+                    }
+                    for (ImageView imgW : ObjList) {
+                        if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                            System.out.println("COLLLLIDED");
+                            tank.setTranslateX(prevX);
+                            tank.setTranslateY(prevY);
+                            break;
+                        }
                     }
                 });
                 timeLineMoveTank.setCycleCount(35);
@@ -499,18 +522,43 @@ public class Tank extends Application {
                 kf = new KeyFrame(
                         Duration.millis(stepDuration),
                         (evt) -> {
-                            if (!tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                            int check = 0;
+                            for (Rectangle rectW : RectList) {
+                                if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                                    check = 1;
+                                    break;
+                                }
+                            }
+                            for (ImageView imgW : ObjList) {
+                                if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                    check = 1;
+                                    break;
+                                }
+                            }
+                            if (check == 0) {
                                 tank.setTranslateX(tank.getTranslateX() - 2);
                             }
                         }
                 );
                 timeLineMoveTank = new Timeline(kf);
                 timeLineMoveTank.setOnFinished(evt -> {
-                    if (tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
-                        System.out.println("COLLLLIDED");
-                        tank.setTranslateX(prevX);
-                        tank.setTranslateY(prevY);
+                    int check = 0;
+                    for (Rectangle rectW : RectList) {
+                        if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                            System.out.println("COLLLLIDED");
+                            tank.setTranslateX(prevX);
+                            tank.setTranslateY(prevY);
+                        }
                     }
+                    for (ImageView imgW : ObjList) {
+                        if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                            System.out.println("COLLLLIDED");
+                            tank.setTranslateX(prevX);
+                            tank.setTranslateY(prevY);
+                            break;
+                        }
+                    }
+
                 });
                 timeLineMoveTank.setCycleCount(35);
                 callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate(), scale, Step);
@@ -531,17 +579,40 @@ public class Tank extends Application {
                 kf = new KeyFrame(
                         Duration.millis(stepDuration),
                         (evt) -> {
-                            if (!tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                            int check = 0;
+                            for (Rectangle rectW : RectList) {
+                                if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                                    check = 1;
+                                    break;
+                                }
+                            }
+                            for (ImageView imgW : ObjList) {
+                                if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                    check = 1;
+                                    break;
+                                }
+                            }
+                            if (check == 0) {
                                 tank.setTranslateY(tank.getTranslateY() - 2);
                             }
                         }
                 );
                 timeLineMoveTank = new Timeline(kf);
                 timeLineMoveTank.setOnFinished(evt -> {
-                    if (tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
-                        System.out.println("COLLLLIDED");
-                        tank.setTranslateX(prevX);
-                        tank.setTranslateY(prevY);
+                    for (Rectangle rectW : RectList) {
+                        if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                            System.out.println("COLLLLIDED");
+                            tank.setTranslateX(prevX);
+                            tank.setTranslateY(prevY);
+                        }
+                    }
+                    for (ImageView imgW : ObjList) {
+                        if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                            System.out.println("COLLLLIDED");
+                            tank.setTranslateX(prevX);
+                            tank.setTranslateY(prevY);
+                            break;
+                        }
                     }
                 });
                 timeLineMoveTank.setCycleCount(35);
@@ -549,8 +620,6 @@ public class Tank extends Application {
                 ft.play();
                 ft2.play();
                 timeLineMoveTank.play();
-
-
                 break;
             case RIGHT:
                 if (tank.getRotate() != 90) {
@@ -564,17 +633,40 @@ public class Tank extends Application {
                 kf = new KeyFrame(
                         Duration.millis(stepDuration),
                         (evt) -> {
-                            if (!tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                            int check = 0;
+                            for (Rectangle rectW : RectList) {
+                                if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                                    check = 1;
+                                    break;
+                                }
+                            }
+                            for (ImageView imgW : ObjList) {
+                                if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                    check = 1;
+                                    break;
+                                }
+                            }
+                            if (check == 0) {
                                 tank.setTranslateX(tank.getTranslateX() + 2);
                             }
                         }
                 );
                 timeLineMoveTank = new Timeline(kf);
                 timeLineMoveTank.setOnFinished(evt -> {
-                    if (tank.getBoundsInParent().intersects(rect.getBoundsInParent())) {
-                        System.out.println("COLLLLIDED");
-                        tank.setTranslateX(prevX);
-                        tank.setTranslateY(prevY);
+                    for (Rectangle rectW : RectList) {
+                        if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                            System.out.println("COLLLLIDED");
+                            tank.setTranslateX(prevX);
+                            tank.setTranslateY(prevY);
+                        }
+                    }
+                    for (ImageView imgW : ObjList) {
+                        if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                            System.out.println("COLLLLIDED");
+                            tank.setTranslateX(prevX);
+                            tank.setTranslateY(prevY);
+                            break;
+                        }
                     }
                 });
                 timeLineMoveTank.setCycleCount(35);

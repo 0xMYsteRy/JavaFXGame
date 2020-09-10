@@ -140,7 +140,7 @@ public class mainMenu extends Application {
 
         // Color pane
         Rectangle red = new Rectangle(40, 40);
-        red.setFill(Color.RED);
+        red.setFill(Color.INDIANRED);
         red.setStroke(Color.WHITESMOKE);
         red.setOnMouseClicked(e -> {
             ContentFrame frame5 = null;
@@ -172,7 +172,7 @@ public class mainMenu extends Application {
             color = 2;
         });
         Rectangle green = new Rectangle(40, 40);
-        green.setFill(Color.GREEN);
+        green.setFill(Color.TEAL);
         green.setStroke(Color.WHITESMOKE);
         green.setOnMouseClicked(e -> {
             ContentFrame frame5 = null;
@@ -188,7 +188,7 @@ public class mainMenu extends Application {
             color = 3;
         });
         Rectangle blue = new Rectangle(40, 40);
-        blue.setFill(Color.BLUE);
+        blue.setFill(Color.ROYALBLUE);
         blue.setStroke(Color.WHITESMOKE);
         blue.setOnMouseClicked(e -> {
             ContentFrame frame5 = null;
