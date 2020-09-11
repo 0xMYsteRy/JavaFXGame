@@ -17,7 +17,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 /*MAC: --module-path "/Users/s3757937/Downloads/javafx-sdk-11.0.2/lib" --add-modules javafx.controls,javafx.fxml*/
@@ -112,11 +114,10 @@ class Bullet {
     private double RealoadRate = 0;
     private int Ammunition = 0;
     private int Range = 0;
-    private String ImagePath = "file:src/SCML/Effects/Exhaust_Fire.png";
-    private ImageView Bullet = new ImageView(new Image(ImagePath));
+    private String ImagePath = "file:src/PNG/Effects/Exhaust_Fire.png";
+    private String ImagePath2 = "file:src/PNG/Effects/Plasma.png";
 
     public Bullet() {
-
     }
 
     public Bullet(int bulletOption) {
@@ -167,12 +168,17 @@ class Bullet {
     }
 
 
-    public String getBullet() {
+    public String getBullet(int choice) {
         counting += 1;
         System.out.printf("Shot %d bullets\n", counting);
-
-        return ImagePath;
-
+        switch (choice) {
+            case 1:
+                return ImagePath;
+            case 2:
+                return ImagePath2;
+            default:
+                return ImagePath;
+        }
     }
 
     public int getRange() {
@@ -201,6 +207,130 @@ class Bullet {
     }
 }
 
+class Flash {
+    ImageView[] Imagelist = new ImageView[10];
+
+
+    private double duration = 100;
+
+    public Flash() {
+        Imagelist[0] = new ImageView(new Image("file:src/PNG/Effects/Flash_A_01.png"));
+        Imagelist[1] = new ImageView(new Image("file:src/PNG/Effects/Flash_A_02.png"));
+        Imagelist[2] = new ImageView(new Image("file:src/PNG/Effects/Flash_A_03.png"));
+        Imagelist[3] = new ImageView(new Image("file:src/PNG/Effects/Flash_A_04.png"));
+        Imagelist[4] = new ImageView(new Image("file:src/PNG/Effects/Flash_A_05.png"));
+        Imagelist[5] = new ImageView(new Image("file:src/PNG/Effects/Flash_B_01.png"));
+        Imagelist[6] = new ImageView(new Image("file:src/PNG/Effects/Flash_B_02.png"));
+        Imagelist[7] = new ImageView(new Image("file:src/PNG/Effects/Flash_B_03.png"));
+        Imagelist[8] = new ImageView(new Image("file:src/PNG/Effects/Flash_B_04.png"));
+        Imagelist[9] = new ImageView(new Image("file:src/PNG/Effects/Flash_B_05.png"));
+    }
+
+    public void FlashAnimation(double x, double y, double rotation, double size, int choice, Pane pane) {
+        Group FlashSet = new Group(Imagelist[(choice - 1) * 5]);
+        Timeline flashTimeline = new Timeline();
+        flashTimeline.setCycleCount(1);
+
+        for (int i = 5 * choice - 4; i < 5 * choice; i++) {
+            Imagelist[i].setFitWidth(size);
+            Imagelist[i].setFitHeight(size);
+            Imagelist[i].setX(x);
+            Imagelist[i].setY(y);
+            Imagelist[i].setRotate(rotation);
+            int finalI = i;
+            flashTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(duration * i),
+                    evt -> FlashSet.getChildren().addAll(Imagelist[finalI])
+            ));
+            pane.getChildren().add(Imagelist[i]);
+        }
+        flashTimeline.setOnFinished(actionEvent -> {
+            for (int i = 5 * choice - 4; i < 5 * choice; i++) {
+                pane.getChildren().remove(Imagelist[i]);
+            }
+        });
+        flashTimeline.play();
+    }
+}
+
+class Explosion {
+    private ImageView a1 = new ImageView(new Image("file:src/PNG/Effects/Explosion_A.png"));
+    private ImageView a2 = new ImageView(new Image("file:src/PNG/Effects/Explosion_B.png"));
+    private ImageView a3 = new ImageView(new Image("file:src/PNG/Effects/Explosion_C.png"));
+    private ImageView a4 = new ImageView(new Image("file:src/PNG/Effects/Explosion_D.png"));
+    private ImageView a5 = new ImageView(new Image("file:src/PNG/Effects/Explosion_E.png"));
+    private ImageView a6 = new ImageView(new Image("file:src/PNG/Effects/Explosion_F.png"));
+    private ImageView a7 = new ImageView(new Image("file:src/PNG/Effects/Explosion_G.png"));
+    private ImageView a8 = new ImageView(new Image("file:src/PNG/Effects/Explosion_H.png"));
+    private double duration = 50;
+
+    public Explosion() {
+    }
+
+    public void ExplosionAnimation(double x, double y, Pane tankPane) {
+        a1.setFitWidth(70);
+        a1.setFitHeight(70);
+        a2.setFitWidth(70);
+        a2.setFitHeight(70);
+        a3.setFitWidth(70);
+        a3.setFitHeight(70);
+        a4.setFitWidth(70);
+        a4.setFitHeight(70);
+        a5.setFitWidth(70);
+        a5.setFitHeight(70);
+        a6.setFitWidth(70);
+        a6.setFitHeight(70);
+        a7.setFitWidth(70);
+        a7.setFitHeight(70);
+        a8.setFitWidth(70);
+        a8.setFitHeight(70);
+        a1.setX(x);
+        a1.setY(y);
+        a2.setX(x);
+        a2.setY(y);
+        a3.setX(x);
+        a3.setY(y);
+        a4.setX(x);
+        a4.setY(y);
+        a5.setX(x);
+        a5.setY(y);
+        a6.setX(x);
+        a6.setY(y);
+        a7.setX(x);
+        a7.setY(y);
+        a8.setX(x);
+        a8.setY(y);
+        Group ExplosionSet = new Group(a1);
+        Timeline exploTimeline = new Timeline();
+        exploTimeline.setCycleCount(1);
+        exploTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(duration),
+                evt -> ExplosionSet.getChildren().addAll(a2)
+        ));
+        exploTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(duration * 2),
+                evt -> ExplosionSet.getChildren().addAll(a3)
+        ));
+        exploTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(duration * 3),
+                evt -> ExplosionSet.getChildren().addAll(a4)
+        ));
+        exploTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(duration * 4),
+                evt -> ExplosionSet.getChildren().addAll(a5)
+        ));
+        exploTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(duration * 5),
+                evt -> ExplosionSet.getChildren().addAll(a6)
+        ));
+        exploTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(duration * 6),
+                evt -> ExplosionSet.getChildren().addAll(a7)
+        ));
+        exploTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(duration * 7),
+                evt -> ExplosionSet.getChildren().addAll(a8)
+        ));
+        tankPane.getChildren().addAll(a1, a2, a3, a4, a5, a6, a7, a8);
+        exploTimeline.setOnFinished(evt -> {
+            tankPane.getChildren().removeAll(a1, a2, a3, a4, a5, a6, a7, a8);
+        });
+        exploTimeline.play();
+    }
+}
+
 public class Tank extends Application {
     private Group tank;
 
@@ -212,11 +342,14 @@ public class Tank extends Application {
     private FadeTransition ft, ft2;
     private Scene scene;
     private Pane tankPane;
+    // Stat of resolution
+
     double scale = 70 / 10.0;
     double gap = (70 - 9 * scale) / 2.0;
-
-    //
-    private double speed = 10;
+    double Step = 35;
+    // Stat of tank
+    private int bulletMode = 1;
+    private double speed = 0;
 
     //Getter and setter methods, incase usefull to call those property from other classes.
     // Finish calling setter and getter methods
@@ -278,33 +411,35 @@ public class Tank extends Application {
         this.RectList = rectList;
         this.tankPane = tankPane;
         this.scene = scene;
-
+        //
+        Image img;
+        ImageView a = new ImageView(bullet.getBullet(2));
+        a.setFitWidth(70);
+        a.setFitHeight(70);
+        a.setX(500);
+        a.setY(500);
         //
         tank = createTank(scale);
-        tankPane.getChildren().addAll(tank);
+        tankPane.getChildren().addAll(tank, a);
         tank.setTranslateX(x + gap);
         tank.setTranslateY(y + gap);
-
         tank.setCache(true);
         //Displaying the contents of the stage
         tank.setRotate(0);
-
         //
         rt = new RotateTransition(Duration.millis(300), tank);
-        scene.setOnKeyPressed(e -> {
+        scene.setOnKeyPressed(keyEvent -> {
             try {
-                if ((tank.getTranslateX() - gap) % 70 == 0 & (tank.getTranslateY() - gap) % 70 == 0) {
-                    Move(e, scale);
+                if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0) {
+                    Move(keyEvent, scale);
                 }
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
         });
         scene.setOnKeyReleased(e -> {
-
                     if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
                         shootBullet(e, scale);
-
                     }
                 }
         );
@@ -315,12 +450,12 @@ public class Tank extends Application {
         Image HullI = new Image(hull.getHull());
         Image trackI_A = new Image(track.getTrack());
 
-        Rectangle rect = new Rectangle();
-        rect.setHeight(x * 9);
-        rect.setWidth(x * 9);
-        rect.setFill(Color.rgb(10, 10, 10, 0));
-
-        rect.setStroke(Paint.valueOf("green"));
+//        Rectangle rect = new Rectangle();
+//        rect.setHeight(x * 9);
+//        rect.setWidth(x * 9);
+//        rect.setFill(Color.rgb(10, 10, 10, 0));
+//
+//        rect.setStroke(Paint.valueOf("green"));
         ImageView TankView = new ImageView(HullI);
         ImageView TrackViewA1 = new ImageView(trackI_A);
         ImageView TrackViewA2 = new ImageView(trackI_A);
@@ -355,7 +490,7 @@ public class Tank extends Application {
         WeaponView.setFitHeight(7 * x);
         WeaponView.setFitWidth(3 * x);
 
-        Group root = new Group(rect, TrackViewA1, TrackViewA2, TrackViewA3, TrackViewA4, TankView, WeaponView);
+        Group root = new Group(TrackViewA1, TrackViewA2, TrackViewA3, TrackViewA4, TankView, WeaponView);
 
         //Creating a scene object
         return root;
@@ -366,13 +501,14 @@ public class Tank extends Application {
     }
 
 
-    public void callPathTrack(double x, double y, double direction, double scale, int step) {
+    public void callPathTrack(double x, double y, double direction) {
         var ptr = new TranslateTransition();
-        ptr.setDuration(Duration.millis(500 - 50 * (speed / 10.0 - 1)));
+        ptr.setDuration(Duration.millis((500 - 50 * (speed / 10.0 - 1)) / (70 / Step)));
+        // (500 - 50 * (speed / 10.0 - 1)) / (  70/Step  *35.0)
         ptr.setCycleCount(1);
 
         var ptr2 = new TranslateTransition();
-        ptr2.setDuration(Duration.millis(500 - 50 * (speed / 10.0 - 1)));
+        ptr2.setDuration(Duration.millis((500 - 50 * (speed / 10.0 - 1)) / (70 / Step)));
         ptr2.setCycleCount(1);
 
         track = new Track(1);
@@ -389,72 +525,73 @@ public class Tank extends Application {
             case 0:
 
                 pathTrack.setX(x + 39 * scale / 10.0);
-                pathTrack.setY(y + 85 * scale / 10.0);
+                pathTrack.setY(y + 70 * scale / 10.0 + gap);
                 pathTrack2.setX(x + 2 * scale / 10.0);
-                pathTrack2.setY(y + 85 * scale / 10.0);
+                pathTrack2.setY(y + 70 * scale / 10.0 + gap);
                 ptr.setNode(pathTrack);
                 ptr.setToX(0);
-                ptr.setToY(-step);
+                ptr.setToY(-Step);
                 ptr2.setNode(pathTrack2);
                 ptr2.setToX(0);
-                ptr2.setToY(-step);
+                ptr2.setToY(-Step);
                 break;
             case 90:
-                pathTrack.setX(x - 45 * scale / 10.0);
+                pathTrack.setX(x - 35 * scale / 10.0 - gap);
                 pathTrack.setY(y + 39 * scale / 10.0);
-                pathTrack2.setX(x - 45 * scale / 10.0);
+                pathTrack2.setX(x - 35 * scale / 10.0 - gap);
                 pathTrack2.setY(y + 2 * scale / 10.0);
                 ptr.setNode(pathTrack);
-                ptr.setToX(step);
+                ptr.setToX(Step);
                 ptr.setToY(0);
                 ptr2.setNode(pathTrack2);
-                ptr2.setToX(step);
+                ptr2.setToX(Step);
                 ptr2.setToY(0);
                 break;
             case 180:
                 pathTrack.setX(x + 38 * scale / 10.0);
-                pathTrack.setY(y - 40 * scale / 10.0);
+                pathTrack.setY(y - 35 * scale / 10.0 - gap);
                 pathTrack2.setX(x + 2 * scale / 10.0);
-                pathTrack2.setY(y - 40 * scale / 10.0);
+                pathTrack2.setY(y - 35 * scale / 10.0 - gap);
                 ptr.setNode(pathTrack);
                 ptr.setToX(0);
-                ptr.setToY(step);
+                ptr.setToY(Step);
                 ptr2.setNode(pathTrack2);
                 ptr2.setToX(0);
-                ptr2.setToY(step);
+                ptr2.setToY(Step);
                 break;
             case 270:
-                pathTrack.setX(x + 85 * scale / 10.0);
+                pathTrack.setX(x + 70 * scale / 10.0 + gap);
                 pathTrack.setY(y + 37 * scale / 10.0);
-                pathTrack2.setX(x + 85 * scale / 10.0);
+                pathTrack2.setX(x + 70 * scale / 10.0 + gap);
                 pathTrack2.setY(y + 2 * scale / 10.0);
                 ptr.setNode(pathTrack);
-                ptr.setToX(-step);
+                ptr.setToX(-Step);
                 ptr.setToY(0);
                 ptr2.setNode(pathTrack2);
-                ptr2.setToX(-step);
+                ptr2.setToX(-Step);
                 ptr2.setToY(0);
                 break;
         }
 
-        ft = new FadeTransition(Duration.millis(800 - 50 * (speed / 10.0 - 1)), pathTrack);
+        ft = new FadeTransition(Duration.millis((800 - 50 * (speed / 10.0 - 1))), pathTrack);
         ft.setFromValue(1.0);
         ft.setToValue(0);
-        ft2 = new FadeTransition(Duration.millis(800 - 50 * (speed / 10.0 - 1)), pathTrack2);
+        ft2 = new FadeTransition(Duration.millis((800 - 50 * (speed / 10.0 - 1))), pathTrack2);
         ft2.setFromValue(1.0);
         ft2.setToValue(0);
         ptr.play();
         ptr2.play();
     }
 
+    int check = 0;
+
     public void Move(KeyEvent e, double scale) throws InterruptedException {
+        check = 0;
         double prevX = tank.getTranslateX(), prevY = tank.getTranslateY();
-        int Step = 70;
-        double stepDuration = (500 - 50 * (speed / 10.0 - 1)) / 35.0;
+        double stepDuration = (500 - 50 * (speed / 10.0 - 1)) / (70 / Step * 35);
         // Testing
         Timeline timeLineMoveTank;
-        KeyFrame kf ;
-
+        KeyFrame kf;
         switch (e.getCode()) {
             case DOWN:
                 if (tank.getRotate() != 180) {
@@ -467,45 +604,35 @@ public class Tank extends Application {
                 kf = new KeyFrame(
                         Duration.millis(stepDuration),
                         (evt) -> {
-                            int check = 0;
-                            for (Rectangle rectV : RectList) {
-                                if (tank.getBoundsInParent().intersects(rectV.getBoundsInParent())) {
-                                    check = 1;
-                                    break;
+                            if (check == 0) {
+                                for (Rectangle rectV : RectList) {
+                                    if (tank.getBoundsInParent().intersects(rectV.getBoundsInParent())) {
+                                        check = 1;
+                                        break;
+                                    }
                                 }
-                            }
-                            for (ImageView imgW : ObjList) {
-                                if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                                    check = 1;
-                                    break;
+                                for (ImageView imgW : ObjList) {
+                                    if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                        check = 1;
+                                        break;
+                                    }
                                 }
                             }
                             if (check == 0) {
-                                tank.setTranslateY(tank.getTranslateY() + 2);
+                                tank.setTranslateY(tank.getTranslateY() + Step * 2 / 70.0);
                             }
                         }
                 );
                 timeLineMoveTank = new Timeline(kf);
                 timeLineMoveTank.setOnFinished(evt -> {
-                    for (Rectangle rectW : RectList) {
-                        if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                            System.out.println("COLLLLIDED");
-                            tank.setTranslateX(prevX);
-                            tank.setTranslateY(prevY);
-                            break;
-                        }
-                    }
-                    for (ImageView imgW : ObjList) {
-                        if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                            System.out.println("COLLLLIDED");
-                            tank.setTranslateX(prevX);
-                            tank.setTranslateY(prevY);
-                            break;
-                        }
+                    if (check == 1 | ((tank.getTranslateX() - gap) % Step != 0 & (tank.getTranslateY() % Step - gap) != 0)) {
+                        System.out.println(tank.getTranslateX());
+                        tank.setTranslateX(prevX);
+                        tank.setTranslateY(prevY);
                     }
                 });
                 timeLineMoveTank.setCycleCount(35);
-                callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate(), scale, Step);
+                callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate());
                 ft.play();
                 ft2.play();
                 timeLineMoveTank.play();
@@ -522,7 +649,6 @@ public class Tank extends Application {
                 kf = new KeyFrame(
                         Duration.millis(stepDuration),
                         (evt) -> {
-                            int check = 0;
                             for (Rectangle rectW : RectList) {
                                 if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
                                     check = 1;
@@ -536,32 +662,19 @@ public class Tank extends Application {
                                 }
                             }
                             if (check == 0) {
-                                tank.setTranslateX(tank.getTranslateX() - 2);
+                                tank.setTranslateX(tank.getTranslateX() - Step * 2 / 70.0);
                             }
                         }
                 );
                 timeLineMoveTank = new Timeline(kf);
                 timeLineMoveTank.setOnFinished(evt -> {
-                    int check = 0;
-                    for (Rectangle rectW : RectList) {
-                        if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                            System.out.println("COLLLLIDED");
-                            tank.setTranslateX(prevX);
-                            tank.setTranslateY(prevY);
-                        }
+                    if (check == 1 | ((tank.getTranslateX() - gap) % Step != 0 & (tank.getTranslateY() % Step - gap) != 0)) {
+                        tank.setTranslateX(prevX);
+                        tank.setTranslateY(prevY);
                     }
-                    for (ImageView imgW : ObjList) {
-                        if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                            System.out.println("COLLLLIDED");
-                            tank.setTranslateX(prevX);
-                            tank.setTranslateY(prevY);
-                            break;
-                        }
-                    }
-
                 });
                 timeLineMoveTank.setCycleCount(35);
-                callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate(), scale, Step);
+                callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate());
                 ft.play();
                 ft2.play();
                 timeLineMoveTank.play();
@@ -572,14 +685,12 @@ public class Tank extends Application {
                     rt.setByAngle(0 - tank.getRotate());
                     rt.setCycleCount(1);
                     rt.setAutoReverse(false);
-
                     rt.play();
                     break;
                 }
                 kf = new KeyFrame(
                         Duration.millis(stepDuration),
                         (evt) -> {
-                            int check = 0;
                             for (Rectangle rectW : RectList) {
                                 if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
                                     check = 1;
@@ -593,30 +704,19 @@ public class Tank extends Application {
                                 }
                             }
                             if (check == 0) {
-                                tank.setTranslateY(tank.getTranslateY() - 2);
+                                tank.setTranslateY(tank.getTranslateY() - Step * 2 / 70.0);
                             }
                         }
                 );
                 timeLineMoveTank = new Timeline(kf);
                 timeLineMoveTank.setOnFinished(evt -> {
-                    for (Rectangle rectW : RectList) {
-                        if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                            System.out.println("COLLLLIDED");
-                            tank.setTranslateX(prevX);
-                            tank.setTranslateY(prevY);
-                        }
-                    }
-                    for (ImageView imgW : ObjList) {
-                        if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                            System.out.println("COLLLLIDED");
-                            tank.setTranslateX(prevX);
-                            tank.setTranslateY(prevY);
-                            break;
-                        }
+                    if (check == 1 | ((tank.getTranslateX() - gap) % Step != 0 & (tank.getTranslateY() % Step - gap) != 0)) {
+                        tank.setTranslateX(prevX);
+                        tank.setTranslateY(prevY);
                     }
                 });
                 timeLineMoveTank.setCycleCount(35);
-                callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate(), scale, Step);
+                callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate());
                 ft.play();
                 ft2.play();
                 timeLineMoveTank.play();
@@ -633,7 +733,6 @@ public class Tank extends Application {
                 kf = new KeyFrame(
                         Duration.millis(stepDuration),
                         (evt) -> {
-                            int check = 0;
                             for (Rectangle rectW : RectList) {
                                 if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
                                     check = 1;
@@ -647,30 +746,19 @@ public class Tank extends Application {
                                 }
                             }
                             if (check == 0) {
-                                tank.setTranslateX(tank.getTranslateX() + 2);
+                                tank.setTranslateX(tank.getTranslateX() + Step * 2 / 70.0);
                             }
                         }
                 );
                 timeLineMoveTank = new Timeline(kf);
                 timeLineMoveTank.setOnFinished(evt -> {
-                    for (Rectangle rectW : RectList) {
-                        if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                            System.out.println("COLLLLIDED");
-                            tank.setTranslateX(prevX);
-                            tank.setTranslateY(prevY);
-                        }
-                    }
-                    for (ImageView imgW : ObjList) {
-                        if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                            System.out.println("COLLLLIDED");
-                            tank.setTranslateX(prevX);
-                            tank.setTranslateY(prevY);
-                            break;
-                        }
+                    if (check == 1 | ((tank.getTranslateX() - gap) % Step != 0 & (tank.getTranslateY() % Step - gap) != 0)) {
+                        tank.setTranslateX(prevX);
+                        tank.setTranslateY(prevY);
                     }
                 });
                 timeLineMoveTank.setCycleCount(35);
-                callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate(), scale, Step);
+                callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate());
                 ft.play();
                 ft2.play();
                 timeLineMoveTank.play();
@@ -681,12 +769,15 @@ public class Tank extends Application {
     public void shootBullet(KeyEvent e, double scale) throws NullPointerException {
 
         if (e.getCode() == KeyCode.SPACE) {
+            AtomicReference<Boolean> shotBullet = new AtomicReference<>(false);
+            Explosion explosion = new Explosion();
+            Flash flash = new Flash();
             double x;
             double y;
             double Direction = tank.getRotate();
             int Range = 10;
             int Speed = bullet.getSpeed() / 10 * Range;
-            ImageView BulletW = new ImageView(new Image(bullet.getBullet()));
+            ImageView BulletW = new ImageView(new Image(bullet.getBullet(bulletMode)));
             BulletW.setFitWidth(scale * 9);
             BulletW.setFitHeight(scale * 9);
             BulletW.setRotate(Direction);
@@ -698,15 +789,42 @@ public class Tank extends Application {
                 case 0:
                     x = tank.getTranslateX();
                     y = tank.getTranslateY() - scale * 4.0;
+                    flash.FlashAnimation(x, y - scale * 4.0, BulletW.getRotate(), BulletW.getFitWidth(), bulletMode, tankPane);
                     bulletAnimation = new Timeline(
                             new KeyFrame(
                                     Duration.millis(stepDuration),
                                     (evt) -> {
-                                        BulletW.setTranslateY(BulletW.getTranslateY() - 2);
+                                        int check = 0;
+                                        if ((BulletW.getTranslateY() % 70) % 36 == 0 & BulletW.getTranslateY() % 70 != 0 & !shotBullet.get()) {
+                                            for (Rectangle rectW : RectList) {
+                                                if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                                                    check = 1;
+                                                    break;
+                                                }
+                                            }
+                                            for (ImageView imgW : ObjList) {
+                                                if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                                    check = 1;
+                                                    tankPane.getChildren().remove(imgW);
+                                                    explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), tankPane);
+                                                    ObjList.remove(imgW);
+                                                    break;
+                                                }
+                                            }
+
+                                        }
+                                        if (check == 0) {
+                                            BulletW.setTranslateY(BulletW.getTranslateY() - 2);
+                                        } else {
+                                            tankPane.getChildren().remove(BulletW);
+                                            shotBullet.set(true);
+                                        }
                                     }
                             ));
-                    bulletAnimation.setOnFinished(evt -> tankPane.getChildren().remove(BulletW));
-                    bulletAnimation.setOnFinished(evt -> tankPane.getChildren().remove(BulletW));
+                    bulletAnimation.setOnFinished(evt -> {
+                        System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
+                        tankPane.getChildren().remove(BulletW);
+                    });
                     bulletAnimation.setCycleCount((int) steps);
                     BulletW.setX(x);
                     BulletW.setY(y);
@@ -715,14 +833,43 @@ public class Tank extends Application {
                 case 90:
                     x = tank.getTranslateX() + scale * 4.0;
                     y = tank.getTranslateY();
+                    flash.FlashAnimation(x + scale * 4.0, y, BulletW.getRotate(), BulletW.getFitWidth(), bulletMode, tankPane);
                     bulletAnimation = new Timeline(
                             new KeyFrame(
                                     Duration.millis(stepDuration),
                                     (evt) -> {
-                                        BulletW.setTranslateX(BulletW.getTranslateX() + 2);
+                                        int check = 0;
+                                        if ((BulletW.getTranslateX() % 70) % 36 == 0 & BulletW.getTranslateX() % 70 != 0 & !shotBullet.get()) {
+                                            for (Rectangle rectW : RectList) {
+                                                if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                                                    check = 1;
+                                                    break;
+                                                }
+                                            }
+                                            for (ImageView imgW : ObjList) {
+                                                if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                                    check = 1;
+                                                    tankPane.getChildren().remove(imgW);
+                                                    explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), tankPane);
+
+                                                    ObjList.remove(imgW);
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        if (check == 0) {
+                                            BulletW.setTranslateX(BulletW.getTranslateX() + 2);
+                                        } else {
+                                            tankPane.getChildren().remove(BulletW);
+                                            shotBullet.set(true);
+                                        }
                                     }
                             ));
-                    bulletAnimation.setOnFinished(evt -> tankPane.getChildren().remove(BulletW));
+                    bulletAnimation.setOnFinished(evt -> {
+                        System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
+                        tankPane.getChildren().remove(BulletW);
+                    });
                     bulletAnimation.setCycleCount((int) steps);
                     BulletW.setX(x);
                     BulletW.setY(y);
@@ -731,14 +878,42 @@ public class Tank extends Application {
                 case 180:
                     x = tank.getTranslateX();
                     y = tank.getTranslateY() + scale * 4.0;
+                    flash.FlashAnimation(x, y + scale * 4.0, BulletW.getRotate(), BulletW.getFitWidth(), bulletMode, tankPane);
                     bulletAnimation = new Timeline(
                             new KeyFrame(
                                     Duration.millis(stepDuration),
                                     (evt) -> {
-                                        BulletW.setTranslateY(BulletW.getTranslateY() + 2);
+                                        int check = 0;
+                                        if ((BulletW.getTranslateY() % 70) % 36 == 0 & BulletW.getTranslateY() % 70 != 0 & !shotBullet.get()) {
+                                            for (Rectangle rectW : RectList) {
+                                                if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                                                    check = 1;
+                                                    break;
+                                                }
+                                                for (ImageView imgW : ObjList) {
+                                                    if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                                        check = 1;
+                                                        tankPane.getChildren().remove(imgW);
+                                                        explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), tankPane);
+
+                                                        ObjList.remove(imgW);
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (check == 0) {
+                                            BulletW.setTranslateY(BulletW.getTranslateY() + 2);
+                                        } else {
+                                            tankPane.getChildren().remove(BulletW);
+                                            shotBullet.set(true);
+                                        }
                                     }
                             ));
-                    bulletAnimation.setOnFinished(evt -> tankPane.getChildren().remove(BulletW));
+                    bulletAnimation.setOnFinished(evt -> {
+                        System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
+                        tankPane.getChildren().remove(BulletW);
+                    });
                     bulletAnimation.setCycleCount((int) steps);
                     BulletW.setX(x);
                     BulletW.setY(y);
@@ -747,14 +922,41 @@ public class Tank extends Application {
                 case 270:
                     x = tank.getTranslateX() - scale * 4.0;
                     y = tank.getTranslateY();
+                    flash.FlashAnimation(x - scale * 4.0, y, BulletW.getRotate(), BulletW.getFitWidth(), bulletMode, tankPane);
                     bulletAnimation = new Timeline(
                             new KeyFrame(
                                     Duration.millis(stepDuration),
                                     (evt) -> {
-                                        BulletW.setTranslateX(BulletW.getTranslateX() - 2);
+                                        int check = 0;
+                                        if ((BulletW.getTranslateX() % 70) % 36 == 0 & BulletW.getTranslateX() % 70 != 0 & !shotBullet.get()) {
+                                            for (Rectangle rectW : RectList) {
+                                                if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                                                    check = 1;
+                                                    break;
+                                                }
+                                                for (ImageView imgW : ObjList) {
+                                                    if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                                        check = 1;
+                                                        tankPane.getChildren().remove(imgW);
+                                                        explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), tankPane);
+                                                        ObjList.remove(imgW);
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (check == 0) {
+                                            BulletW.setTranslateX(BulletW.getTranslateX() - 2);
+                                        } else {
+                                            tankPane.getChildren().remove(BulletW);
+                                            shotBullet.set(true);
+                                        }
                                     }
                             ));
-                    bulletAnimation.setOnFinished(evt -> tankPane.getChildren().remove(BulletW));
+                    bulletAnimation.setOnFinished(evt -> {
+                        System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
+                        tankPane.getChildren().remove(BulletW);
+                    });
 
                     bulletAnimation.setCycleCount((int) steps);
                     BulletW.setX(x);
