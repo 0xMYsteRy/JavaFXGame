@@ -412,15 +412,14 @@ public class Tank extends Application {
         this.tankPane = tankPane;
         this.scene = scene;
         //
-        Image img;
-        ImageView a = new ImageView(bullet.getBullet(2));
-        a.setFitWidth(70);
-        a.setFitHeight(70);
-        a.setX(500);
-        a.setY(500);
+//        ImageView a = new ImageView(bullet.getBullet(2));
+//        a.setFitWidth(70);
+//        a.setFitHeight(70);
+//        a.setX(500);
+//        a.setY(500);
         //
         tank = createTank(scale);
-        tankPane.getChildren().addAll(tank, a);
+        tankPane.getChildren().addAll(tank);
         tank.setTranslateX(x + gap);
         tank.setTranslateY(y + gap);
         tank.setCache(true);
