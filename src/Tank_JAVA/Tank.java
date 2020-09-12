@@ -171,7 +171,7 @@ class Bullet {
     public String getBullet(int choice) {
         counting += 1;
         System.out.printf("Shot %d bullets\n", counting);
-        switch (choice) {
+        switch (choice%3) {
             case 1:
                 return ImagePath;
             case 2:
@@ -333,7 +333,6 @@ class Explosion {
 
 public class Tank extends Application {
     private Group tank;
-
     private Hull hull;
     private Bullet bullet;
     private Weapon weapon;
@@ -343,7 +342,6 @@ public class Tank extends Application {
     private Scene scene;
     private Pane tankPane;
     // Stat of resolution
-
     double scale = 70 / 10.0;
     double gap = (70 - 9 * scale) / 2.0;
     double Step = 35;
@@ -412,14 +410,14 @@ public class Tank extends Application {
         this.tankPane = tankPane;
         this.scene = scene;
         //
-//        ImageView a = new ImageView(bullet.getBullet(2));
-//        a.setFitWidth(70);
-//        a.setFitHeight(70);
-//        a.setX(500);
-//        a.setY(500);
+        Bot bot = new Bot(3,8,1,1);
+        Group bot1= bot.createbot(scale);
+
+        bot1.setTranslateX(420);
+        bot1.setTranslateY(420);
         //
         tank = createTank(scale);
-        tankPane.getChildren().addAll(tank);
+        tankPane.getChildren().addAll(tank,bot1);
         tank.setTranslateX(x + gap);
         tank.setTranslateY(y + gap);
         tank.setCache(true);
@@ -430,7 +428,7 @@ public class Tank extends Application {
         scene.setOnKeyPressed(keyEvent -> {
             try {
                 if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0) {
-                    Move(keyEvent, scale);
+                    Move(keyEvent);
                 }
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
@@ -438,7 +436,7 @@ public class Tank extends Application {
         });
         scene.setOnKeyReleased(e -> {
                     if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
-                        shootBullet(e, scale);
+                        shootBullet(e);
                     }
                 }
         );
@@ -582,9 +580,9 @@ public class Tank extends Application {
         ptr2.play();
     }
 
-    int check = 0;
+    private int check = 0;
 
-    public void Move(KeyEvent e, double scale) throws InterruptedException {
+    public void Move(KeyEvent e) throws InterruptedException {
         check = 0;
         double prevX = tank.getTranslateX(), prevY = tank.getTranslateY();
         double stepDuration = (500 - 50 * (speed / 10.0 - 1)) / (70 / Step * 35);
@@ -630,7 +628,7 @@ public class Tank extends Application {
                         tank.setTranslateY(prevY);
                     }
                 });
-                timeLineMoveTank.setCycleCount(35);
+                timeLineMoveTank.setCycleCount((int) Step);
                 callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate());
                 ft.play();
                 ft2.play();
@@ -672,7 +670,7 @@ public class Tank extends Application {
                         tank.setTranslateY(prevY);
                     }
                 });
-                timeLineMoveTank.setCycleCount(35);
+                timeLineMoveTank.setCycleCount((int) Step);
                 callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate());
                 ft.play();
                 ft2.play();
@@ -714,7 +712,7 @@ public class Tank extends Application {
                         tank.setTranslateY(prevY);
                     }
                 });
-                timeLineMoveTank.setCycleCount(35);
+                timeLineMoveTank.setCycleCount((int) Step);
                 callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate());
                 ft.play();
                 ft2.play();
@@ -756,7 +754,7 @@ public class Tank extends Application {
                         tank.setTranslateY(prevY);
                     }
                 });
-                timeLineMoveTank.setCycleCount(35);
+                timeLineMoveTank.setCycleCount((int) Step);
                 callPathTrack(tank.getTranslateX(), tank.getTranslateY(), tank.getRotate());
                 ft.play();
                 ft2.play();
@@ -765,7 +763,7 @@ public class Tank extends Application {
         }
     }
 
-    public void shootBullet(KeyEvent e, double scale) throws NullPointerException {
+    public void shootBullet(KeyEvent e) throws NullPointerException {
 
         if (e.getCode() == KeyCode.SPACE) {
             AtomicReference<Boolean> shotBullet = new AtomicReference<>(false);
