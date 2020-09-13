@@ -148,6 +148,13 @@ public class   Map2 extends Application {
         }
     }
 
+    public ArrayList<Rectangle> getRectList() {
+        return RectList;
+    }
+
+    public ArrayList<ImageView> getobjectList() {
+        return objectList;
+    }
     public String getObjectImagePath(int choice) {
         switch (choice) {
             case 1:

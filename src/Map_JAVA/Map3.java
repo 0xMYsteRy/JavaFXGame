@@ -40,6 +40,13 @@ public class   Map3 extends Application {
     private final ArrayList<ImageView> objectList = new ArrayList<ImageView>();
     private final ArrayList<Rectangle> RectList = new ArrayList<Rectangle>();
 
+    public ArrayList<Rectangle> getRectList() {
+        return RectList;
+    }
+
+    public ArrayList<ImageView> getobjectList() {
+        return objectList;
+    }
     public void loadGround(Pane tankPane) {
 
         //Draw background
