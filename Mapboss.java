@@ -13,11 +13,11 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-public class Map extends Application {
+public class Mapboss extends Application {
     // Constructor
     Scene scene;
 
-    public Map() {
+    public Mapboss() {
     }
 
 
@@ -28,8 +28,8 @@ public class Map extends Application {
 
         tankPane = new Pane();
         //Load the map
-        Map map = new Map();
-        map.loadGround(tankPane);
+        Mapboss map4 = new Mapboss();
+        map4.loadGround(tankPane);
         scene = new Scene(tankPane, 1400, 750);//1400x750
         //Create Player
         Tank b = new Tank(2, 3);
@@ -40,7 +40,7 @@ public class Map extends Application {
 //        a.createPlayer(1330,0,tankPane,scene,RectList,objectList);
 //        Tank d = new Tank (4,3);
 //        d.createPlayer(1330,700,tankPane,scene,RectList,objectList);
-        map.loadObject(tankPane);
+        map4.loadObject(tankPane);
         //Adding scene to the stage
         stage.setScene(scene);
         stage.show();
@@ -51,17 +51,17 @@ public class Map extends Application {
         //Draw object
         //Draw object
         int[][] objectMap = {
-                {1, 1, 1, 1, 1, 8, 8, 8, 14, 8, 8, 8, 1, 1, 1, 1, 1, 11, 1, 1},
-                {1, 1, 1, 5, 1, 1, 1, 1, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 14, 1, 1},
-                {1, 1, 1, 1, 1, 1, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 8},
-                {8, 8, 1, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 8, 8},
-                {8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 8, 8},
-                {8, 8, 1, 1, 1, 6, 1, 1, 1, 1, 1, 1, 11, 1, 1, 1, 1, 1, 8, 8},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 8, 8, 8, 14, 8, 8, 8, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 13, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 18, 1, 1, 1, 18, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 13, 1, 18, 1, 1, 1, 1, 1, 1, 1, 1, 1, 18, 1, 1, 13, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 18, 1, 1, 1, 18, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 13, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 
         };
         drawObject(pane, objectMap);
@@ -70,12 +70,12 @@ public class Map extends Application {
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 10, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 1, 7, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 7, 1, 1, 1, 7, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 1, 7, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 9, 1, 1, 1, 1 ,1, 1, 1, 11, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1,1 , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 
@@ -85,15 +85,15 @@ public class Map extends Application {
         // Draw castle
         int[][] castleMap = {
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 12, 1, 1, 1, 1},
+                {1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 8, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 8, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
         };
         drawCastleObject(pane, castleMap);
@@ -126,7 +126,7 @@ public class Map extends Application {
                 rect.setHeight(x * 9);
                 rect.setWidth(x * 9);
                 rect.setFill(Color.rgb(10, 10, 10, 0));
-                rect.setStroke(Paint.valueOf("blue"));
+                rect.setStroke(Paint.valueOf("darkgreen"));
                 rect.setTranslateX(70 * j);
                 rect.setTranslateY(70 * i);
                 tankPane.getChildren().addAll(rect);
@@ -156,11 +156,13 @@ public class Map extends Application {
     public String getImagePath(int choice) {
         switch (choice) {
             case 1:
-                return "file:src\\Map_JAVA\\PNG1\\background\\snow.png";
-            case 3:
-                return "file:src/Map_JAVA/PNG1/background/snow4.png";
+                return "file:src\\Map_JAVA\\PNG4\\Background\\grass2.png";
             case 4:
-                return "file:src/Ultilities/PNG/bigcircle.png";
+                return "file:src\\Map_JAVA\\PNG4\\ground4.png";
+            case 2:
+                return "file:src\\Map_JAVA\\PNG4\\Background\\ground2.png";
+            case 3:
+                return "file:src\\Map_JAVA\\PNG4\\ground3.png";
             default:
                 return "file:";
         }
@@ -172,31 +174,63 @@ public class Map extends Application {
                 //return nothing if the no need to add object on that tile.
                 return "file:";
             case 2:
-                return "file:src/Map_JAVA/PNG1/object/glass.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\pine.png";
             case 3:
-                return "file:src/Map_JAVA/PNG1/object/boom.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\pine tree.png";
             case 4:
-                return "file:src/Map_JAVA/PNG1/object/snowman.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\pine tree 1.png";
             case 5:
-                return "file:src/Map_JAVA/PNG1/object/reindeer.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\decoration.png";
             case 6:
-                return "file:src/Map_JAVA/PNG1/object/socks.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\direction.png";
             case 7:
-                return "file:src/Map_JAVA/PNG1/object/gift.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\flower.png";
             case 8:
-                return "file:src/Map_JAVA/PNG1/object/tree.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\flower3.png";
             case 9:
-                return "file:src/Map_JAVA/PNG1/object/penguin2.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\flower3a.png";
             case 10:
-                return "file:src/Map_JAVA/PNG1/object/santa2.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\flower3b.png";
             case 11:
-                return "file:src/Map_JAVA/PNG1/object/snowman.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\flower4.png";
             case 12:
-                return "file:src/Map_JAVA/PNG1/object/ObjectTree.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\flower5.png";
             case 13:
-                return "file:src/Map_JAVA/PNG1/object/Background_Castle.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\grass.png";
             case 14:
-                return "file:src/Map_JAVA/PNG1/object/Puddle.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\jar.png";
+            case 15:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\pine.png";
+            case 16:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\pine tree.png";
+            case 17:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\pine tree 1.png";
+            case 18:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\rock.png";
+            case 19:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\rock3.png";
+            case 20:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\small house.png";
+            case 21:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\tomato.png";
+            case 22:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\tree.png";
+            case 23:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\tree2.png";
+            case 24:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\tree7.png";
+            case 25:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\tree8.png";
+            case 26:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\treee.png";
+            case 27:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\windmill.png";
+            case 28:
+                return  "file:src\\Map_JAVA\\PNG4\\Object\\wood.png";
+            case 29:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\tree10.png";
+            case 30:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\treasure.png";
             default:
                 return "";
         }
@@ -225,8 +259,26 @@ public class Map extends Application {
             case 1:
                 //return nothing if the no need to add object on that tile.
                 return "file:";
+            case 2:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\direction.png";
+            case 3:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\rock.png";
+            case 4:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\rock3.png";
+            case 5:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\tree2.png";
             case 6:
-                return "file:src\\Map_JAVA\\PNG1\\object\\santa.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\tree10.png";
+            case 7:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\tree7.png";
+            case 8:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\castle.png";
+            case 9:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\direction2.png";
+            case 10:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\direction3.png";
+            case 11:
+                return "file:src\\Map_JAVA\\PNG4\\Object\\direction4.png";
             default:
                 return "file:";
         }
@@ -238,8 +290,8 @@ public class Map extends Application {
                 String imagePath = getCircleImagePath(map[i][j]);
                 ImageView CircleTile = new ImageView();
                 CircleTile.setImage(new Image(imagePath));
-                CircleTile.setScaleX(1.75);
-                CircleTile.setScaleY(1.75);
+                CircleTile.setScaleX(0.8);
+                CircleTile.setScaleY(0.8);
                 CircleTile.setFitHeight(140);
                 CircleTile.setFitWidth(140);
                 CircleTile.setTranslateX(70 * j - 70);
@@ -259,23 +311,23 @@ public class Map extends Application {
                 //return nothing if the no need to add object on that tile.
                 return "file:";
             case 2:
-                return "file:src/Map_JAVA/PNG1/object/HouseObject.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\windmill2.png";
             case 3:
-                return "file:src/Map_JAVA/PNG1/object/snowman2.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\bird statue.png";
             case 4:
-                return "file:src/Map_JAVA/PNG1/object/tree2.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\castle 3.png";
             case 5:
-                return "file:src/Map_JAVA/PNG1/object/santa2.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\direction.png";
             case 6:
-                return "file:src/Map_JAVA/PNG1/object/santA/Png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\castle.png";
             case 7:
-                return "file:src/Map_JAVA/PNG1/object/penguin2.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\wood mine.png";
             case 8:
-                return "file:src/Map_JAVA/PNG1/object/penguin.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\gold mine.png";
             case 9:
-                return "file:src/Map_JAVA/PNG1/object/pine.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\chimmey.png";
             case 10:
-                return "file:src/Map_JAVA/PNG1/object/tree.png";
+                return "file:src\\Map_JAVA\\PNG4\\Object\\fountain.png";
             case 11:
                 return "file:src/Map_JAVA/PNG1/object/gift.png";
             case 12:
@@ -325,4 +377,3 @@ public class Map extends Application {
 
 
 }
-
