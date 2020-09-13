@@ -12,6 +12,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
@@ -67,15 +68,27 @@ public class Bot {
         bot.setRotate(0);
         //
         rt = new RotateTransition(Duration.millis(300), bot);
-        while (true & Living == true) {
-            if ((bot.getTranslateX() - gap) % Step == 0 & (bot.getTranslateY() - gap) % Step == 0) {
-                if (!Moving) {
-                    int direction = random.nextInt() % 4 + 1;
-                    botmove(direction);
-                }
+//        while (Living) {
+        for (int i = 0; i < 1; i++) {
+            int direction = random.nextInt(3)+1;
+            int tankMoves = random.nextInt(3)+1;
+
+            if ((bot.getTranslateX() - gap) % Step == 0 & (bot.getTranslateY() - gap) % Step == 0 & !Moving) {
+                Timeline timelineBotshoot = new Timeline(new KeyFrame(Duration.millis(stepDuration*Step*2*tankMoves),
+                        evt -> {
+                            botmove(random.nextInt(4)+1,tankMoves);
+                        }));
+                timelineBotshoot.setCycleCount(Animation.INDEFINITE);
+                timelineBotshoot.play();
             }
             if (bot.getRotate() == 0 | bot.getRotate() == 90 | bot.getRotate() == 180 | bot.getRotate() == 270) {
-                botshoot();
+                KeyFrame[] keyFrame;
+                Timeline timelineBotshoot = new Timeline(new KeyFrame(Duration.millis(1000),
+                        evt -> {
+//                            botshoot();
+                        }));
+                timelineBotshoot.setCycleCount(Animation.INDEFINITE);
+                timelineBotshoot.play();
             }
         }
     }
@@ -135,32 +148,141 @@ public class Bot {
     }
 
     private int check = 0;
-    Timeline timelineStep;
-    KeyFrame StepKeyframe;
-    Timeline timeLineMovebot;
-    KeyFrame kf;
-
-    public void botmove(int direction) {
+    private Timeline timeLineMovebot;
+    private KeyFrame kf;
+    double prevX, prevY;
+    int moveStep;
+    double stepDuration = (500 - 50 * (speed / 10.0 - 1)) / (70 / Step * 35);
+    public void botmove(int direction,int moves) {
+        Moving = true;
         check = 0;
         Random random = new Random();
-        int moveStep = random.nextInt() % 10;
-        double prevX = bot.getTranslateX(), prevY = bot.getTranslateY();
-        double stepDuration = (500 - 50 * (speed / 10.0 - 1)) / (70 / Step * 35);
+        moveStep = moves;
+        stepDuration = (500 - 50 * (speed / 10.0 - 1)) / (70 / Step * 35);
         // Testing
-
+        System.out.println("I was here " + bot.getTranslateX()+" "+bot.getTranslateY());
 
         switch (direction) {
+            case 1:
+                if (bot.getRotate() != 0) {
+                    rt.setByAngle(0 - bot.getRotate());
+                    rt.setCycleCount(1);
+                    rt.setAutoReverse(true);
+                    rt.play();
+                }
+                KeyFrame stepKeyframe = new KeyFrame(
+                        Duration.millis(stepDuration * Step),
+                        actionEvent -> {
+                            prevX = bot.getTranslateX();
+                            prevY = bot.getTranslateY();
+                            System.out.println(bot.getTranslateX()+" "+bot.getTranslateY());
+                            kf = new KeyFrame(
+                                    Duration.millis(stepDuration),
+                                    (evt) -> {
+
+                                        for (Rectangle rectW : RectList) {
+                                            if (bot.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                                                check = 1;
+                                                break;
+                                            }
+                                        }
+                                        for (ImageView imgW : ObjList) {
+                                            if (bot.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                                check = 1;
+                                                break;
+                                            }
+                                        }
+                                        if (check == 0) {
+                                            bot.setTranslateY(bot.getTranslateY() - Step * 2 / 70.0);
+                                        }
+                                    }
+                            );
+                            timeLineMovebot = new Timeline(kf);
+                            timeLineMovebot.setOnFinished(evt -> {
+                                if (check == 1 | ((bot.getTranslateX() - gap) % Step != 0 & (bot.getTranslateY() % Step - gap) != 0)) {
+                                    System.out.println(bot.getTranslateX());
+                                    bot.setTranslateX(prevX);
+                                    bot.setTranslateY(prevY);
+                                }
+                            });
+                            timeLineMovebot.setCycleCount(35);
+                            callPathTrack(bot.getTranslateX(), bot.getTranslateY(), bot.getRotate());
+                            ft.play();
+                            ft2.play();
+                            timeLineMovebot.play();
+                        }
+                );
+                Timeline timelineStep = new Timeline(stepKeyframe);
+                timelineStep.setCycleCount(moveStep);
+                timelineStep.play();
+                break;
+            case 2:
+                if (bot.getRotate() != 90) {
+                    rt.setByAngle(90 - bot.getRotate());
+                    rt.setCycleCount(1);
+                    rt.setAutoReverse(true);
+                    rt.play();
+                }
+                stepKeyframe = new KeyFrame(
+                        Duration.millis(stepDuration * Step),
+                        actionEvent -> {
+                            prevX = bot.getTranslateX();
+                            prevY = bot.getTranslateY();
+                            kf = new KeyFrame(
+                                    Duration.millis(stepDuration),
+                                    (evt) -> {
+
+                                        for (Rectangle rectW : RectList) {
+                                            if (bot.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                                                check = 1;
+                                                break;
+                                            }
+                                        }
+                                        for (ImageView imgW : ObjList) {
+                                            if (bot.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                                check = 1;
+                                                break;
+                                            }
+                                        }
+                                        if (check == 0) {
+                                            bot.setTranslateX(bot.getTranslateX() + Step * 2 / 70.0);
+                                        }
+                                    }
+                            );
+                            timeLineMovebot = new Timeline(kf);
+                            timeLineMovebot.setOnFinished(evt -> {
+                                if (check == 1 | ((bot.getTranslateX() - gap) % Step != 0 & (bot.getTranslateY() % Step - gap) != 0)) {
+                                    bot.setTranslateX(prevX);
+                                    bot.setTranslateY(prevY);
+                                }
+                            });
+                            timeLineMovebot.setCycleCount(35);
+                            callPathTrack(bot.getTranslateX(), bot.getTranslateY(), bot.getRotate());
+                            ft.play();
+                            ft2.play();
+                            timeLineMovebot.play();
+                        }
+                );
+                timelineStep = new Timeline(stepKeyframe);
+                timelineStep.setCycleCount(moveStep);
+                timelineStep.play();
+                break;
+            default:
+                System.out.println("I was here!D " + direction);
+                break;
             case 3:
                 if (bot.getRotate() != 180) {
                     rt.setByAngle(180 - bot.getRotate());
                     rt.setCycleCount(1);
                     rt.setAutoReverse(true);
                     rt.play();
-                    break;
+
                 }
-                StepKeyframe = new KeyFrame(
+                stepKeyframe = new KeyFrame(
                         Duration.millis(stepDuration * Step),
                         actionEvent -> {
+                            prevX = bot.getTranslateX();
+                            prevY = bot.getTranslateY();
                             kf = new KeyFrame(
                                     Duration.millis(stepDuration),
                                     (evt) -> {
@@ -184,7 +306,6 @@ public class Bot {
                                     }
                             );
                             timeLineMovebot = new Timeline(kf);
-
                             timeLineMovebot.setOnFinished(evt -> {
                                 if (check == 1 | ((bot.getTranslateX() - gap) % Step != 0 & (bot.getTranslateY() % Step - gap) != 0)) {
                                     System.out.println(bot.getTranslateX());
@@ -199,6 +320,7 @@ public class Bot {
                             timeLineMovebot.play();
                         }
                 );
+                timelineStep = new Timeline(stepKeyframe);
                 timelineStep.setCycleCount(moveStep);
                 timelineStep.play();
                 break;
@@ -208,14 +330,17 @@ public class Bot {
                     rt.setCycleCount(1);
                     rt.setAutoReverse(true);
                     rt.play();
-                    break;
+
                 }
-                StepKeyframe = new KeyFrame(
+                stepKeyframe = new KeyFrame(
                         Duration.millis(stepDuration * Step),
                         actionEvent -> {
+                            prevX = bot.getTranslateX();
+                            prevY = bot.getTranslateY();
                             kf = new KeyFrame(
                                     Duration.millis(stepDuration),
                                     (evt) -> {
+
                                         for (Rectangle rectW : RectList) {
                                             if (bot.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
                                                 check = 1;
@@ -248,125 +373,19 @@ public class Bot {
 
                         }
                 );
-                timelineStep.setCycleCount(moveStep);
-                timelineStep.play();
-                break;
-            case 1:
-                if (bot.getRotate() != 0) {
-                    rt.setByAngle(0 - bot.getRotate());
-                    rt.setCycleCount(1);
-                    rt.setAutoReverse(false);
-                    rt.play();
-                    break;
-                }
-                if (bot.getRotate() != 270) {
-                    rt.setByAngle(270 - bot.getRotate());
-                    rt.setCycleCount(1);
-                    rt.setAutoReverse(true);
-                    rt.play();
-                    break;
-                }
-                StepKeyframe = new KeyFrame(
-                        Duration.millis(stepDuration * Step),
-                        actionEvent -> {
-                            kf = new KeyFrame(
-                                    Duration.millis(stepDuration),
-                                    (evt) -> {
-                                        for (Rectangle rectW : RectList) {
-                                            if (bot.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                                                check = 1;
-                                                break;
-                                            }
-                                        }
-                                        for (ImageView imgW : ObjList) {
-                                            if (bot.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                                                check = 1;
-                                                break;
-                                            }
-                                        }
-                                        if (check == 0) {
-                                            bot.setTranslateY(bot.getTranslateY() - Step * 2 / 70.0);
-                                        }
-                                    }
-                            );
-                            timeLineMovebot = new Timeline(kf);
-                            timeLineMovebot.setOnFinished(evt -> {
-                                if (check == 1 | ((bot.getTranslateX() - gap) % Step != 0 & (bot.getTranslateY() % Step - gap) != 0)) {
-                                    bot.setTranslateX(prevX);
-                                    bot.setTranslateY(prevY);
-                                }
-                            });
-                            timeLineMovebot.setCycleCount(35);
-                            callPathTrack(bot.getTranslateX(), bot.getTranslateY(), bot.getRotate());
-                            ft.play();
-                            ft2.play();
-                            timeLineMovebot.play();
-                        }
-                );
-                timelineStep.setCycleCount(moveStep);
-                timelineStep.play();
-                break;
-            case 2:
-                if (bot.getRotate() != 90) {
-                    rt.setByAngle(90 - bot.getRotate());
-                    rt.setCycleCount(1);
-                    rt.setAutoReverse(true);
-
-                    rt.play();
-                }
-                if (bot.getRotate() != 270) {
-                    rt.setByAngle(270 - bot.getRotate());
-                    rt.setCycleCount(1);
-                    rt.setAutoReverse(true);
-                    rt.play();
-                    break;
-                }
-                StepKeyframe = new KeyFrame(
-                        Duration.millis(stepDuration * Step),
-                        actionEvent -> {
-                            kf = new KeyFrame(
-                                    Duration.millis(stepDuration),
-                                    (evt) -> {
-                                        for (Rectangle rectW : RectList) {
-                                            if (bot.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                                                check = 1;
-                                                break;
-                                            }
-                                        }
-                                        for (ImageView imgW : ObjList) {
-                                            if (bot.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                                                check = 1;
-                                                break;
-                                            }
-                                        }
-                                        if (check == 0) {
-                                            bot.setTranslateX(bot.getTranslateX() + Step * 2 / 70.0);
-                                        }
-                                    }
-                            );
-                            timeLineMovebot = new Timeline(kf);
-                            timeLineMovebot.setOnFinished(evt -> {
-                                if (check == 1 | ((bot.getTranslateX() - gap) % Step != 0 & (bot.getTranslateY() % Step - gap) != 0)) {
-                                    bot.setTranslateX(prevX);
-                                    bot.setTranslateY(prevY);
-                                }
-                            });
-                            timeLineMovebot.setCycleCount(35);
-                            callPathTrack(bot.getTranslateX(), bot.getTranslateY(), bot.getRotate());
-                            ft.play();
-                            ft2.play();
-                            timeLineMovebot.play();
-                        }
-                );
+                timelineStep = new Timeline(stepKeyframe);
                 timelineStep.setCycleCount(moveStep);
                 timelineStep.play();
                 break;
         }
+        Moving= false;
     }
 
+    private boolean shotBullet;
+    private Explosion explosion;
+
     public void botshoot() {
-        AtomicReference<Boolean> shotBullet = new AtomicReference<>(false);
-        Explosion explosion = new Explosion();
+
         Flash flash = new Flash();
         double x;
         double y;
@@ -391,7 +410,7 @@ public class Bot {
                                 Duration.millis(stepDuration),
                                 (evt) -> {
                                     int check = 0;
-                                    if ((BulletW.getTranslateY() % 70) % 36 == 0 & BulletW.getTranslateY() % 70 != 0 & !shotBullet.get()) {
+                                    if ((BulletW.getTranslateY() % 70) % 36 == 0 & BulletW.getTranslateY() % 70 != 0 & !shotBullet) {
                                         for (Rectangle rectW : RectList) {
                                             if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
                                                 check = 1;
@@ -413,7 +432,7 @@ public class Bot {
                                         BulletW.setTranslateY(BulletW.getTranslateY() - 2);
                                     } else {
                                         botPane.getChildren().remove(BulletW);
-                                        shotBullet.set(true);
+                                        shotBullet = true;
                                     }
                                 }
                         ));
@@ -435,7 +454,7 @@ public class Bot {
                                 Duration.millis(stepDuration),
                                 (evt) -> {
                                     int check = 0;
-                                    if ((BulletW.getTranslateX() % 70) % 36 == 0 & BulletW.getTranslateX() % 70 != 0 & !shotBullet.get()) {
+                                    if ((BulletW.getTranslateX() % 70) % 36 == 0 & BulletW.getTranslateX() % 70 != 0 & !shotBullet) {
                                         for (Rectangle rectW : RectList) {
                                             if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
                                                 check = 1;
@@ -458,7 +477,7 @@ public class Bot {
                                         BulletW.setTranslateX(BulletW.getTranslateX() + 2);
                                     } else {
                                         botPane.getChildren().remove(BulletW);
-                                        shotBullet.set(true);
+                                        shotBullet = true;
                                     }
                                 }
                         ));
@@ -480,7 +499,7 @@ public class Bot {
                                 Duration.millis(stepDuration),
                                 (evt) -> {
                                     int check = 0;
-                                    if ((BulletW.getTranslateY() % 70) % 36 == 0 & BulletW.getTranslateY() % 70 != 0 & !shotBullet.get()) {
+                                    if ((BulletW.getTranslateY() % 70) % 36 == 0 & BulletW.getTranslateY() % 70 != 0 & !shotBullet) {
                                         for (Rectangle rectW : RectList) {
                                             if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
                                                 check = 1;
@@ -502,7 +521,7 @@ public class Bot {
                                         BulletW.setTranslateY(BulletW.getTranslateY() + 2);
                                     } else {
                                         botPane.getChildren().remove(BulletW);
-                                        shotBullet.set(true);
+                                        shotBullet = true;
                                     }
                                 }
                         ));
@@ -524,7 +543,7 @@ public class Bot {
                                 Duration.millis(stepDuration),
                                 (evt) -> {
                                     int check = 0;
-                                    if ((BulletW.getTranslateX() % 70) % 36 == 0 & BulletW.getTranslateX() % 70 != 0 & !shotBullet.get()) {
+                                    if ((BulletW.getTranslateX() % 70) % 36 == 0 & BulletW.getTranslateX() % 70 != 0 & !shotBullet) {
                                         for (Rectangle rectW : RectList) {
                                             if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
                                                 check = 1;
@@ -545,7 +564,7 @@ public class Bot {
                                         BulletW.setTranslateX(BulletW.getTranslateX() - 2);
                                     } else {
                                         botPane.getChildren().remove(BulletW);
-                                        shotBullet.set(true);
+                                        shotBullet = true;
                                     }
                                 }
                         ));

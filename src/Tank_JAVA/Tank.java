@@ -121,7 +121,7 @@ class Bullet {
     }
 
     public Bullet(int bulletOption) {
-        switch (bulletOption) {
+        switch (bulletOption%5) {
             case 1:
                 this.Damage = 15;
                 this.Speed = 12;
@@ -147,6 +147,38 @@ class Bullet {
                 this.Range = 15;
                 break;
             case 4:
+                this.Damage = 90;
+                this.Speed = 0;
+                this.Effect = 2;
+                this.RealoadRate = 0;
+                this.Ammunition = 0;
+                this.Range = 1;
+                break;
+            case 5:
+                this.Damage = 15;
+                this.Speed = 12;
+                this.Effect = 1;
+                this.RealoadRate = 0.2;
+                this.Ammunition = 20;
+                this.Range = 10;
+                break;
+            case 6:
+                this.Damage = 30;
+                this.Speed = 10;
+                this.Effect = 1;
+                this.RealoadRate = 0.5;
+                this.Ammunition = 10;
+                this.Range = 12;
+                break;
+            case 7:
+                this.Damage = 50;
+                this.Speed = 15;
+                this.Effect = 1;
+                this.RealoadRate = 1;
+                this.Ammunition = 5;
+                this.Range = 15;
+                break;
+            case 8:
                 this.Damage = 90;
                 this.Speed = 0;
                 this.Effect = 2;
@@ -346,7 +378,7 @@ public class Tank extends Application {
     double gap = (70 - 9 * scale) / 2.0;
     double Step = 35;
     // Stat of tank
-    private int bulletMode = 1;
+    private int bulletMode = 2;
     private double speed = 0;
 
     //Getter and setter methods, incase usefull to call those property from other classes.
@@ -396,6 +428,9 @@ public class Tank extends Application {
         //Create Player
         Tank b = new Tank(1, 2);
         b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList());
+        //Create Bot
+        Bot bot= new Bot(1,6,1,1);
+        bot.spawnbot(420,420,tankPane,scene,map.getRectList(),map.getobjectList());
         //Adding scene to the stage
         map.loadObject(tankPane);
         stage.setScene(scene);
@@ -410,14 +445,9 @@ public class Tank extends Application {
         this.tankPane = tankPane;
         this.scene = scene;
         //
-        Bot bot = new Bot(3,8,1,1);
-        Group bot1= bot.createbot(scale);
-
-        bot1.setTranslateX(420);
-        bot1.setTranslateY(420);
         //
         tank = createTank(scale);
-        tankPane.getChildren().addAll(tank,bot1);
+        tankPane.getChildren().addAll(tank);
         tank.setTranslateX(x + gap);
         tank.setTranslateY(y + gap);
         tank.setCache(true);
