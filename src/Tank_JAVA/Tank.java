@@ -1,6 +1,8 @@
 package Tank_JAVA;
 
 import Map_JAVA.Map2;
+import Map_JAVA.Map3;
+import Map_JAVA.Mapboss;
 import javafx.animation.*;
 
 import javafx.application.Application;
@@ -421,7 +423,7 @@ public class Tank extends Application {
 
         tankPane = new Pane();
         //Load the map
-        Map2 map = new Map2();
+        Mapboss map = new Mapboss();
 
         map.loadGround(tankPane);
         scene = new Scene(tankPane, 1400, 750);//1400x750
