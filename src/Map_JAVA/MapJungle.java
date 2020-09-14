@@ -1,8 +1,10 @@
 
 package Map_JAVA;
 
+import Tank_JAVA.Bot;
 import Tank_JAVA.Tank;
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,10 +15,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MapJungle extends Application {
     // Constructor
-    Scene scene;
+
 
     public MapJungle() {
     }
@@ -25,7 +28,7 @@ public class MapJungle extends Application {
     public void start(Stage stage) throws Exception {
         stage.setTitle("Loading an image");
         Pane tankPane;
-
+        Scene scene;
         tankPane = new Pane();
         //Load the map
         MapJungle map = new MapJungle();
@@ -38,6 +41,24 @@ public class MapJungle extends Application {
         //Adding scene to the stage
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void loadBot(Pane pane, Tank tank, Scene scene) {
+        int[][] botSpawn = {
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+
+        };
+        callBot(pane, botSpawn, tank, scene);
     }
 
     public void loadObject(Pane pane) {
@@ -72,7 +93,7 @@ public class MapJungle extends Application {
                 {1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
         };
-        drawCastleObject(pane, castleMap);
+//        drawCastleObject(pane, castleMap);
     }
 
     public void loadGround(Pane tankPane) {
@@ -111,6 +132,23 @@ public class MapJungle extends Application {
 
     }
 
+    private ArrayList<Bot> ObjBotList = new ArrayList<>();
+    Random random = new Random();
+
+    public void callBot(Pane pane, int[][] map, Tank tank, Scene scene) {
+        for (int j = 0; j < 11; j++) {
+            for (int i = 0; i < 20; i++) {
+                if (map[j][i] > 1) {
+                    Bot bot = new Bot(i * 70, j * 70, random.nextInt(4) + 1, random.nextInt(4) + 5, 1, 1);
+                    ObjBotList.add(bot);
+                }
+            }
+        }
+        for (Bot x : ObjBotList) {
+            x.spawnbot(pane, scene, RectList, objectList, ObjBotList, tank);
+        }
+    }
+
     public void drawMap(Pane pane, int[][] map) {
         for (int i = 0; i < 11; i++) {
             for (int j = 0; j < 20; j++) {
@@ -129,9 +167,9 @@ public class MapJungle extends Application {
     public String getImagePath(int choice) {
         switch (choice) {
             case 1:
-                return "file:src/Ultilities/PNG/Background_Snow.png";
+                return "file:src/Map_JAVA/PNG2/Background/glass ground .png";
             case 2:
-                return "file:src/Ultilities/PNG/Background_DarkSnow.png";
+                return "file:src/Map_JAVA/PNG4/Background/ground2.png";
             case 3:
                 return "file:src/Ultilities/PNG/bigcircle.png";
             default:
