@@ -42,7 +42,6 @@ public class MapJungle extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
     public void loadBot(Pane pane, Tank tank, Scene scene) {
         int[][] botSpawn = {
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},

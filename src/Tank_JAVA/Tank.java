@@ -151,7 +151,7 @@ class Bullet {
                 break;
             case 4:
                 this.Damage = 90;
-                this.Speed = 0;
+                this.Speed = 1;
                 this.Effect = 2;
                 this.RealoadRate = 0;
                 this.Ammunition = 0;
@@ -183,7 +183,7 @@ class Bullet {
                 break;
             case 8:
                 this.Damage = 90;
-                this.Speed = 0;
+                this.Speed = 1;
                 this.Effect = 2;
                 this.RealoadRate = 0;
                 this.Ammunition = 0;
@@ -455,6 +455,7 @@ public class Tank extends Application {
         this.BulletDamage = bullet.getDamage();
         this.BulletReloadRate = bullet.getReload();
         this.BulletSpeed=bullet.getSpeed();
+        this.Range= bullet.getRange();
     }
 
     @Override
@@ -473,9 +474,9 @@ public class Tank extends Application {
         Tank b = new Tank(1, 2);
         b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList());
         //Create Bot
-        map.loadBot(tankPane, b   , scene);
+//        map.loadBot(tankPane, b   , scene);
         //Adding scene to the s tage
-//        map.loadObject(tankPane);
+        map.loadObject(tankPane);
         stage.setScene(scene);
         stage.show();
 
@@ -856,7 +857,7 @@ public class Tank extends Application {
             double x;
             double y;
             double Direction = tank.getRotate();
-            double Speed = bullet.getSpeed() / 10.0 * Range;
+            double Speed = BulletSpeed/ 10.0 * Range;
             ImageView BulletW = new ImageView(new Image(bullet.getBullet(bulletMode)));
             BulletW.setFitWidth(scale * 9);
             BulletW.setFitHeight(scale * 9);
@@ -865,6 +866,7 @@ public class Tank extends Application {
             // Timeline
             double steps = scale * Range * 4 / 2.0;
             double stepDuration = 100 * Speed / steps;
+            System.out.println(Range);
             Timeline bulletAnimation;
             switch ((int) Direction) {
                 case 0:
