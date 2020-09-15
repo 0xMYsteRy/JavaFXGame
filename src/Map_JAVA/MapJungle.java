@@ -36,7 +36,7 @@ public class MapJungle extends Application {
         scene = new Scene(tankPane, 1400, 750);//1400x750
         //Create Player
         Tank b = new Tank(1, 2);
-        b.createPlayer(350, 350, tankPane, scene, RectList, objectList);
+        b.createPlayer(350, 350, tankPane, scene, RectList, objectList,ObjBotList);
         map.loadObject(tankPane);
         //Adding scene to the stage
         stage.setScene(scene);
@@ -152,14 +152,15 @@ public class MapJungle extends Application {
                 if (map[j][i] > 1) {
                     Bot bot = new Bot(i * 70, j * 70, random.nextInt(4) + 1, random.nextInt(4) + 5, 1, 1);
                     ObjBotList.add(bot);
+                    bot.spawnbot(pane, scene, RectList, objectList, tank);
+
                 }
             }
         }
-        for (Bot x : ObjBotList) {
-            x.spawnbot(pane, scene, RectList, objectList, ObjBotList, tank);
-        }
     }
-
+    public ArrayList<Bot> getObjBotList(){
+        return ObjBotList;
+    }
     public void drawMap(Pane pane, int[][] map) {
         for (int i = 0; i < 22; i++) {
             for (int j = 0; j < 40; j++) {

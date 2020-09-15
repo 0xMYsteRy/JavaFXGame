@@ -3,6 +3,7 @@ package Tank_JAVA;
 import javafx.animation.*;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class Bot {
+public class Bot implements Runnable {
     private Group bot;
     private Hull hull;
     private Bullet bullet;
@@ -31,7 +32,7 @@ public class Bot {
     double gap = (70 - 9 * scale) / 2.0;
     double Step = 35;
     // Stat of bot
-    private int bulletMode = 1;
+    private int bulletMode = 2;
     private double speed = 0;
     //Getter and setter methods, incase usefull to call those property from other classes.
     // Finish calling setter and getter methods
@@ -40,6 +41,7 @@ public class Bot {
     Random random = new Random();
     private int spawnx, spawny;
     private int difficulty;
+    private Tank playerTank;
 
     // Constructor
     public Bot(int x, int y, int color, int choice, int typebot, int difficulty) {
@@ -58,13 +60,26 @@ public class Bot {
         return bot;
     }
 
-    public void spawnbot(Pane botPane, Scene scene, ArrayList<Rectangle> rectList, ArrayList<ImageView> objList, ArrayList<Bot> botList, Tank tank) {
+    public void setLiving(boolean Living) {
+        this.Living = Living;
+        timelineBotMove.stop();
+        timelineBotshoot.stop();
+    }
+
+    Timeline timelineBotMove;
+    Timeline timelineBotshoot;
+
+    @Override
+    public void run() {
+
+    }
+
+    public void spawnbot(Pane botPane, Scene scene, ArrayList<Rectangle> rectList, ArrayList<ImageView> objList, Tank tank) {
         this.ObjList = objList;
         this.RectList = rectList;
         this.botPane = botPane;
         this.scene = scene;
-        //
-
+        this.playerTank = tank;
         //
         bot = createbot(scale);
         botPane.getChildren().addAll(bot);
@@ -75,28 +90,37 @@ public class Bot {
         bot.setRotate(0);
         //
         rt = new RotateTransition(Duration.millis(100), bot);
-//        while (Living) {
-        for (int i = 0; i < 1; i++) {
-            int tankMoves = random.nextInt(5) + 1;
+//        while (Living)
+//         {
+        int tankMoves = random.nextInt(5) + 1;
 
-            if ((bot.getTranslateX() - gap) % Step == 0 & (bot.getTranslateY() - gap) % Step == 0 & !Moving & !Rotating) {
-                Timeline timelineBotshoot = new Timeline(new KeyFrame(Duration.millis(stepDuration * Step * 3 * tankMoves),
-                        evt -> {
-                            botmove(random.nextInt(4) + 1, tankMoves);
-                        }));
-                timelineBotshoot.setCycleCount(Animation.INDEFINITE);
+        timelineBotMove = new Timeline(new KeyFrame(Duration.millis(stepDuration * Step * 3 * tankMoves),
+                evt -> {
+                    if ((bot.getTranslateX() - gap) % Step == 0 & (bot.getTranslateY() - gap) % Step == 0 & !Moving & !Rotating) {
+
+                        botmove(random.nextInt(4) + 1, tankMoves);
+                    }
+                }));
+        timelineBotMove.setOnFinished(actionEvent -> {
+            if (Living) {
+                timelineBotMove.play();
+            }
+        });
+        timelineBotMove.setCycleCount(Animation.INDEFINITE);
+        timelineBotMove.play();
+        timelineBotshoot = new Timeline(new KeyFrame(Duration.millis(1200.0 / difficulty),
+                evt -> {
+                    botshoot();
+                }));
+        timelineBotMove.setOnFinished(actionEvent -> {
+            if (Living) {
                 timelineBotshoot.play();
             }
-            if (bot.getRotate() % 90 == 0) {
-                KeyFrame[] keyFrame;
-                Timeline timelineBotshoot = new Timeline(new KeyFrame(Duration.millis(1200 / difficulty),
-                        evt -> {
-                            botshoot();
-                        }));
-                timelineBotshoot.setCycleCount(Animation.INDEFINITE);
-                timelineBotshoot.play();
-            }
-        }
+        });
+        timelineBotshoot.setCycleCount(Animation.INDEFINITE);
+        timelineBotshoot.play();
+
+//        }
     }
 
     public Group createbot(double x) {
@@ -167,7 +191,6 @@ public class Bot {
         moveStep = moves;
         stepDuration = (500 - 50 * (speed / 10.0 - 1)) / (70 / Step * 35);
         // Testing
-//        System.out.println("I was here " + bot.getTranslateX()+" "+bot.getTranslateY());
 
         switch (direction) {
             case 1:
@@ -181,7 +204,6 @@ public class Bot {
                 KeyFrame stepKeyframe = new KeyFrame(
                         Duration.millis(stepDuration * Step),
                         actionEvent -> {
-                            System.out.println(bot.getTranslateX() + " " + bot.getTranslateY());
                             AtomicReference<Double> prevY = new AtomicReference<>((double) 0);
                             kf = new KeyFrame(
                                     Duration.millis(stepDuration),
@@ -192,25 +214,27 @@ public class Bot {
                                                 break;
                                             }
                                         }
+                                        if (bot.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            check = 1;
+                                        }
                                         for (ImageView imgW : ObjList) {
                                             if (bot.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
                                                 check = 1;
                                                 break;
                                             }
                                         }
-                                        if (bot.getTranslateX() < 0 | bot.getTranslateY() > 750 | bot.getTranslateY() < 0 | bot.getTranslateX() > 1400) {
+                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 770 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
                                             check = 1;
                                         }
                                         if (check == 0) {
                                             bot.setTranslateY(bot.getTranslateY() - Step * 2 / 70.0);
-                                            prevY.updateAndGet(v -> new Double((double) (v - Step * 2 / 70.0)));
+                                            prevY.updateAndGet(v -> (double) (v - Step * 2 / 70.0));
                                         }
                                     }
                             );
                             timeLineMovebot = new Timeline(kf);
                             timeLineMovebot.setOnFinished(evt -> {
                                 if (check == 1) {
-                                    System.out.println("Check 0 fixed " + prevY + " from " + gap);
                                     bot.setTranslateY(bot.getTranslateY() - prevY.get());
                                     check = 0;
                                 }
@@ -255,20 +279,22 @@ public class Bot {
                                                 break;
                                             }
                                         }
-                                        if (bot.getTranslateX() < 0 | bot.getTranslateY() > 750 | bot.getTranslateY() < 0 | bot.getTranslateX() > 1400) {
+                                        if (bot.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            check = 1;
+                                        }
+                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 770 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
                                             check = 1;
                                         }
                                         if (check == 0) {
 
                                             bot.setTranslateX(bot.getTranslateX() + Step * 2 / 70.0);
-                                            prevX.updateAndGet(v -> new Double((double) (v + Step * 2 / 70.0)));
+                                            prevX.updateAndGet(v -> (double) (v + Step * 2 / 70.0));
                                         }
                                     }
                             );
                             timeLineMovebot = new Timeline(kf);
                             timeLineMovebot.setOnFinished(evt -> {
                                 if (check == 1) {
-                                    System.out.println("Check 90 fixed " + prevX + " from " + gap);
                                     bot.setTranslateX(bot.getTranslateX() - prevX.get());
                                     check = 0;
                                 }
@@ -283,9 +309,6 @@ public class Bot {
                 timelineStep = new Timeline(stepKeyframe);
                 timelineStep.setCycleCount(moveStep);
                 timelineStep.play();
-                break;
-            default:
-                System.out.println("I was here! " + direction);
                 break;
             case 3:
                 if (bot.getRotate() != 180) {
@@ -318,19 +341,21 @@ public class Bot {
                                                 }
                                             }
                                         }
-                                        if (bot.getTranslateX() < 0 | bot.getTranslateY() > 750 | bot.getTranslateY() < 0 | bot.getTranslateX() > 1400) {
+                                        if (bot.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            check = 1;
+                                        }
+                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 770 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
                                             check = 1;
                                         }
                                         if (check == 0) {
                                             bot.setTranslateY(bot.getTranslateY() + Step * 2 / 70.0);
-                                            prevY.updateAndGet(v -> new Double((double) (v + Step * 2 / 70.0)));
+                                            prevY.updateAndGet(v -> (double) (v + Step * 2 / 70.0));
                                         }
                                     }
                             );
                             timeLineMovebot = new Timeline(kf);
                             timeLineMovebot.setOnFinished(evt -> {
                                 if (check == 1) {
-                                    System.out.println("Check 270 fixed " + prevY + " from " + gap);
                                     bot.setTranslateY(bot.getTranslateY() - prevY.get());
                                     check = 0;
                                 }
@@ -376,19 +401,21 @@ public class Bot {
                                                 break;
                                             }
                                         }
-                                        if (bot.getTranslateX() < 0 | bot.getTranslateY() > 750 | bot.getTranslateY() < 0 | bot.getTranslateX() > 1400) {
+                                        if (bot.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            check = 1;
+                                        }
+                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 770 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
                                             check = 1;
                                         }
                                         if (check == 0) {
                                             bot.setTranslateX(bot.getTranslateX() - Step * 2 / 70.0);
-                                            prevX.updateAndGet(v -> new Double((double) (v - Step * 2 / 70.0)));
+                                            prevX.updateAndGet(v -> (double) (v - Step * 2 / 70.0));
                                         }
                                     }
                             );
                             timeLineMovebot = new Timeline(kf);
                             timeLineMovebot.setOnFinished(evt -> {
                                 if (check == 1) {
-                                    System.out.println("Check 270 fixed " + prevX + " from " + gap);
                                     bot.setTranslateX(bot.getTranslateX() - prevX.get());
                                     check = 0;
                                 }
@@ -405,14 +432,19 @@ public class Bot {
                 timelineStep.setCycleCount(moveStep);
                 timelineStep.play();
                 break;
+            default:
+                Moving = false;
+                Rotating = false;
+                break;
         }
         Moving = false;
+        Rotating = false;
     }
 
     private boolean shotBullet;
     private Explosion explosion;
     double bulletSteps;
-    int checkBullet = 0;
+    int checkBullet = 0, shotPlayer = 0;
     double BulletstepDuration;
 
     public void botshoot() {
@@ -458,6 +490,12 @@ public class Bot {
                                                 break;
                                             }
                                         }
+                                        if (BulletW.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            shotPlayer = 1;
+                                            checkBullet = 1;
+                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane);
+                                        }
+                                        ;
 
                                     }
                                     if (checkBullet == 0) {
@@ -468,8 +506,11 @@ public class Bot {
                                 }
                         ));
                 bulletAnimation.setOnFinished(evt -> {
-                    System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
                     botPane.getChildren().remove(BulletW);
+                    if (shotPlayer == 1) {
+                        playerTank.setHealth(bullet.getDamage());
+                        shotPlayer = 0;
+                    }
                 });
                 bulletAnimation.setCycleCount((int) bulletSteps);
                 BulletW.setX(x);
@@ -502,6 +543,12 @@ public class Bot {
                                                 break;
                                             }
                                         }
+                                        if (BulletW.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            shotPlayer = 1;
+                                            checkBullet = 1;
+                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane);
+                                        }
+
                                     }
 
                                     if (checkBullet == 0) {
@@ -512,8 +559,11 @@ public class Bot {
                                 }
                         ));
                 bulletAnimation.setOnFinished(evt -> {
-                    System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
                     botPane.getChildren().remove(BulletW);
+                    if (shotPlayer == 1) {
+                        playerTank.setHealth(bullet.getDamage());
+                        shotPlayer = 0;
+                    }
                 });
                 bulletAnimation.setCycleCount((int) bulletSteps);
                 BulletW.setX(x);
@@ -545,6 +595,11 @@ public class Bot {
                                                 break;
                                             }
                                         }
+                                        if (BulletW.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            shotPlayer = 1;
+                                            checkBullet = 1;
+                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane);
+                                        }
 
                                     }
                                     if (checkBullet == 0) {
@@ -555,8 +610,11 @@ public class Bot {
                                 }
                         ));
                 bulletAnimation.setOnFinished(evt -> {
-                    System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
                     botPane.getChildren().remove(BulletW);
+                    if (shotPlayer == 1) {
+                        playerTank.setHealth(bullet.getDamage());
+                        shotPlayer = 0;
+                    }
                 });
                 bulletAnimation.setCycleCount((int) bulletSteps);
                 BulletW.setX(x);
@@ -587,6 +645,11 @@ public class Bot {
                                                 break;
                                             }
                                         }
+                                        if (BulletW.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            shotPlayer = 1;
+                                            checkBullet = 1;
+                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane);
+                                        }
 
                                     }
                                     if (checkBullet == 0) {
@@ -597,8 +660,11 @@ public class Bot {
                                 }
                         ));
                 bulletAnimation.setOnFinished(evt -> {
-                    System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
                     botPane.getChildren().remove(BulletW);
+                    if (shotPlayer == 1) {
+                        playerTank.setHealth(bullet.getDamage());
+                        shotPlayer = 0;
+                    }
                 });
 
                 bulletAnimation.setCycleCount((int) bulletSteps);
@@ -608,10 +674,8 @@ public class Bot {
 
                 break;
             default:
-                System.out.println("Unexpected value: " + Direction);
                 botPane.getChildren().remove(BulletW);
         }
-        System.out.println("Direction " + Direction);
     }
 
     public void callPathTrack(double x, double y, double direction) {

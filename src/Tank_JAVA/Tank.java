@@ -17,11 +17,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -124,7 +128,7 @@ class Bullet {
     }
 
     public Bullet(int bulletOption) {
-        switch (bulletOption % 5) {
+        switch (bulletOption) {
             case 1:
                 this.Damage = 15;
                 this.Speed = 12;
@@ -134,7 +138,7 @@ class Bullet {
                 this.Range = 10;
                 break;
             case 2:
-                this.Damage = 30;
+                this.Damage = 11;
                 this.Speed = 10;
                 this.Effect = 1;
                 this.RealoadRate = 0.5;
@@ -142,7 +146,7 @@ class Bullet {
                 this.Range = 12;
                 break;
             case 3:
-                this.Damage = 50;
+                this.Damage = 24;
                 this.Speed = 15;
                 this.Effect = 1;
                 this.RealoadRate = 1;
@@ -150,47 +154,47 @@ class Bullet {
                 this.Range = 15;
                 break;
             case 4:
-                this.Damage = 90;
-                this.Speed = 1;
+                this.Damage = 22;
+                this.Speed = 16;
                 this.Effect = 2;
                 this.RealoadRate = 0;
                 this.Ammunition = 0;
-                this.Range = 1;
+                this.Range = 19;
                 break;
             case 5:
                 this.Damage = 15;
                 this.Speed = 12;
                 this.Effect = 1;
                 this.RealoadRate = 0.2;
-                this.Ammunition = 20;
+                this.Ammunition = 10;
                 this.Range = 10;
                 break;
             case 6:
-                this.Damage = 30;
+                this.Damage = 20;
                 this.Speed = 10;
                 this.Effect = 1;
                 this.RealoadRate = 0.5;
-                this.Ammunition = 10;
+                this.Ammunition = 14;
                 this.Range = 12;
                 break;
             case 7:
-                this.Damage = 50;
+                this.Damage = 18;
                 this.Speed = 15;
                 this.Effect = 1;
                 this.RealoadRate = 1;
-                this.Ammunition = 5;
+                this.Ammunition = 7;
                 this.Range = 15;
                 break;
             case 8:
-                this.Damage = 90;
-                this.Speed = 1;
+                this.Damage = 20;
+                this.Speed = 19;
                 this.Effect = 2;
                 this.RealoadRate = 0;
                 this.Ammunition = 0;
-                this.Range = 1;
+                this.Range = 20;
                 break;
             default:
-                System.out.println("Damn, Wrong option");
+                System.out.println("Damn, Wrong Bullet option " + bulletOption);
                 break;
         }
     }
@@ -216,7 +220,7 @@ class Bullet {
 
     public String getBullet(int choice) {
         counting += 1;
-        System.out.printf("Shot %d bullets\n", counting);
+//        System.out.printf("Shot %d bullets\n", counting);
         switch (choice % 3) {
             case 1:
                 return ImagePath;
@@ -421,7 +425,7 @@ public class Tank extends Application {
     // Finish calling setter and getter methods
     private ArrayList<Rectangle> RectList;
     private ArrayList<ImageView> ObjList;
-
+    private ArrayList<Bot> BotList;
 
     // Constructor
     public Tank() {
@@ -454,8 +458,8 @@ public class Tank extends Application {
         this.BulletAmmunition = bullet.getAmmunition();
         this.BulletDamage = bullet.getDamage();
         this.BulletReloadRate = bullet.getReload();
-        this.BulletSpeed=bullet.getSpeed();
-        this.Range= bullet.getRange();
+        this.BulletSpeed = bullet.getSpeed();
+        this.Range = bullet.getRange();
     }
 
     @Override
@@ -463,7 +467,6 @@ public class Tank extends Application {
         //Setting title to the Stage
         stage.setTitle("Loading an image");
         Pane tankPane;
-
         tankPane = new Pane();
         //Load the map
         MapJungle map = new MapJungle();
@@ -471,23 +474,63 @@ public class Tank extends Application {
         map.loadGround(tankPane);
         scene = new Scene(tankPane, 1400, 750);//1400x750
         //Create Player
-        Tank b = new Tank(1, 2);
-        b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList());
+        Tank b = new Tank(2, 1);
+
+        b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList());
         //Create Bot
-//        map.loadBot(tankPane, b   , scene);
-        //Adding scene to the s tage
-        map.loadObject(tankPane);
+        map.loadBot(tankPane, b, scene);
+        //Adding scene to the stage
+//        map.loadObject(tankPane);
         stage.setScene(scene);
         stage.show();
 
 
     }
 
-    public void createPlayer(int x, int y, Pane tankPane, Scene scene, ArrayList<Rectangle> rectList, ArrayList<ImageView> objList) {
+    Random random = new Random();
+
+    public void setHealth(int damage) {
+        Health -= damage;
+        Text dam = new Text("-"+ damage);
+        dam.setFill(Color.RED);
+        dam.setFont(Font.font("verdana",FontWeight.EXTRA_BOLD,15));
+        dam.setStroke(Color.WHITESMOKE);
+        dam.setStrokeWidth(0.5);
+        double iniX = tank.getTranslateX() + random.nextInt(10+10)  +17, iniY = tank.getTranslateY() + random.nextInt(10+10) + 5;
+        dam.setX(iniX);
+        dam.setY(iniY);
+        tankPane.getChildren().add(dam);
+        Timeline minusHealth = new Timeline(new KeyFrame(Duration.millis(50),
+                actionEvent -> {
+                    if (iniX > tank.getTranslateX()+25) {
+                        dam.setX(dam.getX() + 1);
+                        dam.setY(dam.getY() - 5);
+                    }else {
+                        dam.setX(dam.getX() - 1);
+                        dam.setY(dam.getY() - 5);
+                    }
+                    dam.setOpacity(dam.getOpacity() - 0.1);
+                }));
+        minusHealth.setCycleCount(20);
+        minusHealth.setOnFinished(evt->tankPane.getChildren().remove(dam));
+        minusHealth.play();
+        checkHealth();
+    }
+    public void checkHealth(){
+        if (Health<=100){
+            System.out.println(Health);
+        }
+    }
+
+    public void createPlayer(int x, int y, Pane tankPane, Scene scene, ArrayList<Rectangle> rectList, ArrayList<ImageView> objList, ArrayList<Bot> BotList) {
         this.ObjList = objList;
         this.RectList = rectList;
         this.tankPane = tankPane;
         this.scene = scene;
+        this.BotList = BotList;
+        //
+        Random rand = new Random();
+
         //
         tank = createTank(scale);
         tankPane.getChildren().addAll(tank);
@@ -510,6 +553,7 @@ public class Tank extends Application {
         scene.setOnKeyReleased(e -> {
                     if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
                         shootBullet(e);
+
                     }
                 }
         );
@@ -566,8 +610,8 @@ public class Tank extends Application {
         return root;
     }
 
-    public Bullet getBullet() {
-        return bullet;
+    public Group getTank() {
+        return tank;
     }
 
 
@@ -681,15 +725,21 @@ public class Tank extends Application {
                                         break;
                                     }
                                 }
+                                for (Bot bot : BotList) {
+                                    if (tank.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
+                                        check = 1;
+                                        break;
+                                    }
+                                }
                                 for (ImageView imgW : ObjList) {
                                     if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
                                         check = 1;
                                         break;
                                     }
                                 }
-                            }
-                            if (tank.getTranslateX() < 0 | tank.getTranslateY() > 750 | tank.getTranslateY() < 0 | tank.getTranslateX() > 1400) {
-                                check = 1;
+                                if (tank.getTranslateX() <= 0 | tank.getTranslateY() >= 770 | tank.getTranslateY() <= 0 | tank.getTranslateX() >= 1365) {
+                                    check = 1;
+                                }
                             }
                             if (check == 0) {
                                 tank.setTranslateY(tank.getTranslateY() + Step * 2 / 70.0);
@@ -722,20 +772,29 @@ public class Tank extends Application {
                 kf = new KeyFrame(
                         Duration.millis(stepDuration),
                         (evt) -> {
-                            for (Rectangle rectW : RectList) {
-                                if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                                    check = 1;
-                                    break;
+
+                            if (check == 0) {
+                                for (Rectangle rectW : RectList) {
+                                    if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                                        check = 1;
+                                        break;
+                                    }
                                 }
-                            }
-                            for (ImageView imgW : ObjList) {
-                                if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                                    check = 1;
-                                    break;
+                                for (Bot bot : BotList) {
+                                    if (tank.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
+                                        check = 1;
+                                        break;
+                                    }
                                 }
-                            }
-                            if (tank.getTranslateX() < 0 | tank.getTranslateY() > 750 | tank.getTranslateY() < 0 | tank.getTranslateX() > 1400) {
-                                check = 1;
+                                for (ImageView imgW : ObjList) {
+                                    if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                        check = 1;
+                                        break;
+                                    }
+                                }
+                                if (tank.getTranslateX() <= 0 | tank.getTranslateY() >= 770 | tank.getTranslateY() <= 0 | tank.getTranslateX() >= 1365) {
+                                    check = 1;
+                                }
                             }
                             if (check == 0) {
                                 tank.setTranslateX(tank.getTranslateX() - Step * 2 / 70.0);
@@ -767,20 +826,28 @@ public class Tank extends Application {
                 kf = new KeyFrame(
                         Duration.millis(stepDuration),
                         (evt) -> {
-                            for (Rectangle rectW : RectList) {
-                                if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                                    check = 1;
-                                    break;
+                            if (check == 0) {
+                                for (Rectangle rectW : RectList) {
+                                    if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                                        check = 1;
+                                        break;
+                                    }
                                 }
-                            }
-                            for (ImageView imgW : ObjList) {
-                                if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                                    check = 1;
-                                    break;
+                                for (ImageView imgW : ObjList) {
+                                    if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                        check = 1;
+                                        break;
+                                    }
                                 }
-                            }
-                            if (tank.getTranslateX() < 0 | tank.getTranslateY() > 750 | tank.getTranslateY() < 0 | tank.getTranslateX() > 1400) {
-                                check = 1;
+                                for (Bot bot : BotList) {
+                                    if (tank.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
+                                        check = 1;
+                                        break;
+                                    }
+                                }
+                                if (tank.getTranslateX() <= 0 | tank.getTranslateY() >= 770 | tank.getTranslateY() <= 0 | tank.getTranslateX() >= 1365) {
+                                    check = 1;
+                                }
                             }
                             if (check == 0) {
                                 tank.setTranslateY(tank.getTranslateY() - Step * 2 / 70.0);
@@ -812,20 +879,28 @@ public class Tank extends Application {
                 kf = new KeyFrame(
                         Duration.millis(stepDuration),
                         (evt) -> {
-                            for (Rectangle rectW : RectList) {
-                                if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                                    check = 1;
-                                    break;
+                            if (check == 0) {
+                                for (Rectangle rectW : RectList) {
+                                    if (tank.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
+                                        check = 1;
+                                        break;
+                                    }
                                 }
-                            }
-                            for (ImageView imgW : ObjList) {
-                                if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                                    check = 1;
-                                    break;
+                                for (ImageView imgW : ObjList) {
+                                    if (tank.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                        check = 1;
+                                        break;
+                                    }
                                 }
-                            }
-                            if (tank.getTranslateX() < 0 | tank.getTranslateY() > 750 | tank.getTranslateY() < 0 | tank.getTranslateX() > 1400) {
-                                check = 1;
+                                for (Bot bot : BotList) {
+                                    if (tank.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
+                                        check = 1;
+                                        break;
+                                    }
+                                }
+                                if (tank.getTranslateX() <= 0 | tank.getTranslateY() >= 770 | tank.getTranslateY() <= 0 | tank.getTranslateX() >= 1365) {
+                                    check = 1;
+                                }
                             }
                             if (check == 0) {
                                 tank.setTranslateX(tank.getTranslateX() + Step * 2 / 70.0);
@@ -848,6 +923,8 @@ public class Tank extends Application {
         }
     }
 
+    private int checkBullet;
+
     public void shootBullet(KeyEvent e) throws NullPointerException {
 
         if (e.getCode() == KeyCode.SPACE) {
@@ -857,7 +934,7 @@ public class Tank extends Application {
             double x;
             double y;
             double Direction = tank.getRotate();
-            double Speed = BulletSpeed/ 10.0 * Range;
+            double Speed = BulletSpeed / 10.0 * Range;
             ImageView BulletW = new ImageView(new Image(bullet.getBullet(bulletMode)));
             BulletW.setFitWidth(scale * 9);
             BulletW.setFitHeight(scale * 9);
@@ -866,7 +943,6 @@ public class Tank extends Application {
             // Timeline
             double steps = scale * Range * 4 / 2.0;
             double stepDuration = 100 * Speed / steps;
-            System.out.println(Range);
             Timeline bulletAnimation;
             switch ((int) Direction) {
                 case 0:
@@ -877,26 +953,36 @@ public class Tank extends Application {
                             new KeyFrame(
                                     Duration.millis(stepDuration),
                                     (evt) -> {
-                                        int check = 0;
+                                        checkBullet = 0;
                                         if ((BulletW.getTranslateY() % 70) % 36 == 0 & BulletW.getTranslateY() % 70 != 0 & !shotBullet.get()) {
                                             for (Rectangle rectW : RectList) {
                                                 if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                                                    check = 1;
+                                                    checkBullet = 1;
                                                     break;
                                                 }
                                             }
                                             for (ImageView imgW : ObjList) {
                                                 if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                                                    check = 1;
-                                                    tankPane.getChildren().remove(imgW);
+                                                    checkBullet = 1;
                                                     explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), tankPane);
+                                                    tankPane.getChildren().remove(imgW);
                                                     ObjList.remove(imgW);
+                                                    break;
+                                                }
+                                            }
+                                            for (Bot bot : BotList) {
+                                                if (BulletW.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
+                                                    checkBullet = 1;
+                                                    explosion.ExplosionAnimation(bot.getBot().getTranslateX(), bot.getBot().getTranslateY(), tankPane);
+                                                    tankPane.getChildren().remove(bot.getBot());
+                                                    bot.setLiving(false);
+                                                    BotList.remove(bot);
                                                     break;
                                                 }
                                             }
 
                                         }
-                                        if (check == 0) {
+                                        if (checkBullet == 0) {
                                             BulletW.setTranslateY(BulletW.getTranslateY() - 2);
                                         } else {
                                             tankPane.getChildren().remove(BulletW);
@@ -921,17 +1007,27 @@ public class Tank extends Application {
                             new KeyFrame(
                                     Duration.millis(stepDuration),
                                     (evt) -> {
-                                        int check = 0;
+                                        int checkBullet = 0;
                                         if ((BulletW.getTranslateX() % 70) % 36 == 0 & BulletW.getTranslateX() % 70 != 0 & !shotBullet.get()) {
                                             for (Rectangle rectW : RectList) {
                                                 if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                                                    check = 1;
+                                                    checkBullet = 1;
+                                                    break;
+                                                }
+                                            }
+                                            for (Bot bot : BotList) {
+                                                if (BulletW.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
+                                                    checkBullet = 1;
+                                                    explosion.ExplosionAnimation(bot.getBot().getTranslateX(), bot.getBot().getTranslateY(), tankPane);
+                                                    bot.setLiving(false);
+                                                    tankPane.getChildren().remove(bot.getBot());
+                                                    BotList.remove(bot);
                                                     break;
                                                 }
                                             }
                                             for (ImageView imgW : ObjList) {
                                                 if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                                                    check = 1;
+                                                    checkBullet = 1;
                                                     tankPane.getChildren().remove(imgW);
                                                     explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), tankPane);
 
@@ -941,7 +1037,7 @@ public class Tank extends Application {
                                             }
                                         }
 
-                                        if (check == 0) {
+                                        if (checkBullet == 0) {
                                             BulletW.setTranslateX(BulletW.getTranslateX() + 2);
                                         } else {
                                             tankPane.getChildren().remove(BulletW);
@@ -966,17 +1062,27 @@ public class Tank extends Application {
                             new KeyFrame(
                                     Duration.millis(stepDuration),
                                     (evt) -> {
-                                        int check = 0;
+                                        int checkBullet = 0;
                                         if ((BulletW.getTranslateY() % 70) % 36 == 0 & BulletW.getTranslateY() % 70 != 0 & !shotBullet.get()) {
                                             for (Rectangle rectW : RectList) {
                                                 if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                                                    check = 1;
+                                                    checkBullet = 1;
+                                                    break;
+                                                }
+                                            }
+                                            for (Bot bot : BotList) {
+                                                if (BulletW.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
+                                                    checkBullet = 1;
+                                                    explosion.ExplosionAnimation(bot.getBot().getTranslateX(), bot.getBot().getTranslateY(), tankPane);
+                                                    tankPane.getChildren().remove(bot.getBot());
+                                                    bot.setLiving(false);
+                                                    BotList.remove(bot);
                                                     break;
                                                 }
                                             }
                                             for (ImageView imgW : ObjList) {
                                                 if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                                                    check = 1;
+                                                    checkBullet = 1;
                                                     tankPane.getChildren().remove(imgW);
                                                     explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), tankPane);
 
@@ -987,7 +1093,7 @@ public class Tank extends Application {
 
 
                                         }
-                                        if (check == 0) {
+                                        if (checkBullet == 0) {
                                             BulletW.setTranslateY(BulletW.getTranslateY() + 2);
                                         } else {
                                             tankPane.getChildren().remove(BulletW);
@@ -1012,17 +1118,27 @@ public class Tank extends Application {
                             new KeyFrame(
                                     Duration.millis(stepDuration),
                                     (evt) -> {
-                                        int check = 0;
+                                        int checkBullet = 0;
                                         if ((BulletW.getTranslateX() % 70) % 36 == 0 & BulletW.getTranslateX() % 70 != 0 & !shotBullet.get()) {
                                             for (Rectangle rectW : RectList) {
                                                 if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                                                    check = 1;
+                                                    checkBullet = 1;
+                                                    break;
+                                                }
+                                            }
+                                            for (Bot bot : BotList) {
+                                                if (BulletW.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
+                                                    checkBullet = 1;
+                                                    explosion.ExplosionAnimation(bot.getBot().getTranslateX(), bot.getBot().getTranslateY(), tankPane);
+                                                    tankPane.getChildren().remove(bot.getBot());
+                                                    bot.setLiving(false);
+                                                    BotList.remove(bot);
                                                     break;
                                                 }
                                             }
                                             for (ImageView imgW : ObjList) {
                                                 if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                                                    check = 1;
+                                                    checkBullet = 1;
                                                     tankPane.getChildren().remove(imgW);
                                                     explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), tankPane);
                                                     ObjList.remove(imgW);
@@ -1031,7 +1147,7 @@ public class Tank extends Application {
                                             }
 
                                         }
-                                        if (check == 0) {
+                                        if (checkBullet == 0) {
                                             BulletW.setTranslateX(BulletW.getTranslateX() - 2);
                                         } else {
                                             tankPane.getChildren().remove(BulletW);
