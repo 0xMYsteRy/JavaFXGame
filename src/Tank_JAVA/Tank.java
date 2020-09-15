@@ -202,6 +202,17 @@ class Bullet {
         System.out.println("Hello " + Value);
     }
 
+    public int getDamage() {
+        return Damage;
+    }
+
+    public void SetReload(int Value) {
+        System.out.println("Hello " + Value);
+    }
+
+    public double getReload() {
+        return RealoadRate;
+    }
 
     public String getBullet(int choice) {
         counting += 1;
@@ -216,6 +227,14 @@ class Bullet {
         }
     }
 
+    public void setAmmunition(int Amount) {
+        Ammunition += Amount;
+    }
+
+    public int getAmmunition() {
+        return Ammunition;
+    }
+
     public int getRange() {
         return Range;
     }
@@ -224,22 +243,6 @@ class Bullet {
         return Speed;
     }
 
-    public class BulletTimer extends AnimationTimer {
-
-        @Override
-        public void handle(long now) {
-            doHandle();
-        }
-
-        private void doHandle() {
-            Range -= 1;
-            if (Range <= 0) {
-
-                stop();
-                System.out.println("Animation stopped");
-            }
-        }
-    }
 }
 
 class Flash {
@@ -406,6 +409,13 @@ public class Tank extends Application {
     // Stat of tank
     private int bulletMode = 1;
     private double speed = 0;
+    private double Health = 0;
+    //Bullet
+    private double BulletDamage = 0;
+    private double BulletSpeed = 0;
+    private double BulletReloadRate = 0;
+    private double BulletAmmunition = 0;
+    private double Range = 0;
 
     //Getter and setter methods, incase usefull to call those property from other classes.
     // Finish calling setter and getter methods
@@ -426,17 +436,25 @@ public class Tank extends Application {
         switch (choice) {
             case 1:
                 this.speed = 15;
+                this.Health = 100;
                 break;
             case 2:
                 this.speed = 20;
+                this.Health = 100;
                 break;
             case 3:
                 this.speed = 13;
+                this.Health = 100;
                 break;
             case 4:
                 this.speed = 18;
+                this.Health = 100;
                 break;
         }
+        this.BulletAmmunition = bullet.getAmmunition();
+        this.BulletDamage = bullet.getDamage();
+        this.BulletReloadRate = bullet.getReload();
+        this.BulletSpeed=bullet.getSpeed();
     }
 
     @Override
@@ -457,7 +475,7 @@ public class Tank extends Application {
         //Create Bot
         map.loadBot(tankPane, b   , scene);
         //Adding scene to the s tage
-        map.loadObject(tankPane);
+//        map.loadObject(tankPane);
         stage.setScene(scene);
         stage.show();
 
@@ -838,8 +856,7 @@ public class Tank extends Application {
             double x;
             double y;
             double Direction = tank.getRotate();
-            int Range = 10;
-            int Speed = bullet.getSpeed() / 10 * Range;
+            double Speed = bullet.getSpeed() / 10.0 * Range;
             ImageView BulletW = new ImageView(new Image(bullet.getBullet(bulletMode)));
             BulletW.setFitWidth(scale * 9);
             BulletW.setFitHeight(scale * 9);
