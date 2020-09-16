@@ -20,6 +20,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class Server extends Application {
@@ -29,6 +30,8 @@ public class Server extends Application {
     private DataInputStream input;
     private DataOutputStream output;
     private int numOfConnected;
+    private static InputStream inputStream;
+    private static OutputStream outputStream;
 
     private static void log(String str) {
         System.out.println(str);
@@ -87,8 +90,9 @@ public class Server extends Application {
                 log("+A client connected from " + socket.getInetAddress() + " running on port " + socket.getPort());
             }
         }).start();
+
+        //TODO: Receive the msg from the client
         new Thread(() -> {
-            InputStream inputStream = null;
             try {
                 assert socket != null;
                 inputStream = socket.getInputStream();
@@ -97,6 +101,25 @@ public class Server extends Application {
             }
             try {
                 ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                // Read the message form the client
+
+                List<Message> listOfMessages = (List<Message>) objectInputStream.readObject();
+                System.out.println("Received [" + listOfMessages.size() + "] messages from: " + socket);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        // Send a message to the client
+        new Thread(() -> {
+            try {
+                assert socket != null;
+                outputStream = socket.getOutputStream();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            try {
+                ObjectOutputStream objectOutputStream  = new ObjectOutputStream(outputStream);
             } catch (IOException e) {
                 e.printStackTrace();
             }
