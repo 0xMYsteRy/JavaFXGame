@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class Bot implements Runnable {
+public class Bot {
     private Group bot;
     private Hull hull;
     private Bullet bullet;
@@ -68,11 +68,41 @@ public class Bot implements Runnable {
 
     Timeline timelineBotMove;
     Timeline timelineBotshoot;
+    Thread runThread = new Thread(new Runnable() {
+        @Override
+        public void run() {
 
-    @Override
-    public void run() {
+            //
+            rt = new RotateTransition(Duration.millis(100), bot);
+            int tankMoves = random.nextInt(5) + 1;
+            timelineBotMove = new Timeline(new KeyFrame(Duration.millis(stepDuration * Step * 3 * tankMoves),
+                    evt -> {
+                        if ((bot.getTranslateX() - gap) % Step == 0 & (bot.getTranslateY() - gap) % Step == 0 & !Moving & !Rotating) {
 
-    }
+                            botmove(random.nextInt(4) + 1, tankMoves);
+                        }
+                    }));
+            timelineBotMove.setOnFinished(actionEvent -> {
+                if (!Living) {
+                    timelineBotMove.stop();
+                }
+            });
+            timelineBotMove.setCycleCount(Animation.INDEFINITE);
+            timelineBotMove.play();
+            timelineBotshoot = new Timeline(new KeyFrame(Duration.millis(1200.0 / difficulty),
+                    evt -> {
+                        botshoot();
+                    }));
+            timelineBotMove.setOnFinished(actionEvent -> {
+                if (!Living) {
+                    timelineBotshoot.stop();
+                }
+            });
+            timelineBotshoot.setCycleCount(Animation.INDEFINITE);
+            timelineBotshoot.play();
+        }
+    });
+
 
     public void spawnbot(Pane botPane, Scene scene, ArrayList<Rectangle> rectList, ArrayList<ImageView> objList, Tank tank) {
         this.ObjList = objList;
@@ -80,47 +110,18 @@ public class Bot implements Runnable {
         this.botPane = botPane;
         this.scene = scene;
         this.playerTank = tank;
-        //
+
         bot = createbot(scale);
-        botPane.getChildren().addAll(bot);
+        botPane.getChildren().add(bot);
         bot.setTranslateX(spawnx + gap);
         bot.setTranslateY(spawny + gap);
         bot.setCache(true);
         //Displaying the contents of the stage
         bot.setRotate(0);
+        runThread.setDaemon(true);
+        runThread.start();
+
         //
-        rt = new RotateTransition(Duration.millis(100), bot);
-//        while (Living)
-//         {
-        int tankMoves = random.nextInt(5) + 1;
-
-        timelineBotMove = new Timeline(new KeyFrame(Duration.millis(stepDuration * Step * 3 * tankMoves),
-                evt -> {
-                    if ((bot.getTranslateX() - gap) % Step == 0 & (bot.getTranslateY() - gap) % Step == 0 & !Moving & !Rotating) {
-
-                        botmove(random.nextInt(4) + 1, tankMoves);
-                    }
-                }));
-        timelineBotMove.setOnFinished(actionEvent -> {
-            if (Living) {
-                timelineBotMove.play();
-            }
-        });
-        timelineBotMove.setCycleCount(Animation.INDEFINITE);
-        timelineBotMove.play();
-        timelineBotshoot = new Timeline(new KeyFrame(Duration.millis(1200.0 / difficulty),
-                evt -> {
-                    botshoot();
-                }));
-        timelineBotMove.setOnFinished(actionEvent -> {
-            if (Living) {
-                timelineBotshoot.play();
-            }
-        });
-        timelineBotshoot.setCycleCount(Animation.INDEFINITE);
-        timelineBotshoot.play();
-
-//        }
     }
 
     public Group createbot(double x) {

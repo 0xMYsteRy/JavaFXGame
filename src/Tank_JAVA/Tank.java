@@ -472,7 +472,7 @@ public class Tank extends Application {
         MapJungle map = new MapJungle();
 
         map.loadGround(tankPane);
-        scene = new Scene(tankPane, 1400, 750);//1400x750
+        scene = new Scene(tankPane, 1400, 770);//1400x750
         //Create Player
         Tank b = new Tank(2, 1);
 
