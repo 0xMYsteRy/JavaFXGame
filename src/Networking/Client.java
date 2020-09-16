@@ -1,43 +1,71 @@
 package Networking;
 
+
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
+
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 
-public class Client {
+public class Client extends Thread implements EventHandler<KeyEvent> {
+    private static ObjectOutputStream toServer;
+    private static Scene scene;
+    private static String Msg;
+    private static KeyEvent keyEvent;
+    private static Socket socket;
+    private static OutputStream outputStream;
+    private static ObjectOutputStream objectOutputStream;
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        InetSocketAddress addr = new InetSocketAddress("127.0.0.1", 1111);
-        SocketChannel client = SocketChannel.open(addr);
-
-        log("Connecting to Server on port 1111...");
-
-        ArrayList<String> companyDetails = new ArrayList<String>();
-
-        // create a ArrayList with companyName list
-        companyDetails.add("Facebook");
-        companyDetails.add("Twitter");
-        companyDetails.add("IBM");
-        companyDetails.add("Google");
-        companyDetails.add("Crunchify");
-
-        for (String companyName : companyDetails) {
-
-            byte[] message = new String(companyName).getBytes();
-            ByteBuffer buffer = ByteBuffer.wrap(message);
-            client.write(buffer);
-
-            log("sending: " + companyName);
-            buffer.clear();
-
-            // wait for 2 seconds before sending next message
-            Thread.sleep(2000);
-        }
-        client.close();
+    //Get key
+    Client(ObjectOutputStream toServer) {
+        Client.toServer = toServer;
     }
 
+    public static void main(String[] args) throws IOException {
+        Socket socket = new Socket("10.247.169.35", 80);
+        log("Connecting to Server "+ socket.getRemoteSocketAddress()+ " running on port "+ socket.getPort());
+        //while (true){
+        outputStream = socket.getOutputStream();
+        objectOutputStream = new ObjectOutputStream(outputStream);
+        System.out.println("Sending messages to the ServerSocket");
+
+
+        //TODO: Get the key event here
+        objectOutputStream.writeObject(keyEvent);
+
+        System.out.println("OK");
+        //}
+    }
+    void send(KeyEvent keyEvent){
+        try {
+            toServer.writeObject(keyEvent);
+            System.out.println("OK");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public void run() {
+    }
+    @Override
+    public void handle(KeyEvent e) {
+        if (keyEvent != null) {
+            switch (e.getCode()) {
+                case DOWN:
+                    System.out.println("Sent to server");
+                    break;
+                case UP:
+                    break;
+                case LEFT:
+                    break;
+                case RIGHT:
+                    break;
+            }
+        }
+    }
     private static void log(String str) {
         System.out.println(str);
     }
