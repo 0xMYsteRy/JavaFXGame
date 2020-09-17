@@ -30,8 +30,10 @@ public class Server extends Application {
     private DataInputStream input;
     private DataOutputStream output;
     private int numOfConnected;
+
     private static InputStream inputStream;
     private static OutputStream outputStream;
+
 
     private static void log(String str) {
         System.out.println(str);
@@ -50,8 +52,10 @@ public class Server extends Application {
         //Create Player
         Tank tankClient = new Tank(1, 2);
         Tank tankClient2 = new Tank(2, 3);
+
         tankClient.createPlayer(0, 630, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList());
         tankClient2.createPlayer(0, 70, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList());
+
         stage.setScene(scene);
         stage.show();
 
@@ -66,7 +70,9 @@ public class Server extends Application {
         new Thread(() -> {
             ServerSocket ss = null;
             try {
+
                 ss = new ServerSocket(8080);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -91,8 +97,10 @@ public class Server extends Application {
             }
         }).start();
 
+
         //TODO: Receive the msg from the client
         new Thread(() -> {
+
             try {
                 assert socket != null;
                 inputStream = socket.getInputStream();
@@ -101,6 +109,7 @@ public class Server extends Application {
             }
             try {
                 ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+
                 // Read the message form the client
 
                 List<Message> listOfMessages = (List<Message>) objectInputStream.readObject();
@@ -120,6 +129,7 @@ public class Server extends Application {
             }
             try {
                 ObjectOutputStream objectOutputStream  = new ObjectOutputStream(outputStream);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -152,3 +162,4 @@ class IPAddress {
         return ip.getHostAddress();
     }
 }
+
