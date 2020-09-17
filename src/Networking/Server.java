@@ -50,11 +50,11 @@ public class Server extends Application {
         scene = new Scene(tankPane, 1400, 750);//1400x750
 
         //Create Player
-//        Tank tankClient = new Tank(1, 2);
-//        Tank tankClient2 = new Tank(2, 3);
-//
-//        tankClient.createPlayer(0, 630, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList());
-//        tankClient2.createPlayer(0, 70, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList());
+        Tank tankClient = new Tank(1, 2);
+        Tank tankClient2 = new Tank(2, 3);
+
+        tankClient.createPlayer(0, 630, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList());
+        tankClient2.createPlayer(0, 70, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList());
 
         stage.setScene(scene);
         stage.show();
