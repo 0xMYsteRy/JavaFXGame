@@ -11,6 +11,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -42,7 +45,7 @@ public class Bot {
     private int spawnx, spawny;
     private int difficulty;
     private Tank playerTank;
-
+    private double Health =50;
     // Constructor
     public Bot(int x, int y, int color, int choice, int typebot, int difficulty) {
         this.difficulty = difficulty;
@@ -52,6 +55,7 @@ public class Bot {
         weapon = new Weapon(color, choice);
         track = new Track(choice);
         this.bullet = new Bullet(choice);
+        Health =25*difficulty;
     }
 
     private boolean Moving = false, Living = true, Rotating = false;
@@ -68,10 +72,25 @@ public class Bot {
 
     Timeline timelineBotMove;
     Timeline timelineBotshoot;
-    Thread runThread = new Thread(new Runnable() {
-        @Override
-        public void run() {
 
+
+
+    public void spawnbot(Pane botPane, Scene scene, ArrayList<Rectangle> rectList, ArrayList<ImageView> objList, Tank tank) {
+        this.ObjList = objList;
+        this.RectList = rectList;
+        this.botPane = botPane;
+        this.scene = scene;
+        this.playerTank = tank;
+
+        bot = createbot(scale);
+        botPane.getChildren().add(bot);
+        bot.setTranslateX(spawnx + gap);
+        bot.setTranslateY(spawny + gap);
+        bot.setCache(true);
+        //Displaying the contents of the stage
+        bot.setRotate(0);
+
+        new Thread(() -> {
             //
             rt = new RotateTransition(Duration.millis(100), bot);
             int tankMoves = random.nextInt(5) + 1;
@@ -89,7 +108,7 @@ public class Bot {
             });
             timelineBotMove.setCycleCount(Animation.INDEFINITE);
             timelineBotMove.play();
-            timelineBotshoot = new Timeline(new KeyFrame(Duration.millis(1200.0 / difficulty),
+            timelineBotshoot = new Timeline(new KeyFrame(Duration.millis(1000.0 / difficulty),
                     evt -> {
                         botshoot();
                     }));
@@ -100,27 +119,7 @@ public class Bot {
             });
             timelineBotshoot.setCycleCount(Animation.INDEFINITE);
             timelineBotshoot.play();
-        }
-    });
-
-
-    public void spawnbot(Pane botPane, Scene scene, ArrayList<Rectangle> rectList, ArrayList<ImageView> objList, Tank tank) {
-        this.ObjList = objList;
-        this.RectList = rectList;
-        this.botPane = botPane;
-        this.scene = scene;
-        this.playerTank = tank;
-
-        bot = createbot(scale);
-        botPane.getChildren().add(bot);
-        bot.setTranslateX(spawnx + gap);
-        bot.setTranslateY(spawny + gap);
-        bot.setCache(true);
-        //Displaying the contents of the stage
-        bot.setRotate(0);
-        runThread.setDaemon(true);
-        runThread.start();
-
+        }).start();
         //
     }
 
@@ -183,7 +182,40 @@ public class Bot {
     private KeyFrame kf;
     int moveStep;
     double stepDuration = (500 - 50 * (speed / 10.0 - 1)) / (70 / Step * 35);
-
+    public void setHealth(int damage) {
+        Health -= damage;
+        Text dam = new Text("-"+ damage);
+        dam.setFill(Color.RED);
+        dam.setFont(Font.font("verdana", FontWeight.EXTRA_BOLD,15));
+        dam.setStroke(Color.WHITESMOKE);
+        dam.setStrokeWidth(0.5);
+        double iniX = bot.getTranslateX() + random.nextInt(10+10)  +17, iniY = bot.getTranslateY() + random.nextInt(10+10) + 5;
+        dam.setX(iniX);
+        dam.setY(iniY);
+        botPane.getChildren().add(dam);
+        Timeline minusHealth = new Timeline(new KeyFrame(Duration.millis(50),
+                actionEvent -> {
+                    if (iniX > bot.getTranslateX()+25) {
+                        dam.setX(dam.getX() + 1);
+                        dam.setY(dam.getY() - 5);
+                    }else {
+                        dam.setX(dam.getX() - 1);
+                        dam.setY(dam.getY() - 5);
+                    }
+                    dam.setOpacity(dam.getOpacity() - 0.1);
+                }));
+        minusHealth.setCycleCount(20);
+        minusHealth.setOnFinished(evt->botPane.getChildren().remove(dam));
+        minusHealth.play();
+    }
+    public boolean checkHealth(){
+        if (Health<=0){
+            System.out.println(Health);
+            botPane.getChildren().remove(bot);
+            setLiving(false);
+            return false;
+        } else {return true;}
+    }
     public void botmove(int direction, int moves) {
         Moving = true;
         Rotating = true;
@@ -224,7 +256,7 @@ public class Bot {
                                                 break;
                                             }
                                         }
-                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 770 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
+                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 735 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
                                             check = 1;
                                         }
                                         if (check == 0) {
@@ -283,7 +315,7 @@ public class Bot {
                                         if (bot.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
                                             check = 1;
                                         }
-                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 770 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
+                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 735 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
                                             check = 1;
                                         }
                                         if (check == 0) {
@@ -345,7 +377,7 @@ public class Bot {
                                         if (bot.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
                                             check = 1;
                                         }
-                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 770 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
+                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 735 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
                                             check = 1;
                                         }
                                         if (check == 0) {
@@ -405,7 +437,7 @@ public class Bot {
                                         if (bot.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
                                             check = 1;
                                         }
-                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 770 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
+                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 735 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
                                             check = 1;
                                         }
                                         if (check == 0) {

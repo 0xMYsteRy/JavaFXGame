@@ -203,7 +203,7 @@ class Bullet {
     private Boolean BulletAlive;
 
     public void SetDamage(int Value) {
-        System.out.println("Hello " + Value);
+
     }
 
     public int getDamage() {
@@ -211,7 +211,7 @@ class Bullet {
     }
 
     public void SetReload(int Value) {
-        System.out.println("Hello " + Value);
+
     }
 
     public double getReload() {
@@ -415,7 +415,7 @@ public class Tank extends Application {
     private double speed = 0;
     private double Health = 0;
     //Bullet
-    private double BulletDamage = 0;
+    private int BulletDamage = 0;
     private double BulletSpeed = 0;
     private double BulletReloadRate = 0;
     private double BulletAmmunition = 0;
@@ -517,7 +517,7 @@ public class Tank extends Application {
         checkHealth();
     }
     public void checkHealth(){
-        if (Health<=100){
+        if (Health<=0){
             System.out.println(Health);
         }
     }
@@ -898,7 +898,7 @@ public class Tank extends Application {
                                         break;
                                     }
                                 }
-                                if (tank.getTranslateX() <= 0 | tank.getTranslateY() >= 770 | tank.getTranslateY() <= 0 | tank.getTranslateX() >= 1365) {
+                                if (tank.getTranslateX() <= 0 | tank.getTranslateY() >= 735 | tank.getTranslateY() <= 0 | tank.getTranslateX() >= 1365) {
                                     check = 1;
                                 }
                             }
@@ -974,9 +974,10 @@ public class Tank extends Application {
                                                 if (BulletW.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
                                                     checkBullet = 1;
                                                     explosion.ExplosionAnimation(bot.getBot().getTranslateX(), bot.getBot().getTranslateY(), tankPane);
-                                                    tankPane.getChildren().remove(bot.getBot());
-                                                    bot.setLiving(false);
-                                                    BotList.remove(bot);
+                                                    bot.setHealth(BulletDamage);
+                                                    if (!bot.checkHealth()){
+                                                        BotList.remove(bot);
+                                                    }
                                                     break;
                                                 }
                                             }
@@ -991,7 +992,7 @@ public class Tank extends Application {
                                     }
                             ));
                     bulletAnimation.setOnFinished(evt -> {
-                        System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
+//                        System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
                         tankPane.getChildren().remove(BulletW);
                     });
                     bulletAnimation.setCycleCount((int) steps);
@@ -1019,9 +1020,10 @@ public class Tank extends Application {
                                                 if (BulletW.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
                                                     checkBullet = 1;
                                                     explosion.ExplosionAnimation(bot.getBot().getTranslateX(), bot.getBot().getTranslateY(), tankPane);
-                                                    bot.setLiving(false);
-                                                    tankPane.getChildren().remove(bot.getBot());
-                                                    BotList.remove(bot);
+                                                    bot.setHealth(BulletDamage);
+                                                    if (!bot.checkHealth()){
+                                                        BotList.remove(bot);
+                                                    }
                                                     break;
                                                 }
                                             }
@@ -1046,7 +1048,7 @@ public class Tank extends Application {
                                     }
                             ));
                     bulletAnimation.setOnFinished(evt -> {
-                        System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
+//                        System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
                         tankPane.getChildren().remove(BulletW);
                     });
                     bulletAnimation.setCycleCount((int) steps);
@@ -1074,9 +1076,10 @@ public class Tank extends Application {
                                                 if (BulletW.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
                                                     checkBullet = 1;
                                                     explosion.ExplosionAnimation(bot.getBot().getTranslateX(), bot.getBot().getTranslateY(), tankPane);
-                                                    tankPane.getChildren().remove(bot.getBot());
-                                                    bot.setLiving(false);
-                                                    BotList.remove(bot);
+                                                    bot.setHealth(BulletDamage);
+                                                    if (!bot.checkHealth()){
+                                                        BotList.remove(bot);
+                                                    }
                                                     break;
                                                 }
                                             }
@@ -1102,7 +1105,7 @@ public class Tank extends Application {
                                     }
                             ));
                     bulletAnimation.setOnFinished(evt -> {
-                        System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
+//                        System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
                         tankPane.getChildren().remove(BulletW);
                     });
                     bulletAnimation.setCycleCount((int) steps);
@@ -1130,9 +1133,10 @@ public class Tank extends Application {
                                                 if (BulletW.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
                                                     checkBullet = 1;
                                                     explosion.ExplosionAnimation(bot.getBot().getTranslateX(), bot.getBot().getTranslateY(), tankPane);
-                                                    tankPane.getChildren().remove(bot.getBot());
-                                                    bot.setLiving(false);
-                                                    BotList.remove(bot);
+                                                    bot.setHealth(BulletDamage);
+                                                    if (!bot.checkHealth()){
+                                                        BotList.remove(bot);
+                                                    }
                                                     break;
                                                 }
                                             }
@@ -1156,7 +1160,7 @@ public class Tank extends Application {
                                     }
                             ));
                     bulletAnimation.setOnFinished(evt -> {
-                        System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
+//                        System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
                         tankPane.getChildren().remove(BulletW);
                     });
 
