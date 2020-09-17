@@ -39,7 +39,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class MainMenu extends Application {
+class MainMenu{
     private final Pane root = new Pane();
     private final VBox menuBox = new VBox(-5);
     private final Setting setting= new Setting();
@@ -235,7 +235,7 @@ public class MainMenu extends Application {
 
     private Node createTankContent(int x, int choice, int color) throws FileNotFoundException {
         Tank tank = new Tank(choice, color);
-        Group tank1 = new Group(tank.createTank(x));
+        Group tank1 = new Group(tank.createTank(x,1));
         bgThread.scheduleAtFixedRate(() -> {
             Platform.runLater(() -> {
                 TranslateTransition tt = new TranslateTransition(Duration.seconds(0.5), tank1);
@@ -266,7 +266,7 @@ public class MainMenu extends Application {
 
     private Node createTankContent2(int x, int choice, int color) throws FileNotFoundException {
         Tank tank = new Tank(choice, color);
-        Group tank2 = new Group(tank.createTank(x));
+        Group tank2 = new Group(tank.createTank(x,1));
         return tank2;
     }
 
@@ -359,19 +359,6 @@ public class MainMenu extends Application {
         root.getChildren().add(menuBox);
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-//        window.setScene(menuScene);
-
-        primaryStage.setOnCloseRequest(event -> {
-            bgThread.shutdownNow();
-        });
-        primaryStage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
 
 
