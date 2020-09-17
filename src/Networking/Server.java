@@ -4,25 +4,18 @@ package Networking;
 import Map_JAVA.MapJungle;
 import Tank_JAVA.Tank;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.net.*;
-import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
-import java.util.Iterator;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
+//http://www.java2s.com/Tutorials/Java/Socket/How_to_read_data_from_Socket_connectin_using_Java.htm
 public class Server extends Application {
     private Scene scene;
     private ServerSocket serverSocket;
@@ -39,127 +32,55 @@ public class Server extends Application {
         System.out.println(str);
     }
 
+    List<TaskClientConnection> connectionList = new ArrayList<TaskClientConnection>();
+
     @Override
     public void start(Stage stage) throws Exception {
-        stage.setTitle("Tank Battle");
+        stage.setTitle("Loading an image");
         Pane tankPane;
         tankPane = new Pane();
         MapJungle map = new MapJungle();
-
         map.loadGround(tankPane);
-        scene = new Scene(tankPane, 1400, 750);//1400x750
+        scene = new Scene(tankPane, 1400, 770);//1400x75
 
-        //Create Player
-        Tank tankClient = new Tank(1, 2);
-        Tank tankClient2 = new Tank(2, 3);
 
-        tankClient.createPlayer(0, 630, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList());
-        tankClient2.createPlayer(0, 70, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList());
+        Tank b = new Tank(2, 1);
+        b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), 1);
 
         stage.setScene(scene);
         stage.show();
 
-        /*
-         **The issue here is that loop is running on the main application thread,
-         **so it locks any GUI updates until it's completed.
-         **Perform the loop on its own thread
-         */
 
-        // Running multi thread
-        // Keep the server alive
         new Thread(() -> {
-            ServerSocket ss = null;
+            //Creat socket
             try {
+                ServerSocket serverSocket = new ServerSocket(ConnectionUtil.port);
 
-                ss = new ServerSocket(80);
+                while (true) {
+                    // Listen for a connection request, add new connection to the list
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            log("+----+--------+--------+------------+---------------------+ \n" +
-                    "| ID | NAME   |  MODE  |   STATUS   |      Memory         | \n" +
-                    "+----+--------+--------+------------+---------------------+ \n" +
-                    "|  0 | Server |  fork  |   online   |      10.5mb         | \n" +
-                    "+----+--------+--------+------------+---------------------+ ");
-            System.out.println("\nServer started! Awaiting connections...");
+                    socket = serverSocket.accept();
 
-            while (true) {
-                Socket socket = null;
-                try {
-                    assert ss != null;
-                    socket = ss.accept();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    TaskClientConnection connection = new TaskClientConnection(socket, this);
+                    connectionList.add(connection);
+
+                    //create a new thread
+                    Thread thread = new Thread(connection);
+                    thread.start();
+
                 }
-                //System.out.println("Connection from " + socket + "!");
-                assert socket != null;
-                log("+A client connected from " + socket.getInetAddress() + " running on port " + socket.getPort());
-            }
-        }).start();
-
-
-        //TODO: Receive the msg from the client
-        new Thread(() -> {
-
-            try {
-                assert socket != null;
-                inputStream = socket.getInputStream();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-            try {
-                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-
-                // Read the message form the client
-
-                //List<Message> listOfMessages = (List<Message>) objectInputStream.readObject();
-                //System.out.println("Received [" + listOfMessages.size() + "] messages from: " + socket);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
-        // Send a message to the client
-        new Thread(() -> {
-            try {
-                assert socket != null;
-                outputStream = socket.getOutputStream();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-            try {
-                ObjectOutputStream objectOutputStream  = new ObjectOutputStream(outputStream);
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }).start();
     }
 
-    // In case want to close server
-    public void closeServer() {
-        try {
-            serverSocket.close();
-        } catch (IOException e) {
-            e.getMessage();
+    //send message to all connected clients
+    public void broadcast(Scene scene) {
+        for (TaskClientConnection clientConnection : this.connectionList) {
+            clientConnection.sendMessage(scene);
         }
     }
 }
 
-class IPAddress {
-    public static String getIPAddress() {
-        InetAddress ip = null;
-        try {
-
-            ip = InetAddress.getLocalHost();
-            System.out.println("Server created successfully! Waiting for players ... ");
-            //System.out.println("Server IP address : " + ip.getHostAddress());
-
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        assert ip != null;
-        return ip.getHostAddress();
-    }
-}
 

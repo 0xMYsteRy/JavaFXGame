@@ -26,6 +26,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.security.PublicKey;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Random;
@@ -479,15 +480,13 @@ public class Tank extends Application {
         //Create Player
         Tank b = new Tank(2, 1);
 
-        b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList());
+        b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), 1);
         //Create Bot
         map.loadBot(tankPane, b, scene);
         //Adding scene to the stage
 //        map.loadObject(tankPane);
         stage.setScene(scene);
         stage.show();
-
-
     }
 
     Random random = new Random();
@@ -526,7 +525,7 @@ public class Tank extends Application {
         }
     }
 
-    public void createPlayer(int x, int y, Pane tankPane, Scene scene, ArrayList<Rectangle> rectList, ArrayList<ImageView> objList, ArrayList<Bot> BotList) {
+    public void createPlayer(int x, int y, Pane tankPane, Scene scene, ArrayList<Rectangle> rectList, ArrayList<ImageView> objList, ArrayList<Bot> BotList, int tankIndex) {
         this.ObjList = objList;
         this.RectList = rectList;
         this.tankPane = tankPane;
@@ -534,36 +533,64 @@ public class Tank extends Application {
         this.BotList = BotList;
         //
         Random rand = new Random();
-
         //
-        tank = createTank(scale, 1);
-        tankPane.getChildren().addAll(tank);
-        tank.setTranslateX(x + gap);
-        tank.setTranslateY(y + gap);
-        tank.setCache(true);
-
+        tank = createTank(scale, tankIndex);
         //Displaying the contents of the stage
-        new Thread(() -> {
-            tank.setRotate(0);
-            //
-            rt = new RotateTransition(Duration.millis(300), tank);
-            scene.setOnKeyPressed(keyEvent -> {
-                try {
-                    if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0) {
-                        Move(keyEvent);
-                    }
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            });
-            scene.setOnKeyReleased(e -> {
-                        if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
-                            shootBullet(e);
+        if (tankIndex == 1) {
+            new Thread(() -> {
+                tankPane.getChildren().addAll(tank);
+                tank.setTranslateX(x + gap);
+                tank.setTranslateY(y + gap);
+                tank.setCache(true);
 
+                tank.setRotate(0);
+                //
+                rt = new RotateTransition(Duration.millis(300), tank);
+                scene.setOnKeyPressed(keyEvent -> {
+                    try {
+                        if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0) {
+                            Move(keyEvent);
                         }
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
                     }
-            );
-        }).start();
+                });
+                scene.setOnKeyReleased(e -> {
+                            if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
+                                shootBullet(e);
+
+                            }
+                        }
+                );
+            }).start();
+        } else {
+            new Thread(() -> {
+                tankPane.getChildren().addAll(tank);
+                tank.setTranslateX(x + 250 * tankIndex + gap);
+                tank.setTranslateY(y + gap);
+                tank.setCache(true);
+                tank.setRotate(0);
+                //
+                rt = new RotateTransition(Duration.millis(300), tank);
+
+            }).start();
+        }
+    }
+
+    public void moveClient(KeyEvent keyEvent) {
+        try {
+            if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0) {
+                Move(keyEvent);
+            }
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void ShootClient(KeyEvent keyEvent) {
+        if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
+            shootBullet(keyEvent);
+        }
     }
 
     public Group createTank(double x, int tankIndex) {
