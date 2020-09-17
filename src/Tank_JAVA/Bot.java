@@ -73,8 +73,6 @@ public class Bot {
     Timeline timelineBotMove;
     Timeline timelineBotshoot;
 
-
-
     public void spawnbot(Pane botPane, Scene scene, ArrayList<Rectangle> rectList, ArrayList<ImageView> objList, Tank tank) {
         this.ObjList = objList;
         this.RectList = rectList;

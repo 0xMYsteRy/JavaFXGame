@@ -79,7 +79,7 @@ public class Map extends Application {
         //Create Player
         c = new Tank(2, 3);
         Group b = new Group();
-        b = c.createTank(7);
+        b = c.createTank(7,1);
 //        c.createPlayer(0, 0, tankPane, scene, RectList, objectList);
 //        Tank c = new Tank(2,4);
 //        c.createPlayer(0,700,tankPane,scene,RectList,objectList);
@@ -459,7 +459,7 @@ public class Map extends Application {
         text.setFill(Color.BLACK);
 
         Group player1;
-        player1 = c.createTank(5);
+        player1 = c.createTank(5,1);
 
         player1.setTranslateX(1400);
         player1.setTranslateY(300);

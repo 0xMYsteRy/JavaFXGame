@@ -9,6 +9,8 @@ import javafx.animation.*;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -16,6 +18,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -491,33 +494,34 @@ public class Tank extends Application {
 
     public void setHealth(int damage) {
         Health -= damage;
-        Text dam = new Text("-"+ damage);
+        Text dam = new Text("-" + damage);
         dam.setFill(Color.RED);
-        dam.setFont(Font.font("verdana",FontWeight.EXTRA_BOLD,15));
+        dam.setFont(Font.font("verdana", FontWeight.EXTRA_BOLD, 15));
         dam.setStroke(Color.WHITESMOKE);
         dam.setStrokeWidth(0.5);
-        double iniX = tank.getTranslateX() + random.nextInt(10+10)  +17, iniY = tank.getTranslateY() + random.nextInt(10+10) + 5;
+        double iniX = tank.getTranslateX() + random.nextInt(10 + 10) + 17, iniY = tank.getTranslateY() + random.nextInt(10 + 10) + 5;
         dam.setX(iniX);
         dam.setY(iniY);
         tankPane.getChildren().add(dam);
         Timeline minusHealth = new Timeline(new KeyFrame(Duration.millis(50),
                 actionEvent -> {
-                    if (iniX > tank.getTranslateX()+25) {
+                    if (iniX > tank.getTranslateX() + 25) {
                         dam.setX(dam.getX() + 1);
                         dam.setY(dam.getY() - 5);
-                    }else {
+                    } else {
                         dam.setX(dam.getX() - 1);
                         dam.setY(dam.getY() - 5);
                     }
                     dam.setOpacity(dam.getOpacity() - 0.1);
                 }));
         minusHealth.setCycleCount(20);
-        minusHealth.setOnFinished(evt->tankPane.getChildren().remove(dam));
+        minusHealth.setOnFinished(evt -> tankPane.getChildren().remove(dam));
         minusHealth.play();
         checkHealth();
     }
-    public void checkHealth(){
-        if (Health<=0){
+
+    public void checkHealth() {
+        if (Health <= 0) {
             System.out.println(Health);
         }
     }
@@ -532,44 +536,66 @@ public class Tank extends Application {
         Random rand = new Random();
 
         //
-        tank = createTank(scale);
+        tank = createTank(scale, 1);
         tankPane.getChildren().addAll(tank);
         tank.setTranslateX(x + gap);
         tank.setTranslateY(y + gap);
         tank.setCache(true);
-        //Displaying the contents of the stage
-        tank.setRotate(0);
-        //
-        rt = new RotateTransition(Duration.millis(300), tank);
-        scene.setOnKeyPressed(keyEvent -> {
-            try {
-                if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0) {
-                    Move(keyEvent);
-                }
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        });
-        scene.setOnKeyReleased(e -> {
-                    if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
-                        shootBullet(e);
 
+        //Displaying the contents of the stage
+        new Thread(() -> {
+            tank.setRotate(0);
+            //
+            rt = new RotateTransition(Duration.millis(300), tank);
+            scene.setOnKeyPressed(keyEvent -> {
+                try {
+                    if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0) {
+                        Move(keyEvent);
                     }
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
                 }
-        );
+            });
+            scene.setOnKeyReleased(e -> {
+                        if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
+                            shootBullet(e);
+
+                        }
+                    }
+            );
+        }).start();
     }
 
-    public Group createTank(double x) {
+    public Group createTank(double x, int tankIndex) {
         Image weaponI = new Image(weapon.getWeapon());
         Image HullI = new Image(hull.getHull());
         Image trackI_A = new Image(track.getTrack());
 
-//        Rectangle rect = new Rectangle();
-//        rect.setHeight(x * 9);
-//        rect.setWidth(x * 9);
-//        rect.setFill(Color.rgb(10, 10, 10, 0));
-//
-//        rect.setStroke(Paint.valueOf("green"));
+        Circle circle = new Circle();
+        circle.setRadius(x * 4);
+        circle.setCenterX(4.5 * x);
+        circle.setCenterY(4.5 * x);
+        circle.setFill(Color.rgb(255, 1, 1, 0));
+
+        switch (tankIndex) {
+            case 1:
+                circle.setStroke(Color.rgb(238, 158, 21, 0.4));
+                break;
+            case 2:
+                circle.setStroke(Color.rgb(146, 60, 229, 0.4));
+                break;
+            case 3:
+                circle.setStroke(Color.rgb(206, 105, 16, 0.4));
+                break;
+            case 4:
+                circle.setStroke(Color.rgb(24, 84, 205, 0.4));
+                break;
+            default:
+                circle.setStroke(Color.rgb(255, 1, 1, 0.4));
+                break;
+        }
+        circle.setStrokeWidth(3.0);
+
         ImageView TankView = new ImageView(HullI);
         ImageView TrackViewA1 = new ImageView(trackI_A);
         ImageView TrackViewA2 = new ImageView(trackI_A);
@@ -604,7 +630,7 @@ public class Tank extends Application {
         WeaponView.setFitHeight(7 * x);
         WeaponView.setFitWidth(3 * x);
 
-        Group root = new Group(TrackViewA1, TrackViewA2, TrackViewA3, TrackViewA4, TankView, WeaponView);
+        Group root = new Group(circle, TrackViewA1, TrackViewA2, TrackViewA3, TrackViewA4, TankView, WeaponView);
 
         //Creating a scene object
         return root;
@@ -703,6 +729,7 @@ public class Tank extends Application {
         check = 0;
         double prevX = tank.getTranslateX(), prevY = tank.getTranslateY();
         double stepDuration = (500 - 50 * (speed / 10.0 - 1)) / (70 / Step * 35);
+
         // Testing
         Timeline timeLineMoveTank;
         KeyFrame kf;
@@ -737,6 +764,7 @@ public class Tank extends Application {
                                         break;
                                     }
                                 }
+                                // Border
                                 if (tank.getTranslateX() <= 0 | tank.getTranslateY() >= 770 | tank.getTranslateY() <= 0 | tank.getTranslateX() >= 1365) {
                                     check = 1;
                                 }
@@ -940,6 +968,7 @@ public class Tank extends Application {
             BulletW.setFitHeight(scale * 9);
             BulletW.setRotate(Direction);
             tankPane.getChildren().addAll(BulletW);
+
             // Timeline
             double steps = scale * Range * 4 / 2.0;
             double stepDuration = 100 * Speed / steps;
@@ -975,7 +1004,7 @@ public class Tank extends Application {
                                                     checkBullet = 1;
                                                     explosion.ExplosionAnimation(bot.getBot().getTranslateX(), bot.getBot().getTranslateY(), tankPane);
                                                     bot.setHealth(BulletDamage);
-                                                    if (!bot.checkHealth()){
+                                                    if (!bot.checkHealth()) {
                                                         BotList.remove(bot);
                                                     }
                                                     break;
@@ -1021,7 +1050,7 @@ public class Tank extends Application {
                                                     checkBullet = 1;
                                                     explosion.ExplosionAnimation(bot.getBot().getTranslateX(), bot.getBot().getTranslateY(), tankPane);
                                                     bot.setHealth(BulletDamage);
-                                                    if (!bot.checkHealth()){
+                                                    if (!bot.checkHealth()) {
                                                         BotList.remove(bot);
                                                     }
                                                     break;
@@ -1077,7 +1106,7 @@ public class Tank extends Application {
                                                     checkBullet = 1;
                                                     explosion.ExplosionAnimation(bot.getBot().getTranslateX(), bot.getBot().getTranslateY(), tankPane);
                                                     bot.setHealth(BulletDamage);
-                                                    if (!bot.checkHealth()){
+                                                    if (!bot.checkHealth()) {
                                                         BotList.remove(bot);
                                                     }
                                                     break;
@@ -1134,7 +1163,7 @@ public class Tank extends Application {
                                                     checkBullet = 1;
                                                     explosion.ExplosionAnimation(bot.getBot().getTranslateX(), bot.getBot().getTranslateY(), tankPane);
                                                     bot.setHealth(BulletDamage);
-                                                    if (!bot.checkHealth()){
+                                                    if (!bot.checkHealth()) {
                                                         BotList.remove(bot);
                                                     }
                                                     break;
@@ -1172,9 +1201,7 @@ public class Tank extends Application {
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + (int) Direction);
-
             }
-
         }
     }
 }
