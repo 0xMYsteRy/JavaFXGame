@@ -1,64 +1,29 @@
 package Networking;
 
 
+import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Client extends Thread implements EventHandler<KeyEvent> {
-    private static ObjectOutputStream toServer;
-    private static Scene scene;
-    private static String Msg;
-    private static KeyEvent keyEvent;
-    private static Socket socket;
-    private static OutputStream outputStream;
-    private static ObjectOutputStream objectOutputStream;
+public class Client extends Application implements EventHandler<KeyEvent> {
 
     //Get key
-    Client(ObjectOutputStream toServer) {
-        Client.toServer = toServer;
-    }
-
-    public static void main(String[] args) throws IOException {
-        Socket socket = new Socket("10.247.169.35", 80);
-        log("Connecting to Server " + socket.getRemoteSocketAddress() + " running on port " + socket.getPort());
-        while (true) {
-            outputStream = socket.getOutputStream();
-            objectOutputStream = new ObjectOutputStream(outputStream);
-            //System.out.println("Sending messages to the ServerSocket");
-            //TODO: Get the key event here
-            List<Message> messages = new ArrayList<>();
-            messages.add(new Message(send(keyEvent)));
-            objectOutputStream.writeObject(messages);
-            //System.out.println("OK");
-        }
-    }
-
-    static String send(KeyEvent keyEvent) throws IOException {
-        try {
-            toServer.writeObject(keyEvent);
-            System.out.println("OK");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return toServer.toString();
-    }
-
-    @Override
-    public void run() {
-    }
-
+    Socket socket;
+    Server server;
+    // Create data input and output streams
+    DataInputStream input;
+    DataOutputStream output;
+    Stage stage;
     @Override
     public void handle(KeyEvent e) {
-        if (keyEvent != null) {
+        if (e != null) {
             switch (e.getCode()) {
                 case DOWN:
                     System.out.println("Sent to server");
@@ -76,15 +41,31 @@ public class Client extends Thread implements EventHandler<KeyEvent> {
     private static void log(String str) {
         System.out.println(str);
     }
-}
-class Message implements Serializable {
-    private final String text;
 
-    public Message(String text) {
-        this.text = text;
-    }
+    @Override
+    public void start(Stage stage) throws Exception {
+        this.stage=stage;
+        stage.setTitle("LOL");
 
-    public String getText() {
-        return text;
+        try {
+            // Create a socket to connect to the server
+            Socket socket = new Socket(ConnectionUtil.host, ConnectionUtil.port);
+
+            //Connection successful
+
+
+            // Create an output stream to send data to the server
+            output = new DataOutputStream(socket.getOutputStream());
+
+            //create a thread in order to read message from server continuously
+            TaskReadThread task = new TaskReadThread(socket, this);
+            Thread thread = new Thread(task);
+            thread.start();
+        } catch (IOException ex) {
+            System.out.println("a");
+
+        }
+
     }
 }
+

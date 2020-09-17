@@ -33,7 +33,7 @@ public class Mapboss extends Application {
         scene = new Scene(tankPane, 1400, 750);//1400x750
         //Create Player
         Tank b = new Tank(2, 3);
-        b.createPlayer(0, 0, tankPane, scene, RectList, objectList);
+//        b.createPlayer(0, 0, tankPane, scene, RectList, objectList,map4);
 //        Tank c = new Tank(2,4);
 //        c.createPlayer(0,700,tankPane,scene,RectList,objectList);
 //        Tank a = new Tank (3,1);

@@ -31,7 +31,7 @@ public class   Map2 extends Application {
         map2.loadObject(tankPane);
         scene = new Scene(tankPane,1400,750);
         Tank c = new Tank(3,1);
-        c.createPlayer(70,70,tankPane,scene,RectList,objectList);
+//        c.createPlayer(70,70,tankPane,scene,RectList,objectList);
         stage.setScene(scene);
         stage.show();
     }
