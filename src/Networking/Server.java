@@ -52,7 +52,7 @@ public class Server extends Application {
 
 
         new Thread(() -> {
-            //Creat socket
+            //Create socket
             try {
                 ServerSocket serverSocket = new ServerSocket(ConnectionUtil.port);
 
