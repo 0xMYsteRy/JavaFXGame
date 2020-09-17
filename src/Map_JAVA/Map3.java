@@ -30,7 +30,7 @@ public class   Map3 extends Application {
         map3.loadGround(tankpane);
         scene = new Scene(tankpane,1400,750);
         Tank b = new Tank(2,3);
-        b.createPlayer(70,70,tankpane,scene,RectList,objectList);
+//        b.createPlayer(70,70,tankpane,scene,RectList,objectList);
         map3.loadObject(tankpane);
         stage.setScene(scene);
         stage.show();

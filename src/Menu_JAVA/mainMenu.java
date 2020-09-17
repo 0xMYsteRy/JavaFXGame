@@ -229,7 +229,7 @@ public class mainMenu extends Application {
 
     private Node createTankContent(int x,int choice, int color) throws FileNotFoundException {
         Tank tank = new Tank(choice,color );
-        Group tank1 = new Group(tank.createTank(x));
+        Group tank1 = new Group(tank.createTank(x,1));
         bgThread.scheduleAtFixedRate(() -> {
             Platform.runLater(() -> {
                 TranslateTransition tt = new TranslateTransition(Duration.seconds(0.5), tank1);
@@ -260,7 +260,7 @@ public class mainMenu extends Application {
 
     private Node createTankContent2(int x, int choice, int color) throws FileNotFoundException {
         Tank tank = new Tank(choice, color);
-        Group tank2 = new Group(tank.createTank(x));
+        Group tank2 = new Group(tank.createTank(x,1));
         return tank2;
     }
 
