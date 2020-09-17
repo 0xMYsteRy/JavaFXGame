@@ -71,7 +71,7 @@ public class Server extends Application {
             ServerSocket ss = null;
             try {
 
-                ss = new ServerSocket(8080);
+                ss = new ServerSocket(80);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -112,9 +112,9 @@ public class Server extends Application {
 
                 // Read the message form the client
 
-                List<Message> listOfMessages = (List<Message>) objectInputStream.readObject();
-                System.out.println("Received [" + listOfMessages.size() + "] messages from: " + socket);
-            } catch (IOException | ClassNotFoundException e) {
+                //List<Message> listOfMessages = (List<Message>) objectInputStream.readObject();
+                //System.out.println("Received [" + listOfMessages.size() + "] messages from: " + socket);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }).start();

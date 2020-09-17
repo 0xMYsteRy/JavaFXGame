@@ -481,9 +481,9 @@ public class Tank extends Application {
 
         b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList());
         //Create Bot
-//        map.loadBot(tankPane, b, scene);
+        map.loadBot(tankPane, b, scene);
         //Adding scene to the stage
-        map.loadObject(tankPane);
+//        map.loadObject(tankPane);
         stage.setScene(scene);
         stage.show();
 

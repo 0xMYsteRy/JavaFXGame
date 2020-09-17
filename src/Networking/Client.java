@@ -13,7 +13,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Client extends Thread implements EventHandler<KeyEvent> {
     private static ObjectOutputStream toServer;
     private static Scene scene;
@@ -29,8 +28,9 @@ public class Client extends Thread implements EventHandler<KeyEvent> {
     }
 
     public static void main(String[] args) throws IOException {
-
-        Socket socket = new Socket("10.247.169.255", 8080);
+        System.out.println("Not OK");
+        Socket socket = new Socket("10.247.169.36", 80);
+        System.out.println("OK");
         log("Connecting to Server " + socket.getRemoteSocketAddress() + " running on port " + socket.getPort());
         while (true) {
             outputStream = socket.getOutputStream();
@@ -57,28 +57,36 @@ public class Client extends Thread implements EventHandler<KeyEvent> {
     @Override
     public void run() {
     }
-        Socket socket = new Socket("10.247.169.35", 80);
-        log("Connecting to Server "+ socket.getRemoteSocketAddress()+ " running on port "+ socket.getPort());
-        //while (true){
-        outputStream = socket.getOutputStream();
-        objectOutputStream = new ObjectOutputStream(outputStream);
-        System.out.println("Sending messages to the ServerSocket");
 
-
-        //TODO: Get the key event here
-        objectOutputStream.writeObject(keyEvent);
-
-        System.out.println("OK");
-        //}
-    }
-    void send(KeyEvent keyEvent){
-        try {
-            toServer.writeObject(keyEvent);
-            System.out.println("OK");
-        } catch (IOException e) {
-            e.printStackTrace();
+    @Override
+    public void handle(KeyEvent e) {
+        if (keyEvent != null) {
+            switch (e.getCode()) {
+                case DOWN:
+                    System.out.println("Sent to server");
+                    break;
+                case UP:
+                    break;
+                case LEFT:
+                    break;
+                case RIGHT:
+                    break;
+            }
         }
     }
-    @Override
-    public void run() {
+
+    private static void log(String str) {
+        System.out.println(str);
     }
+}
+class Message implements Serializable {
+    private final String text;
+
+    public Message(String text) {
+        this.text = text;
+    }
+
+    public String getText() {
+        return text;
+    }
+}
