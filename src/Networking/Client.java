@@ -1,6 +1,7 @@
 package Networking;
 
 
+import Menu_JAVA.MainMenu;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -13,17 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Client extends Application implements EventHandler<KeyEvent> {
-
-    //Get key
+    Scene scene;
     Socket socket;
     Server server;
-    // Create data input and output streams
-    DataInputStream input;
-    DataOutputStream output;
+    ObjectOutputStream output;
+    ObjectInputStream input;
     Stage stage;
+
     @Override
     public void handle(KeyEvent e) {
+        System.out.println("ok");
         if (e != null) {
+            System.out.println(e.getCode());
             switch (e.getCode()) {
                 case DOWN:
                     System.out.println("Sent to server");
@@ -50,22 +52,30 @@ public class Client extends Application implements EventHandler<KeyEvent> {
         try {
             // Create a socket to connect to the server
             Socket socket = new Socket(ConnectionUtil.host, ConnectionUtil.port);
-
+            System.out.println(" Connected in  Client");
             //Connection successful
-
-
-            // Create an output stream to send data to the server
-            output = new DataOutputStream(socket.getOutputStream());
 
             //create a thread in order to read message from server continuously
             TaskReadThread task = new TaskReadThread(socket, this);
             Thread thread = new Thread(task);
             thread.start();
+
+
+            // Create an output stream to send data to the server
+
+            new Thread(()->{
+                try {
+                    output = new ObjectOutputStream(socket.getOutputStream());
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
         } catch (IOException ex) {
             System.out.println("a");
 
         }
-
+//        stage.show();
     }
 }
 

@@ -16,6 +16,7 @@ public  class TaskClientConnection implements Runnable {
     ObjectOutputStream output;
     Scene scene ;
     public TaskClientConnection(Socket socket, Server server) {
+        System.out.println("Connected this client to the server");
         this.socket = socket;
         this.server = server;
     }
@@ -29,13 +30,14 @@ public  class TaskClientConnection implements Runnable {
                     socket.getInputStream());
             output = new ObjectOutputStream(
                     socket.getOutputStream());
-
+                System.out.println("Getting message");
+            server.broadcast(scene);
             while (true) {
                 // Get message from the client
                 KeyEvent message = (KeyEvent) input.readObject();
-
                 //send message via server broadcast
                 scene.setOnKeyPressed(evt -> {
+                    System.out.println(" Sending message to  server");
                     server.broadcast(scene);
                 });
 
@@ -63,14 +65,14 @@ public  class TaskClientConnection implements Runnable {
     //send message back to client
     public void sendMessage(Scene scene) {
         try {
+            System.out.println("Sending message");
             output.writeObject(scene);
             output.flush();
+            System.out.println(scene);
 
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
     }
-
 }
 

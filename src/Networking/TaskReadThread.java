@@ -7,6 +7,7 @@ package Networking;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.awt.event.KeyEvent;
 import java.io.DataInputStream;
@@ -25,7 +26,7 @@ public class TaskReadThread implements Runnable {
     Socket socket;
     Client client;
     ObjectInputStream input;
-
+    Stage stage2= new Stage();
     //constructor
     public TaskReadThread(Socket socket, Client client) {
         this.socket = socket;
@@ -35,6 +36,7 @@ public class TaskReadThread implements Runnable {
     @Override
     public void run() {
         //continuously loop it
+        System.out.println("Running TaskThread");
         while (true) {
             try {
                 //Create data input stream
@@ -42,19 +44,24 @@ public class TaskReadThread implements Runnable {
 
                 //get input from the client
                 Scene message= (Scene) input.readObject();
-
+                System.out.println(message);
                 //append message of the Text Area of UI (GUI Thread)
                 Platform.runLater(() -> {
                     //display the message in the textarea
-                    client.stage.setScene(message);
-                    client.stage.show();
                     System.out.println("hello World");
+                    stage2.setScene(message);
+                    stage2.show();
                 });
             } catch (IOException | ClassNotFoundException ex) {
                 System.out.println("Error reading from server: " + ex.getMessage());
-                ex.printStackTrace();
                 break;
             }
         }
+        try {
+            input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

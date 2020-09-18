@@ -37,6 +37,7 @@ public class Server extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("Loading an image");
+        System.out.println("Loading Image");
         Pane tankPane;
         tankPane = new Pane();
         MapJungle map = new MapJungle();
@@ -48,7 +49,7 @@ public class Server extends Application {
         b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), 1);
 
         stage.setScene(scene);
-        stage.show();
+
 
 
         new Thread(() -> {
@@ -58,7 +59,7 @@ public class Server extends Application {
 
                 while (true) {
                     // Listen for a connection request, add new connection to the list
-
+                    System.out.println("Listening");
                     socket = serverSocket.accept();
 
                     TaskClientConnection connection = new TaskClientConnection(socket, this);
@@ -73,12 +74,14 @@ public class Server extends Application {
                 ex.printStackTrace();
             }
         }).start();
+        stage.show();
     }
 
     //send message to all connected clients
     public void broadcast(Scene scene) {
         for (TaskClientConnection clientConnection : this.connectionList) {
-            clientConnection.sendMessage(scene);
+            System.out.println("Sending message to all client from server");
+            clientConnection.sendMessage(this.scene);
         }
     }
 }
