@@ -10,9 +10,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
@@ -32,65 +34,90 @@ public class Bot {
     double gap = (70 - 9 * scale) / 2.0;
     double Step = 35;
     // Stat of bot
-    private int bulletMode = 1;
+    private int bulletMode = 2;
     private double speed = 0;
     //Getter and setter methods, incase usefull to call those property from other classes.
     // Finish calling setter and getter methods
     private ArrayList<Rectangle> RectList;
     private ArrayList<ImageView> ObjList;
     Random random = new Random();
-
+    private int spawnx, spawny;
+    private int difficulty;
+    private Tank playerTank;
+    private double Health =50;
     // Constructor
-    public Bot(int color, int choice, int typebot, double difficulty) {
-
+    public Bot(int x, int y, int color, int choice, int typebot, int difficulty) {
+        this.difficulty = difficulty;
+        this.spawnx = x;
+        this.spawny = y;
         hull = new Hull(color, choice);
         weapon = new Weapon(color, choice);
         track = new Track(choice);
         this.bullet = new Bullet(choice);
+        Health =25*difficulty;
     }
 
-    private boolean Moving = false, Living = true;
+    private boolean Moving = false, Living = true, Rotating = false;
 
-    public void spawnbot(int x, int y, Pane botPane, Scene scene, ArrayList<Rectangle> rectList, ArrayList<ImageView> objList) {
+    public Group getBot() {
+        return bot;
+    }
+
+    public void setLiving(boolean Living) {
+        this.Living = Living;
+        timelineBotMove.stop();
+        timelineBotshoot.stop();
+    }
+
+    Timeline timelineBotMove;
+    Timeline timelineBotshoot;
+
+    public void spawnbot(Pane botPane, Scene scene, ArrayList<Rectangle> rectList, ArrayList<ImageView> objList, Tank tank) {
         this.ObjList = objList;
         this.RectList = rectList;
         this.botPane = botPane;
         this.scene = scene;
-        //
+        this.playerTank = tank;
 
-        //
         bot = createbot(scale);
-        botPane.getChildren().addAll(bot);
-        bot.setTranslateX(x + gap);
-        bot.setTranslateY(y + gap);
+        botPane.getChildren().add(bot);
+        bot.setTranslateX(spawnx + gap);
+        bot.setTranslateY(spawny + gap);
         bot.setCache(true);
         //Displaying the contents of the stage
         bot.setRotate(0);
-        //
-        rt = new RotateTransition(Duration.millis(300), bot);
-//        while (Living) {
-        for (int i = 0; i < 1; i++) {
-            int direction = random.nextInt(3)+1;
-            int tankMoves = random.nextInt(3)+1;
 
-            if ((bot.getTranslateX() - gap) % Step == 0 & (bot.getTranslateY() - gap) % Step == 0 & !Moving) {
-                Timeline timelineBotshoot = new Timeline(new KeyFrame(Duration.millis(stepDuration*Step*2*tankMoves),
-                        evt -> {
-                            botmove(random.nextInt(4)+1,tankMoves);
-                        }));
-                timelineBotshoot.setCycleCount(Animation.INDEFINITE);
-                timelineBotshoot.play();
-            }
-            if (bot.getRotate() == 0 | bot.getRotate() == 90 | bot.getRotate() == 180 | bot.getRotate() == 270) {
-                KeyFrame[] keyFrame;
-                Timeline timelineBotshoot = new Timeline(new KeyFrame(Duration.millis(1000),
-                        evt -> {
-//                            botshoot();
-                        }));
-                timelineBotshoot.setCycleCount(Animation.INDEFINITE);
-                timelineBotshoot.play();
-            }
-        }
+        new Thread(() -> {
+            //
+            rt = new RotateTransition(Duration.millis(100), bot);
+            int tankMoves = random.nextInt(5) + 1;
+            timelineBotMove = new Timeline(new KeyFrame(Duration.millis(stepDuration * Step * 3 * tankMoves),
+                    evt -> {
+                        if ((bot.getTranslateX() - gap) % Step == 0 & (bot.getTranslateY() - gap) % Step == 0 & !Moving & !Rotating) {
+
+                            botmove(random.nextInt(4) + 1, tankMoves);
+                        }
+                    }));
+            timelineBotMove.setOnFinished(actionEvent -> {
+                if (!Living) {
+                    timelineBotMove.stop();
+                }
+            });
+            timelineBotMove.setCycleCount(Animation.INDEFINITE);
+            timelineBotMove.play();
+            timelineBotshoot = new Timeline(new KeyFrame(Duration.millis(1000.0 / difficulty),
+                    evt -> {
+                        botshoot();
+                    }));
+            timelineBotMove.setOnFinished(actionEvent -> {
+                if (!Living) {
+                    timelineBotshoot.stop();
+                }
+            });
+            timelineBotshoot.setCycleCount(Animation.INDEFINITE);
+            timelineBotshoot.play();
+        }).start();
+        //
     }
 
     public Group createbot(double x) {
@@ -150,17 +177,50 @@ public class Bot {
     private int check = 0;
     private Timeline timeLineMovebot;
     private KeyFrame kf;
-    double prevX, prevY;
     int moveStep;
     double stepDuration = (500 - 50 * (speed / 10.0 - 1)) / (70 / Step * 35);
-    public void botmove(int direction,int moves) {
+    public void setHealth(int damage) {
+        Health -= damage;
+        Text dam = new Text("-"+ damage);
+        dam.setFill(Color.RED);
+        dam.setFont(Font.font("verdana", FontWeight.EXTRA_BOLD,15));
+        dam.setStroke(Color.WHITESMOKE);
+        dam.setStrokeWidth(0.5);
+        double iniX = bot.getTranslateX() + random.nextInt(10+10)  +17, iniY = bot.getTranslateY() + random.nextInt(10+10) + 5;
+        dam.setX(iniX);
+        dam.setY(iniY);
+        botPane.getChildren().add(dam);
+        Timeline minusHealth = new Timeline(new KeyFrame(Duration.millis(50),
+                actionEvent -> {
+                    if (iniX > bot.getTranslateX()+25) {
+                        dam.setX(dam.getX() + 1);
+                        dam.setY(dam.getY() - 5);
+                    }else {
+                        dam.setX(dam.getX() - 1);
+                        dam.setY(dam.getY() - 5);
+                    }
+                    dam.setOpacity(dam.getOpacity() - 0.1);
+                }));
+        minusHealth.setCycleCount(20);
+        minusHealth.setOnFinished(evt->botPane.getChildren().remove(dam));
+        minusHealth.play();
+    }
+    public boolean checkHealth(){
+        if (Health<=0){
+            System.out.println(Health);
+            botPane.getChildren().remove(bot);
+            setLiving(false);
+            return false;
+        } else {return true;}
+    }
+    public void botmove(int direction, int moves) {
         Moving = true;
+        Rotating = true;
         check = 0;
         Random random = new Random();
         moveStep = moves;
         stepDuration = (500 - 50 * (speed / 10.0 - 1)) / (70 / Step * 35);
         // Testing
-        System.out.println("I was here " + bot.getTranslateX()+" "+bot.getTranslateY());
 
         switch (direction) {
             case 1:
@@ -168,23 +228,24 @@ public class Bot {
                     rt.setByAngle(0 - bot.getRotate());
                     rt.setCycleCount(1);
                     rt.setAutoReverse(true);
+                    rt.setOnFinished(actionEvent -> Rotating = false);
                     rt.play();
                 }
                 KeyFrame stepKeyframe = new KeyFrame(
                         Duration.millis(stepDuration * Step),
                         actionEvent -> {
-                            prevX = bot.getTranslateX();
-                            prevY = bot.getTranslateY();
-                            System.out.println(bot.getTranslateX()+" "+bot.getTranslateY());
+                            AtomicReference<Double> prevY = new AtomicReference<>((double) 0);
                             kf = new KeyFrame(
                                     Duration.millis(stepDuration),
                                     (evt) -> {
-
                                         for (Rectangle rectW : RectList) {
                                             if (bot.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
                                                 check = 1;
                                                 break;
                                             }
+                                        }
+                                        if (bot.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            check = 1;
                                         }
                                         for (ImageView imgW : ObjList) {
                                             if (bot.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
@@ -192,17 +253,20 @@ public class Bot {
                                                 break;
                                             }
                                         }
+                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 735 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
+                                            check = 1;
+                                        }
                                         if (check == 0) {
                                             bot.setTranslateY(bot.getTranslateY() - Step * 2 / 70.0);
+                                            prevY.updateAndGet(v -> (double) (v - Step * 2 / 70.0));
                                         }
                                     }
                             );
                             timeLineMovebot = new Timeline(kf);
                             timeLineMovebot.setOnFinished(evt -> {
-                                if (check == 1 | ((bot.getTranslateX() - gap) % Step != 0 & (bot.getTranslateY() % Step - gap) != 0)) {
-                                    System.out.println(bot.getTranslateX());
-                                    bot.setTranslateX(prevX);
-                                    bot.setTranslateY(prevY);
+                                if (check == 1) {
+                                    bot.setTranslateY(bot.getTranslateY() - prevY.get());
+                                    check = 0;
                                 }
                             });
                             timeLineMovebot.setCycleCount(35);
@@ -220,14 +284,15 @@ public class Bot {
                 if (bot.getRotate() != 90) {
                     rt.setByAngle(90 - bot.getRotate());
                     rt.setCycleCount(1);
+                    rt.setOnFinished(actionEvent -> Rotating = false);
+
                     rt.setAutoReverse(true);
                     rt.play();
                 }
                 stepKeyframe = new KeyFrame(
                         Duration.millis(stepDuration * Step),
                         actionEvent -> {
-                            prevX = bot.getTranslateX();
-                            prevY = bot.getTranslateY();
+                            AtomicReference<Double> prevX = new AtomicReference<>((double) 0);
                             kf = new KeyFrame(
                                     Duration.millis(stepDuration),
                                     (evt) -> {
@@ -244,16 +309,24 @@ public class Bot {
                                                 break;
                                             }
                                         }
+                                        if (bot.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            check = 1;
+                                        }
+                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 735 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
+                                            check = 1;
+                                        }
                                         if (check == 0) {
+
                                             bot.setTranslateX(bot.getTranslateX() + Step * 2 / 70.0);
+                                            prevX.updateAndGet(v -> (double) (v + Step * 2 / 70.0));
                                         }
                                     }
                             );
                             timeLineMovebot = new Timeline(kf);
                             timeLineMovebot.setOnFinished(evt -> {
-                                if (check == 1 | ((bot.getTranslateX() - gap) % Step != 0 & (bot.getTranslateY() % Step - gap) != 0)) {
-                                    bot.setTranslateX(prevX);
-                                    bot.setTranslateY(prevY);
+                                if (check == 1) {
+                                    bot.setTranslateX(bot.getTranslateX() - prevX.get());
+                                    check = 0;
                                 }
                             });
                             timeLineMovebot.setCycleCount(35);
@@ -267,13 +340,12 @@ public class Bot {
                 timelineStep.setCycleCount(moveStep);
                 timelineStep.play();
                 break;
-            default:
-                System.out.println("I was here!D " + direction);
-                break;
             case 3:
                 if (bot.getRotate() != 180) {
                     rt.setByAngle(180 - bot.getRotate());
                     rt.setCycleCount(1);
+                    rt.setOnFinished(actionEvent -> Rotating = false);
+
                     rt.setAutoReverse(true);
                     rt.play();
 
@@ -281,8 +353,7 @@ public class Bot {
                 stepKeyframe = new KeyFrame(
                         Duration.millis(stepDuration * Step),
                         actionEvent -> {
-                            prevX = bot.getTranslateX();
-                            prevY = bot.getTranslateY();
+                            AtomicReference<Double> prevY = new AtomicReference<>((double) 0);
                             kf = new KeyFrame(
                                     Duration.millis(stepDuration),
                                     (evt) -> {
@@ -300,17 +371,23 @@ public class Bot {
                                                 }
                                             }
                                         }
+                                        if (bot.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            check = 1;
+                                        }
+                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 735 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
+                                            check = 1;
+                                        }
                                         if (check == 0) {
                                             bot.setTranslateY(bot.getTranslateY() + Step * 2 / 70.0);
+                                            prevY.updateAndGet(v -> (double) (v + Step * 2 / 70.0));
                                         }
                                     }
                             );
                             timeLineMovebot = new Timeline(kf);
                             timeLineMovebot.setOnFinished(evt -> {
-                                if (check == 1 | ((bot.getTranslateX() - gap) % Step != 0 & (bot.getTranslateY() % Step - gap) != 0)) {
-                                    System.out.println(bot.getTranslateX());
-                                    bot.setTranslateX(prevX);
-                                    bot.setTranslateY(prevY);
+                                if (check == 1) {
+                                    bot.setTranslateY(bot.getTranslateY() - prevY.get());
+                                    check = 0;
                                 }
                             });
                             timeLineMovebot.setCycleCount(35);
@@ -328,6 +405,7 @@ public class Bot {
                 if (bot.getRotate() != 270) {
                     rt.setByAngle(270 - bot.getRotate());
                     rt.setCycleCount(1);
+                    rt.setOnFinished(actionEvent -> Rotating = false);
                     rt.setAutoReverse(true);
                     rt.play();
 
@@ -335,8 +413,8 @@ public class Bot {
                 stepKeyframe = new KeyFrame(
                         Duration.millis(stepDuration * Step),
                         actionEvent -> {
-                            prevX = bot.getTranslateX();
-                            prevY = bot.getTranslateY();
+
+                            AtomicReference<Double> prevX = new AtomicReference<>((double) 0);
                             kf = new KeyFrame(
                                     Duration.millis(stepDuration),
                                     (evt) -> {
@@ -353,16 +431,23 @@ public class Bot {
                                                 break;
                                             }
                                         }
+                                        if (bot.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            check = 1;
+                                        }
+                                        if (bot.getTranslateX() <= 0 | bot.getTranslateY() >= 735 | bot.getTranslateY() <= 0 | bot.getTranslateX() >= 1365) {
+                                            check = 1;
+                                        }
                                         if (check == 0) {
                                             bot.setTranslateX(bot.getTranslateX() - Step * 2 / 70.0);
+                                            prevX.updateAndGet(v -> (double) (v - Step * 2 / 70.0));
                                         }
                                     }
                             );
                             timeLineMovebot = new Timeline(kf);
                             timeLineMovebot.setOnFinished(evt -> {
-                                if (check == 1 | ((bot.getTranslateX() - gap) % Step != 0 & (bot.getTranslateY() % Step - gap) != 0)) {
-                                    bot.setTranslateX(prevX);
-                                    bot.setTranslateY(prevY);
+                                if (check == 1) {
+                                    bot.setTranslateX(bot.getTranslateX() - prevX.get());
+                                    check = 0;
                                 }
                             });
                             timeLineMovebot.setCycleCount(35);
@@ -377,16 +462,25 @@ public class Bot {
                 timelineStep.setCycleCount(moveStep);
                 timelineStep.play();
                 break;
+            default:
+                Moving = false;
+                Rotating = false;
+                break;
         }
-        Moving= false;
+        Moving = false;
+        Rotating = false;
     }
 
     private boolean shotBullet;
     private Explosion explosion;
+    double bulletSteps;
+    int checkBullet = 0, shotPlayer = 0;
+    double BulletstepDuration;
 
     public void botshoot() {
-
+        checkBullet = 0;
         Flash flash = new Flash();
+        explosion = new Explosion();
         double x;
         double y;
         double Direction = bot.getRotate();
@@ -396,9 +490,10 @@ public class Bot {
         BulletW.setFitWidth(scale * 9);
         BulletW.setFitHeight(scale * 9);
         BulletW.setRotate(Direction);
+        botPane.getChildren().addAll(BulletW);
         // Timeline
-        double steps = scale * Range * 4 / 2.0;
-        double stepDuration = 100 * Speed / steps;
+        bulletSteps = scale * Range * 4 / 2.0;
+        BulletstepDuration = 100 * Speed / bulletSteps;
         Timeline bulletAnimation;
         switch ((int) Direction) {
             case 0:
@@ -407,40 +502,47 @@ public class Bot {
                 flash.FlashAnimation(x, y - scale * 4.0, BulletW.getRotate(), BulletW.getFitWidth(), bulletMode, botPane);
                 bulletAnimation = new Timeline(
                         new KeyFrame(
-                                Duration.millis(stepDuration),
+                                Duration.millis(BulletstepDuration),
                                 (evt) -> {
-                                    int check = 0;
-                                    if ((BulletW.getTranslateY() % 70) % 36 == 0 & BulletW.getTranslateY() % 70 != 0 & !shotBullet) {
+                                    if ((BulletW.getTranslateY() % 70) % 36 == 0 & BulletW.getTranslateY() % 70 != 0) {
                                         for (Rectangle rectW : RectList) {
                                             if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                                                check = 1;
+                                                checkBullet = 1;
                                                 break;
                                             }
                                         }
                                         for (ImageView imgW : ObjList) {
                                             if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                                                check = 1;
+                                                checkBullet = 1;
                                                 botPane.getChildren().remove(imgW);
                                                 explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), botPane);
                                                 ObjList.remove(imgW);
                                                 break;
                                             }
                                         }
+                                        if (BulletW.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            shotPlayer = 1;
+                                            checkBullet = 1;
+                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane);
+                                        }
+                                        ;
 
                                     }
-                                    if (check == 0) {
+                                    if (checkBullet == 0) {
                                         BulletW.setTranslateY(BulletW.getTranslateY() - 2);
                                     } else {
                                         botPane.getChildren().remove(BulletW);
-                                        shotBullet = true;
                                     }
                                 }
                         ));
                 bulletAnimation.setOnFinished(evt -> {
-                    System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
                     botPane.getChildren().remove(BulletW);
+                    if (shotPlayer == 1) {
+                        playerTank.setHealth(bullet.getDamage());
+                        shotPlayer = 0;
+                    }
                 });
-                bulletAnimation.setCycleCount((int) steps);
+                bulletAnimation.setCycleCount((int) bulletSteps);
                 BulletW.setX(x);
                 BulletW.setY(y);
                 bulletAnimation.play();
@@ -451,19 +553,19 @@ public class Bot {
                 flash.FlashAnimation(x + scale * 4.0, y, BulletW.getRotate(), BulletW.getFitWidth(), bulletMode, botPane);
                 bulletAnimation = new Timeline(
                         new KeyFrame(
-                                Duration.millis(stepDuration),
+                                Duration.millis(BulletstepDuration),
                                 (evt) -> {
-                                    int check = 0;
-                                    if ((BulletW.getTranslateX() % 70) % 36 == 0 & BulletW.getTranslateX() % 70 != 0 & !shotBullet) {
+
+                                    if ((BulletW.getTranslateX() % 70) % 36 == 0 & BulletW.getTranslateX() % 70 != 0) {
                                         for (Rectangle rectW : RectList) {
                                             if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                                                check = 1;
+                                                checkBullet = 1;
                                                 break;
                                             }
                                         }
                                         for (ImageView imgW : ObjList) {
                                             if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                                                check = 1;
+                                                checkBullet = 1;
                                                 botPane.getChildren().remove(imgW);
                                                 explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), botPane);
 
@@ -471,21 +573,29 @@ public class Bot {
                                                 break;
                                             }
                                         }
+                                        if (BulletW.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            shotPlayer = 1;
+                                            checkBullet = 1;
+                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane);
+                                        }
+
                                     }
 
-                                    if (check == 0) {
+                                    if (checkBullet == 0) {
                                         BulletW.setTranslateX(BulletW.getTranslateX() + 2);
                                     } else {
                                         botPane.getChildren().remove(BulletW);
-                                        shotBullet = true;
                                     }
                                 }
                         ));
                 bulletAnimation.setOnFinished(evt -> {
-                    System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
                     botPane.getChildren().remove(BulletW);
+                    if (shotPlayer == 1) {
+                        playerTank.setHealth(bullet.getDamage());
+                        shotPlayer = 0;
+                    }
                 });
-                bulletAnimation.setCycleCount((int) steps);
+                bulletAnimation.setCycleCount((int) bulletSteps);
                 BulletW.setX(x);
                 BulletW.setY(y);
                 bulletAnimation.play();
@@ -496,40 +606,47 @@ public class Bot {
                 flash.FlashAnimation(x, y + scale * 4.0, BulletW.getRotate(), BulletW.getFitWidth(), bulletMode, botPane);
                 bulletAnimation = new Timeline(
                         new KeyFrame(
-                                Duration.millis(stepDuration),
+                                Duration.millis(BulletstepDuration),
                                 (evt) -> {
-                                    int check = 0;
-                                    if ((BulletW.getTranslateY() % 70) % 36 == 0 & BulletW.getTranslateY() % 70 != 0 & !shotBullet) {
+                                    if ((BulletW.getTranslateY() % 70) % 36 == 0 & BulletW.getTranslateY() % 70 != 0) {
                                         for (Rectangle rectW : RectList) {
                                             if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                                                check = 1;
+                                                checkBullet = 1;
                                                 break;
                                             }
-                                            for (ImageView imgW : ObjList) {
-                                                if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                                                    check = 1;
-                                                    botPane.getChildren().remove(imgW);
-                                                    explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), botPane);
+                                        }
+                                        for (ImageView imgW : ObjList) {
+                                            if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                                checkBullet = 1;
+                                                botPane.getChildren().remove(imgW);
+                                                explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), botPane);
 
-                                                    ObjList.remove(imgW);
-                                                    break;
-                                                }
+                                                ObjList.remove(imgW);
+                                                break;
                                             }
                                         }
+                                        if (BulletW.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            shotPlayer = 1;
+                                            checkBullet = 1;
+                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane);
+                                        }
+
                                     }
-                                    if (check == 0) {
+                                    if (checkBullet == 0) {
                                         BulletW.setTranslateY(BulletW.getTranslateY() + 2);
                                     } else {
                                         botPane.getChildren().remove(BulletW);
-                                        shotBullet = true;
                                     }
                                 }
                         ));
                 bulletAnimation.setOnFinished(evt -> {
-                    System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
                     botPane.getChildren().remove(BulletW);
+                    if (shotPlayer == 1) {
+                        playerTank.setHealth(bullet.getDamage());
+                        shotPlayer = 0;
+                    }
                 });
-                bulletAnimation.setCycleCount((int) steps);
+                bulletAnimation.setCycleCount((int) bulletSteps);
                 BulletW.setX(x);
                 BulletW.setY(y);
                 bulletAnimation.play();
@@ -540,49 +657,55 @@ public class Bot {
                 flash.FlashAnimation(x - scale * 4.0, y, BulletW.getRotate(), BulletW.getFitWidth(), bulletMode, botPane);
                 bulletAnimation = new Timeline(
                         new KeyFrame(
-                                Duration.millis(stepDuration),
+                                Duration.millis(BulletstepDuration),
                                 (evt) -> {
-                                    int check = 0;
-                                    if ((BulletW.getTranslateX() % 70) % 36 == 0 & BulletW.getTranslateX() % 70 != 0 & !shotBullet) {
+                                    if ((BulletW.getTranslateX() % 70) % 36 == 0 & BulletW.getTranslateX() % 70 != 0) {
                                         for (Rectangle rectW : RectList) {
                                             if (BulletW.getBoundsInParent().intersects(rectW.getBoundsInParent())) {
-                                                check = 1;
+                                                checkBullet = 1;
                                                 break;
                                             }
-                                            for (ImageView imgW : ObjList) {
-                                                if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
-                                                    check = 1;
-                                                    botPane.getChildren().remove(imgW);
-                                                    explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), botPane);
-                                                    ObjList.remove(imgW);
-                                                    break;
-                                                }
+                                        }
+                                        for (ImageView imgW : ObjList) {
+                                            if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
+                                                checkBullet = 1;
+                                                botPane.getChildren().remove(imgW);
+                                                explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), botPane);
+                                                ObjList.remove(imgW);
+                                                break;
                                             }
                                         }
+                                        if (BulletW.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
+                                            shotPlayer = 1;
+                                            checkBullet = 1;
+                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane);
+                                        }
+
                                     }
-                                    if (check == 0) {
+                                    if (checkBullet == 0) {
                                         BulletW.setTranslateX(BulletW.getTranslateX() - 2);
                                     } else {
                                         botPane.getChildren().remove(BulletW);
-                                        shotBullet = true;
                                     }
                                 }
                         ));
                 bulletAnimation.setOnFinished(evt -> {
-                    System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
                     botPane.getChildren().remove(BulletW);
+                    if (shotPlayer == 1) {
+                        playerTank.setHealth(bullet.getDamage());
+                        shotPlayer = 0;
+                    }
                 });
 
-                bulletAnimation.setCycleCount((int) steps);
+                bulletAnimation.setCycleCount((int) bulletSteps);
                 BulletW.setX(x);
                 BulletW.setY(y);
                 bulletAnimation.play();
 
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + (int) Direction);
+                botPane.getChildren().remove(BulletW);
         }
-        botPane.getChildren().addAll(BulletW);
     }
 
     public void callPathTrack(double x, double y, double direction) {
