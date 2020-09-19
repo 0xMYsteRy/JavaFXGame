@@ -407,6 +407,7 @@ public class Tank extends Application implements Serializable {
     private Bullet bullet;
     private Weapon weapon;
     private Track track;
+    private int tankIndex;
     private RotateTransition rt;
     private FadeTransition ft, ft2;
     private Scene scene;
@@ -475,15 +476,21 @@ public class Tank extends Application implements Serializable {
         tankPane = new Pane();
         //Load the map
         MapJungle map = new MapJungle();
-
+        //
+        Boss boss= new Boss(21);
+        Group BossAI =boss.createBoss();
+        BossAI.setTranslateX(600);
+        BossAI.setTranslateY(280);
+        boss.Shooting(tankPane,this);
+        //
         map.loadGround(tankPane);
         scene = new Scene(tankPane, 1400, 770);//1400x750
         //Create Player
         Tank b = new Tank(2, 1);
-
-        b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), 1);
+        tankPane.getChildren().add(BossAI);
+//        b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), 1);
         //Create Bot
-        map.loadBot(tankPane, b, scene);
+//        map.loadBot(tankPane, b, scene);
         //Adding scene to the stage
 //        map.loadObject(tankPane);
         stage.setScene(scene);
@@ -532,10 +539,11 @@ public class Tank extends Application implements Serializable {
         this.tankPane = tankPane;
         this.scene = scene;
         this.BotList = BotList;
+        this.tankIndex = tankIndex;
         //
         Random rand = new Random();
         //
-        tank = createTank(scale, tankIndex);
+        tank = createTank(scale);
         //Displaying the contents of the stage
         if (tankIndex == 1) {
             new Thread(() -> {
@@ -543,7 +551,6 @@ public class Tank extends Application implements Serializable {
                 tank.setTranslateX(x + gap);
                 tank.setTranslateY(y + gap);
                 tank.setCache(true);
-
                 tank.setRotate(0);
                 //
                 rt = new RotateTransition(Duration.millis(300), tank);
@@ -594,7 +601,7 @@ public class Tank extends Application implements Serializable {
         }
     }
 
-    public Group createTank(double x, int tankIndex) {
+    public Group createTank(double x) {
         Image weaponI = new Image(weapon.getWeapon());
         Image HullI = new Image(hull.getHull());
         Image trackI_A = new Image(track.getTrack());
