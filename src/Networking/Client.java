@@ -3,24 +3,40 @@ package Networking;
 
 import Menu_JAVA.MainMenu;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-
-public class Client extends Application implements EventHandler<KeyEvent> {
-    Scene scene;
+/**
+ *
+ * @author topman garbuja,
+ *
+ * This is the client which passes and get message to and from server and
+ * further to multiple clients
+ *
+ * It also uses TaskReadThread.java file to be used in a new thread in order to
+ * get simultaneous input from server
+ */
+public class Client extends Application implements EventHandler<KeyEvent>, Serializable {
     Socket socket;
-    Server server;
     ObjectOutputStream output;
     ObjectInputStream input;
-    Stage stage;
 
+    KeyEvent keyEvent;
+    TextField txtName
+            ,txtInput;
     @Override
     public void handle(KeyEvent e) {
         System.out.println("ok");
@@ -45,13 +61,32 @@ public class Client extends Application implements EventHandler<KeyEvent> {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
-        this.stage=stage;
-        stage.setTitle("LOL");
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setTitle("LOL");
+        //
+        VBox vBox = new VBox();
 
+        HBox hBox = new HBox();
+        txtName = new TextField();
+        txtName.setPromptText("Name");
+        txtName.setTooltip(new Tooltip("Write your Color. "));
+        txtInput = new TextField();
+        txtInput.setPromptText("New message");
+        txtInput.setTooltip(new Tooltip("Write your Choice. "));
+        Button btnSend = new Button("Send");
+        btnSend.setOnAction(new ButtonListener());
+        vBox.getChildren().addAll( hBox);
+
+        hBox.getChildren().addAll(txtName, txtInput, btnSend);
+        hBox.setHgrow(txtInput, Priority.ALWAYS);  //set textfield to grow as window size grows
+        //
+        Scene scene = new Scene(vBox, 450, 500);
+        primaryStage.setTitle("Client: JavaFx Text Chat App");
+        primaryStage.setScene(scene);
+        primaryStage.show();
         try {
             // Create a socket to connect to the server
-            Socket socket = new Socket(ConnectionUtil.host, ConnectionUtil.port);
+             socket = new Socket(ConnectionUtil.host, ConnectionUtil.port);
             System.out.println(" Connected in  Client");
             //Connection successful
 
@@ -62,20 +97,44 @@ public class Client extends Application implements EventHandler<KeyEvent> {
 
 
             // Create an output stream to send data to the server
-
-            new Thread(()->{
-                try {
                     output = new ObjectOutputStream(socket.getOutputStream());
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
         } catch (IOException ex) {
-            System.out.println("a");
-
+            System.out.println(ex);
         }
 //        stage.show();
     }
+    private class ButtonListener implements EventHandler<ActionEvent> {
+
+        @Override
+        public void handle(ActionEvent e) {
+            try {
+                //get username and message
+                String Color = txtName.getText().trim();
+                String Choice = txtInput.getText().trim();
+
+                //if username is empty set it to 'Unknown'
+                if (Color.length() == 0) {
+                    Color = "Unknown";
+                }
+                //if message is empty, just return : don't send the message
+                if (Choice.length() == 0) {
+                    return;
+                }
+
+                //send message to server
+                output.write(Integer.parseInt(Color));
+                output.write(Integer.parseInt(Choice));
+                output.flush();
+
+                //clear the textfield
+                txtInput.clear();
+            } catch (IOException ex) {
+                System.err.println(ex);
+            }
+
+        }
+    }
+
 }
 

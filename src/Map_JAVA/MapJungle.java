@@ -14,10 +14,11 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class MapJungle extends Application {
+public class MapJungle extends Application implements Serializable {
     // Constructor
 
 
