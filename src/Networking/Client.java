@@ -63,7 +63,8 @@ public class Client extends Application implements EventHandler<KeyEvent>, Seria
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("LOL");
-        //
+        //javafx.controls
+        //--module-path "/YOUR/PATH/TO/javafx-sdk-11.0.2/lib" --add-modules javafx.controls,javafx.fxml*/
         VBox vBox = new VBox();
 
         HBox hBox = new HBox();
