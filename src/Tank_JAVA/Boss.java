@@ -137,45 +137,49 @@ public class Boss {
         minusHealth.play();
     }
 
-    //////////////
-    private Explosion explosion = new Explosion();
-    private int scale = 7;
+    private final Explosion explosion = new Explosion();
+    private final int scale = 7;
 
     public boolean checkHealth() {
         if (Health <= 0) {
             System.out.println(Health);
             Timeline Bossdying = new Timeline(new KeyFrame(Duration.millis(100),
                     ac -> {
-                        boss.setTranslateX(boss.getTranslateX() + 10);                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
-
+                        boss.setTranslateX(boss.getTranslateX() + 10);
+                        explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
                     }), new KeyFrame(Duration.millis(200), ac -> {
-                boss.setTranslateX(boss.getTranslateX() + 10);                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
+                boss.setTranslateX(boss.getTranslateX() + 10);
+                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
 
             }), new KeyFrame(Duration.millis(300), ac -> {
-                boss.setTranslateX(boss.getTranslateX() - 10);                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
+                boss.setTranslateX(boss.getTranslateX() - 10);
+                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
 
             }), new KeyFrame(Duration.millis(400), ac -> {
-                boss.setTranslateX(boss.getTranslateX() - 10);                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
+                boss.setTranslateX(boss.getTranslateX() - 10);
+                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
 
             }), new KeyFrame(Duration.millis(500), ac -> {
-                boss.setTranslateX(boss.getTranslateX() - 10);                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
+                boss.setTranslateX(boss.getTranslateX() - 10);
+                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
 
             }), new KeyFrame(Duration.millis(600), ac -> {
-                boss.setTranslateX(boss.getTranslateX() - 10);                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
+                boss.setTranslateX(boss.getTranslateX() - 10);
+                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
 
             }), new KeyFrame(Duration.millis(700), ac -> {
-                boss.setTranslateX(boss.getTranslateX() + 10);                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
+                boss.setTranslateX(boss.getTranslateX() + 10);
+                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
 
             }), new KeyFrame(Duration.millis(800), ac -> {
-                boss.setTranslateX(boss.getTranslateX() + 10);                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
+                boss.setTranslateX(boss.getTranslateX() + 10);
+                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
+            }));
 
-            })
-            );
             Bossdying.setCycleCount(10);
-            Bossdying.setOnFinished(evt -> {
-                pane.getChildren().remove(boss);
-            });
+            Bossdying.setOnFinished(evt -> pane.getChildren().remove(boss));
             Bossdying.play();
+
             return false;
         } else {
             return true;
