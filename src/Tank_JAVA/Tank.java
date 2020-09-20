@@ -893,7 +893,7 @@ public class Tank extends Application implements Serializable {
                                     }
                             ));
                     bulletAnimation.setOnFinished(evt -> {
-//                        System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
+                        System.out.printf("Exploded at %f x - %f y\n", BulletW.getTranslateX(), BulletW.getTranslateY());
                         tankPane.getChildren().remove(BulletW);
                     });
 
