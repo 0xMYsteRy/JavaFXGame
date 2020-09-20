@@ -4,6 +4,8 @@ import Map_JAVA.Map2;
 import Map_JAVA.Map3;
 import Map_JAVA.MapJungle;
 import Map_JAVA.Mapboss;
+import Nguyen_Net.N_Client;
+import Nguyen_Net.N_Server;
 import javafx.animation.*;
 
 import javafx.application.Application;
@@ -26,6 +28,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.security.PublicKey;
 import java.sql.Timestamp;
@@ -35,7 +38,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 
 /*MAC: --module-path "/Users/s3757937/Downloads/javafx-sdk-11.0.2/lib" --add-modules javafx.controls,javafx.fxml*/
-class Hull implements Serializable{
+class Hull implements Serializable {
     private int color = 1;
     private int type;
 
@@ -67,7 +70,7 @@ class Hull implements Serializable{
     }
 }
 
-class Weapon implements Serializable{
+class Weapon implements Serializable {
     private int color;
     private int Option;
 
@@ -99,7 +102,7 @@ class Weapon implements Serializable{
     }
 }
 
-class Track implements Serializable{
+class Track implements Serializable {
     private final float duration = 1;
     private int Option;
 
@@ -254,7 +257,7 @@ class Bullet implements Serializable {
 
 }
 
-class Flash implements Serializable{
+class Flash implements Serializable {
     ImageView[] Imagelist = new ImageView[10];
 
 
@@ -301,7 +304,7 @@ class Flash implements Serializable{
     }
 }
 
-class Explosion implements Serializable{
+class Explosion implements Serializable {
     private ImageView a1 = new ImageView(new Image("file:src/PNG/Effects/Explosion_A.png"));
     private ImageView a2 = new ImageView(new Image("file:src/PNG/Effects/Explosion_B.png"));
     private ImageView a3 = new ImageView(new Image("file:src/PNG/Effects/Explosion_C.png"));
@@ -526,12 +529,17 @@ public class Tank extends Application implements Serializable {
         }
     }
 
+    private int x, y;
+    N_Server server= new N_Server();
+    N_Client client= new N_Client();
     public void createPlayer(int x, int y, Pane tankPane, Scene scene, ArrayList<Rectangle> rectList, ArrayList<ImageView> objList, ArrayList<Bot> BotList, int tankIndex) {
         this.ObjList = objList;
         this.RectList = rectList;
         this.tankPane = tankPane;
         this.scene = scene;
         this.BotList = BotList;
+        this.x = x;
+        this.y = y;
         //
         Random rand = new Random();
         //
@@ -548,15 +556,22 @@ public class Tank extends Application implements Serializable {
                 //
                 rt = new RotateTransition(Duration.millis(300), tank);
                 scene.setOnKeyPressed(keyEvent -> {
+                    System.out.println("Moving of main player");
                     try {
-                        if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0) {
-                            Move(keyEvent);
-                        }
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
+                        client.movingClient(keyEvent);
+                    } catch (Exception e){
+                        System.out.println(e);
+                    }
+                    if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0) {
+                        Move(keyEvent);
                     }
                 });
                 scene.setOnKeyReleased(e -> {
+                    try {
+                        client.shootingClient(e);
+                    } catch (Exception a){
+                        System.out.println(a);
+                    }
                             if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
                                 shootBullet(e);
 
@@ -567,24 +582,21 @@ public class Tank extends Application implements Serializable {
         } else {
             new Thread(() -> {
                 tankPane.getChildren().addAll(tank);
-                tank.setTranslateX(x  + gap);
+                tank.setTranslateX(x + gap);
                 tank.setTranslateY(y + gap);
                 tank.setCache(true);
                 tank.setRotate(0);
                 //
                 rt = new RotateTransition(Duration.millis(300), tank);
-
             }).start();
         }
     }
-
+    public void setClient(N_Client client){
+        this.client=client;
+    }
     public void moveClient(KeyEvent keyEvent) {
-        try {
-            if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0) {
-                Move(keyEvent);
-            }
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
+        if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0) {
+            Move(keyEvent);
         }
     }
 
@@ -753,7 +765,7 @@ public class Tank extends Application implements Serializable {
 
     private int check = 0;
 
-    public void Move(KeyEvent e) throws InterruptedException {
+    public void Move(KeyEvent e) {
         check = 0;
         double prevX = tank.getTranslateX(), prevY = tank.getTranslateY();
         double stepDuration = (500 - 50 * (speed / 10.0 - 1)) / (70 / Step * 35);
