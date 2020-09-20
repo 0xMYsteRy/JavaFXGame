@@ -1,5 +1,6 @@
 package Tank_JAVA;
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
@@ -13,6 +14,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import java.awt.*;
 import java.security.Key;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -91,7 +93,22 @@ public class Boss {
         });
         BossShoot2.setCycleCount(3);
         BossShoot1.setDelay(Duration.millis(1000));
-        BossShoot2.play();
+        Timeline playShootBoss = new Timeline();
+        playShootBoss.getKeyFrames().add(new KeyFrame(Duration.millis(5000),
+                actionEvent -> {
+                    if (random.nextInt(2) + 1 == 1) {
+                        BossShoot1.play();
+                    } else if (random.nextInt(2) + 1 == 2) {
+                        BossShoot2.play();
+                    }
+                }));
+        playShootBoss.setCycleCount(Animation.INDEFINITE);
+        playShootBoss.setOnFinished(actionEvent -> {
+            if (!checkHealth()){
+                playShootBoss.stop();
+            }
+        });
+        playShootBoss.play();
     }
 
     public void setHealth(int damage) {
@@ -123,7 +140,8 @@ public class Boss {
 
     //////////////
     private Explosion explosion = new Explosion();
-    private int scale =7;
+    private int scale = 7;
+
     public boolean checkHealth() {
         if (Health <= 0) {
             System.out.println(Health);
@@ -148,7 +166,7 @@ public class Boss {
             );
             Bossdying.setCycleCount(10);
             Bossdying.setOnFinished(evt -> {
-                explosion.ExplosionAnimation(boss.getTranslateX()+scale*2*5, boss.getTranslateY()+scale*2*5, pane,2);
+                explosion.ExplosionAnimation(boss.getTranslateX() + scale * 2 * 5, boss.getTranslateY() + scale * 2 * 5, pane, 2);
                 pane.getChildren().remove(boss);
             });
             Bossdying.play();

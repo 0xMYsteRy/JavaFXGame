@@ -23,11 +23,12 @@ public class FireBall {
         }
     }
 
-    boolean finished = true;
+    boolean finished = true, shotTank=false;
     ;
 
     public void FireBallAnimation(double x, double y, double rotation, double size, Pane pane, Tank tank) {
         if (finished) {
+            shotTank=false;
             Group FireBallSet = new Group(FBImageList[0]);
             Timeline FireBallTimeline = new Timeline();
             FireBallTimeline.setCycleCount(1);
@@ -40,7 +41,7 @@ public class FireBall {
 
             grayscale.setBrightness(-0.5);
             grayscale.setContrast(0.5);
-            for (int i = 1; i < 60; i++) {
+            for (int i = 1; i < 60&!shotTank; i++) {
                 FBImageList[i].setFitWidth(size);
                 FBImageList[i].setFitHeight(size);
                 FBImageList[i].setX(x + stepX * i);
@@ -50,11 +51,12 @@ public class FireBall {
                 int finalI = i;
                 FireBallTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(2000 / 60.0 * (i + 1)),
                         evt -> {
-//                            if (FBImageList[finalI].getBoundsInParent().intersects(tank.getTank().getBoundsInParent())) {
-//                                tank.setHealth(20);
-//                                explosion.ExplosionAnimation(tank.getTank().getTranslateX(),tank.getTank().getTranslateY(),pane,1);
-//                                finished=true;
-//                            }
+                            if (FBImageList[finalI].getBoundsInParent().intersects(tank.getTank().getBoundsInParent()) & !shotTank) {
+                                tank.setHealth(20);
+                                explosion.ExplosionAnimation(tank.getTank().getTranslateX(),tank.getTank().getTranslateY(),pane,1);
+                                finished=true;
+                                shotTank=true;
+                            }
                             FireBallSet.getChildren().add(FBImageList[finalI]);
                             pane.getChildren().add(FBImageList[finalI]);
                             pane.getChildren().remove(FBImageList[finalI - 1]);
