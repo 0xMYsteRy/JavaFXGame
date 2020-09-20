@@ -49,7 +49,7 @@ public class N_Client extends Application implements EventHandler<KeyEvent>, Ser
     @Override
     public void start(Stage primaryStage) throws Exception  {
         //System.out.println("Not OK");
-        Socket socket = new Socket("10.247.169.35", 80);
+        Socket socket = new Socket("127.0.0.1", 80);
         //System.out.println("OK");
         log("Connecting to Server " + socket.getRemoteSocketAddress() + " running on port " + socket.getPort());
         Pane tankPane;
@@ -62,9 +62,9 @@ public class N_Client extends Application implements EventHandler<KeyEvent>, Ser
         //Create Player
         Tank b = new Tank(1, 2);
 
-        b.createPlayer(0, 630, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), 1);
+        b.createPlayer(0, 630, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(),null,true, 1);
         //Create Bot
-        map.loadBot(tankPane, b, scene);
+//        map.loadBot(tankPane, b, scene);
         output = new ObjectOutputStream(socket.getOutputStream());
         b.setClient(this);
 

@@ -94,7 +94,7 @@ public class Bot {
             int tankMoves = random.nextInt(5) + 1;
             timelineBotMove = new Timeline(new KeyFrame(Duration.millis(stepDuration * Step * 3 * tankMoves),
                     evt -> {
-                        if ((bot.getTranslateX() - gap) % Step == 0 & (bot.getTranslateY() - gap) % Step == 0 & !Moving & !Rotating) {
+                        if (!Moving & !Rotating) {
 
                             botmove(random.nextInt(4) + 1, tankMoves);
                         }
@@ -516,7 +516,7 @@ public class Bot {
                                             if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
                                                 checkBullet = 1;
                                                 botPane.getChildren().remove(imgW);
-                                                explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), botPane);
+                                                explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), botPane,1);
                                                 ObjList.remove(imgW);
                                                 break;
                                             }
@@ -524,7 +524,7 @@ public class Bot {
                                         if (BulletW.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
                                             shotPlayer = 1;
                                             checkBullet = 1;
-                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane);
+                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane,1);
                                         }
                                         ;
 
@@ -568,7 +568,7 @@ public class Bot {
                                             if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
                                                 checkBullet = 1;
                                                 botPane.getChildren().remove(imgW);
-                                                explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), botPane);
+                                                explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), botPane,1);
 
                                                 ObjList.remove(imgW);
                                                 break;
@@ -577,7 +577,7 @@ public class Bot {
                                         if (BulletW.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
                                             shotPlayer = 1;
                                             checkBullet = 1;
-                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane);
+                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane,1);
                                         }
 
                                     }
@@ -620,7 +620,7 @@ public class Bot {
                                             if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
                                                 checkBullet = 1;
                                                 botPane.getChildren().remove(imgW);
-                                                explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), botPane);
+                                                explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), botPane,1);
 
                                                 ObjList.remove(imgW);
                                                 break;
@@ -629,7 +629,7 @@ public class Bot {
                                         if (BulletW.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
                                             shotPlayer = 1;
                                             checkBullet = 1;
-                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane);
+                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane,1);
                                         }
 
                                     }
@@ -671,7 +671,7 @@ public class Bot {
                                             if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
                                                 checkBullet = 1;
                                                 botPane.getChildren().remove(imgW);
-                                                explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), botPane);
+                                                explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), botPane,1);
                                                 ObjList.remove(imgW);
                                                 break;
                                             }
@@ -679,7 +679,7 @@ public class Bot {
                                         if (BulletW.getBoundsInParent().intersects(playerTank.getTank().getBoundsInParent())) {
                                             shotPlayer = 1;
                                             checkBullet = 1;
-                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane);
+                                            explosion.ExplosionAnimation(playerTank.getTank().getTranslateX(), playerTank.getTank().getTranslateY(), botPane,1);
                                         }
 
                                     }

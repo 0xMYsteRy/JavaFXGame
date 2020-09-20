@@ -43,7 +43,7 @@ public class N_Server extends Application {
         Tank tankClient = new Tank(1, 2);
         Tank tankClient2 = new Tank(2, 3);
 
-        tankClient.createPlayer(0, 630, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), 2);
+        tankClient.createPlayer(0, 630, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), null,true,2);
         //tankClient2.createPlayer(0, 70, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(),2);
         tankPane.getChildren().addAll();
         stage.setScene(scene);
@@ -91,7 +91,11 @@ public class N_Server extends Application {
                         System.out.println("till here is fine");
 
                         Platform.runLater(() -> {
-                            tankClient.moveClient(message);
+                            try {
+                                tankClient.moveClient(message);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                             tankClient.ShootClient(message);
                         });
                         System.out.println("Msg from client: " + message);
