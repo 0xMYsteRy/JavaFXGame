@@ -26,6 +26,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.Serializable;
 import java.security.PublicKey;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 
 /*MAC: --module-path "/Users/s3757937/Downloads/javafx-sdk-11.0.2/lib" --add-modules javafx.controls,javafx.fxml*/
-class Hull {
+class Hull implements Serializable{
     private int color = 1;
     private int type;
 
@@ -66,7 +67,7 @@ class Hull {
     }
 }
 
-class Weapon {
+class Weapon implements Serializable{
     private int color;
     private int Option;
 
@@ -98,7 +99,7 @@ class Weapon {
     }
 }
 
-class Track {
+class Track implements Serializable{
     private final float duration = 1;
     private int Option;
 
@@ -117,7 +118,7 @@ class Track {
     }
 }
 
-class Bullet {
+class Bullet implements Serializable {
     private int counting = 0;
     private int Damage = 0;
     private int Speed = 0;
@@ -253,7 +254,7 @@ class Bullet {
 
 }
 
-class Flash {
+class Flash implements Serializable{
     ImageView[] Imagelist = new ImageView[10];
 
 
@@ -300,7 +301,7 @@ class Flash {
     }
 }
 
-class Explosion {
+class Explosion implements Serializable{
     private ImageView a1 = new ImageView(new Image("file:src/PNG/Effects/Explosion_A.png"));
     private ImageView a2 = new ImageView(new Image("file:src/PNG/Effects/Explosion_B.png"));
     private ImageView a3 = new ImageView(new Image("file:src/PNG/Effects/Explosion_C.png"));
@@ -400,7 +401,7 @@ class Explosion {
     }
 }
 
-public class Tank extends Application {
+public class Tank extends Application implements Serializable {
     private Group tank;
     private Hull hull;
     private Bullet bullet;
@@ -566,7 +567,7 @@ public class Tank extends Application {
         } else {
             new Thread(() -> {
                 tankPane.getChildren().addAll(tank);
-                tank.setTranslateX(x + 250 * tankIndex + gap);
+                tank.setTranslateX(x  + gap);
                 tank.setTranslateY(y + gap);
                 tank.setCache(true);
                 tank.setRotate(0);

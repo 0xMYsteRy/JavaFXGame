@@ -1,25 +1,34 @@
 package Networking;
 
+import Tank_JAVA.Tank;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.Socket;
 
-public  class TaskClientConnection implements Runnable {
+/**
+ *
+ * @author topman garbuja,It represents each new connection
+ */
+public  class TaskClientConnection implements Runnable,Serializable {
 
     Socket socket;
     Server server;
     // Create data input and output streams
     ObjectInputStream input;
     ObjectOutputStream output;
-    Scene scene ;
-    public TaskClientConnection(Socket socket, Server server) {
+    int playerIndex;
+    public TaskClientConnection(Socket socket, Server server,int index) {
+        System.out.println("Connected this client to the server");
         this.socket = socket;
         this.server = server;
+        this.playerIndex=index;
     }
     KeyEvent keyEvent;
+
     @Override
     public void run() {
 
@@ -29,15 +38,15 @@ public  class TaskClientConnection implements Runnable {
                     socket.getInputStream());
             output = new ObjectOutputStream(
                     socket.getOutputStream());
-
+                System.out.println("Getting message");
+            int color = input.read();
+            int choice = input.read();
+            server.sendInitial(color,choice,playerIndex);
             while (true) {
                 // Get message from the client
-                KeyEvent message = (KeyEvent) input.readObject();
-
+//                KeyEvent keyEvent1= (KeyEvent) input.readObject();
                 //send message via server broadcast
-                scene.setOnKeyPressed(evt -> {
-                    server.broadcast(scene);
-                });
+//                server.sendKey1(keyEvent1);
 
 //                //append message of the Text Area of UI (GUI Thread)
 //                Platform.runLater(() -> {
@@ -47,29 +56,36 @@ public  class TaskClientConnection implements Runnable {
 
 
 
-        } catch (IOException | ClassNotFoundException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
-        } finally {
+        }finally {
             try {
                 socket.close();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-
         }
-
     }
-
     //send message back to client
-    public void sendMessage(Scene scene) {
+    public void sendMessage(KeyEvent keyEvent) {
         try {
-            output.writeObject(scene);
+            System.out.println("Sending message back ");
+            output.writeObject(keyEvent);
             output.flush();
-
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
+    }
+    public void sendInitial(int Color, int Choice, int Pos) {
+        try {
+            System.out.println("Sending message back ");
+            output.writeInt(Color);
+            output.write(Choice);
+            output.write(Pos);
+            output.flush();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

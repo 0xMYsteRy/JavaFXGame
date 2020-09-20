@@ -7,17 +7,17 @@ package Networking;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
-import java.awt.event.KeyEvent;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.net.Socket;
 
 /**
+ * 000000
  *
  * @author topman garbuja,
- * 
+ * <p>
  * It is used to get input from server simultaneously
  */
 public class TaskReadThread implements Runnable {
@@ -35,26 +35,34 @@ public class TaskReadThread implements Runnable {
     @Override
     public void run() {
         //continuously loop it
+        System.out.println("Running TaskThread");
         while (true) {
             try {
+                KeyEvent keyEvent1, keyEvent2, keyEvent3, keyEvent4;
+
                 //Create data input stream
                 input = new ObjectInputStream(socket.getInputStream());
 
                 //get input from the client
-                Scene message= (Scene) input.readObject();
-
+                keyEvent1 = (KeyEvent) input.readObject();
+                System.out.println("1");
                 //append message of the Text Area of UI (GUI Thread)
                 Platform.runLater(() -> {
                     //display the message in the textarea
-                    client.stage.setScene(message);
-                    client.stage.show();
                     System.out.println("hello World");
+                    client.keyEvent = keyEvent1;
                 });
             } catch (IOException | ClassNotFoundException ex) {
                 System.out.println("Error reading from server: " + ex.getMessage());
-                ex.printStackTrace();
                 break;
             }
         }
+        try {
+            input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
+
 }
