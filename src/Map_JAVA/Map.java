@@ -617,5 +617,3 @@ public class Map extends Application {
     }
 
 }
-
-

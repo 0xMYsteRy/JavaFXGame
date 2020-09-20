@@ -84,6 +84,7 @@ public class Mapboss extends Application {
 //        second = 0;
 //        minute = 0;
         //   timer.start();
+
         //Adding scene to the stage
         stage.setScene(scene);
         stage.show();

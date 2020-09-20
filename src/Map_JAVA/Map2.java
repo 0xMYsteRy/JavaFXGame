@@ -597,4 +597,3 @@ public class   Map2 extends Application {
 }
 
 
-
