@@ -41,7 +41,7 @@ public class Server extends Application implements Serializable {
         map.loadGround(tankPane);
         scene = new Scene(tankPane, 1400, 770);//1400x750
         Tank b = new Tank(2, 1);
-        b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), 1);
+        b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(),null,true, 1);
         stage.setScene(scene);
         stage.show();
     }
