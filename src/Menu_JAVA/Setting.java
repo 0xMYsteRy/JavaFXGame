@@ -75,6 +75,7 @@ public class Setting {
         hbox.setTranslateY(120);
 
         Button control = new Button("Control");
+        buttonVietNam.setTooltip(I18N.tooltipForKey("button.vietnam.control"));
         control.setMinWidth(100);
         control.setMinHeight(20);
         Button faq = new Button("FAQ");
@@ -99,6 +100,7 @@ public class Setting {
         closeButton.setMinHeight(30);
         closeButton.setAlignment(Pos.BOTTOM_CENTER);
         closeButton.setTranslateY(270);
+
         closeButton.setOnMouseClicked(mouseEvent -> {
             try {
                 handleCloseButtonAction();
