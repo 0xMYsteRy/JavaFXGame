@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<fx:root prefHeight="326.0" prefWidth="435.0" type="AnchorPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="Menu_JAVA.settingController">
+   <children>
+      <HBox layoutY="300.0" prefHeight="53.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Button contentDisplay="TOP" ellipsisString="" mnemonicParsing="false" onAction="#closeSetting" prefHeight="63.0" prefWidth="600.0" text="CLOSE" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <effect>
+                  <Lighting>
+                     <bumpInput>
+                        <Shadow blurType="GAUSSIAN" />
+                     </bumpInput>
+                     <light>
+                     </light>
+                  </Lighting>
+               </effect>
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="TEXT" />
+               </cursor>
+            </Button>
+         </children></HBox>
+      <HBox layoutY="50.0" prefHeight="42.0" prefWidth="600.0" spacing="50.0">
+         <children>
+            <Text layoutX="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Language">
+               <font>
+                  <Font size="26.0" />
+               </font>
+            </Text>
+            <CheckBox mnemonicParsing="false" onMouseClicked="#switchEnglish" prefHeight="40.0" prefWidth="100.0" text="English">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+            </CheckBox>
+            <CheckBox mnemonicParsing="false" onMouseClicked="#switchViet" prefHeight="40.0" text="Tiếng Việt">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+            </CheckBox>
+         </children>
+      </HBox>
+      <Text fontSmoothingType="LCD" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TANK BATTLE" textAlignment="CENTER" wrappingWidth="600.0">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Text>
+      <Button layoutX="37.0" layoutY="127.0" mnemonicParsing="false" onMouseClicked="#showFAQ" prefWidth="200.0" text="FAQ">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Button>
+      <Button layoutX="334.0" layoutY="125.0" mnemonicParsing="false" onMouseClicked="#setControl" prefHeight="38.0" prefWidth="200.0" text="Control">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Button>
+      <Button layoutX="37.0" layoutY="201.0" mnemonicParsing="false" onMouseClicked="#showCredits" prefHeight="38.0" prefWidth="200.0" text="Credits">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Button>
+   </children>
+</fx:root>
