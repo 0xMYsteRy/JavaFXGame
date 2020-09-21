@@ -208,7 +208,7 @@ public class Tank extends Application implements Serializable {
                             e.printStackTrace();
                         }
                     }
-                    if (multiplayer) {
+                    if (multiplayer&(tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0 &(tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270)) {
                         try {
                             client.movingClient(keyEvent);
                         } catch (Exception e) {

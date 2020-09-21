@@ -72,52 +72,55 @@ public class N_Server extends Application {
                     "+----+--------+--------+------------+---------------------+ ");
             System.out.println("\nServer started! Awaiting connections...");
             ServerSocket finalSs = ss;
-            try {
-                socket = finalSs.accept();
-                log("+A client connected from " + socket.getInetAddress() + " running on port " + socket.getPort());
-                connectionList.add(socket);
-                playerCount++;
-                tankIndex = playerCount;
-                outputStream = new DataOutputStream(socket.getOutputStream());
-                outputStream.write(playerCount);
+            new Thread(() -> {
+                try {
+                    synchronized (finalSs){
+                    socket = finalSs.accept();}
+                    connectionList.add(socket);
+                    playerCount++;
+                    tankIndex = playerCount;
+                    log("+A client connected from " + socket.getInetAddress() + " running on port " + socket.getPort() + " socket: " + socket + " , index of tank: " + tankIndex);
 
-                DataInputStream dataInputStream;
-                dataInputStream = new DataInputStream(socket.getInputStream());
-                ObjectInputStream objectInputStream;
-                objectInputStream = new ObjectInputStream(socket.getInputStream());
-                while (true) {
-                    try {
-                        KeyEvent message = (KeyEvent) objectInputStream.readObject();
-                        switch (tankIndex) {
-                            case 1:
-                                Platform.runLater(() -> {
-                                    try {
-                                        tankClient.moveClient(message);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                    tankClient.ShootClient(message);
-                                });
-                                break;
-                            case 2:
-                                Platform.runLater(() -> {
-                                    try {
-                                        tankClient2.moveClient(message);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                    tankClient2.ShootClient(message);
-                                });
-                                break;
+                    outputStream = new DataOutputStream(socket.getOutputStream());
+                    outputStream.write(playerCount);
+
+                    DataInputStream dataInputStream;
+                    dataInputStream = new DataInputStream(socket.getInputStream());
+                    ObjectInputStream objectInputStream;
+                    objectInputStream = new ObjectInputStream(socket.getInputStream());
+                    while (true) {
+                        try {
+                            KeyEvent message = (KeyEvent) objectInputStream.readObject();
+                            switch (tankIndex) {
+                                case 1:
+                                    Platform.runLater(() -> {
+                                        try {
+                                            tankClient.moveClient(message);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        tankClient.ShootClient(message);
+                                    });
+                                    break;
+                                case 2:
+                                    Platform.runLater(() -> {
+                                        try {
+                                            tankClient2.moveClient(message);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        tankClient2.ShootClient(message);
+                                    });
+                                    break;
+                            }
+                        } catch (IOException | ClassNotFoundException e) {
+                            System.out.println(e.getMessage());
                         }
-                        objectInputStream.reset();
-                    } catch (IOException | ClassNotFoundException e) {
-                        System.out.println(e.getMessage());
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            }).start();
             //}
         }).start();
         // Read simutaneously
