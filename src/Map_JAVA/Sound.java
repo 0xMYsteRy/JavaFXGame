@@ -8,10 +8,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.time.Duration;
 
 
 public class Sound {
@@ -28,7 +28,7 @@ public class Sound {
     public String getSound(int option) {
         switch (option) {
             case 1:
-                return new File("src/Map_JAVA/Sound/a.mp3").toURI().toString();
+                return "src/Map_JAVA/Sound/strong_exploision.mp3";
             case 2:
                 return "src/Map_JAVA/Sound/background.mp3";
             case 3:
@@ -42,10 +42,14 @@ public class Sound {
     MediaPlayer player;
     public void loadSound(int option) {
         Media sound = new Media(Paths.get(getSound(option)).toUri().toString());
-        System.out.println(sound);
         player = new MediaPlayer(sound);
         player.setVolume(1);
         player.setCycleCount(MediaPlayer.INDEFINITE);
+
+        //Fire bullet
+        if (option == 1){
+            player.setCycleCount(1);
+        }
         player.play();
     }
 }
