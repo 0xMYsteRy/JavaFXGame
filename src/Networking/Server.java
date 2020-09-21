@@ -20,8 +20,7 @@ public class Server extends Application implements Serializable {
     private Scene scene;
     private ServerSocket serverSocket;
     private Socket socket;
-    private DataInputStream input;
-    private DataOutputStream output;
+    private ObjectOutputStream output;
     private int numOfConnected;
     private Stage stage;
     private static InputStream inputStream;
@@ -32,24 +31,17 @@ public class Server extends Application implements Serializable {
         System.out.println(str);
     }
 
-    List<TaskClientConnection> connectionList = new ArrayList<TaskClientConnection>();
+    List<TaskClientConnection> connectionList = new ArrayList<>();
 
-    public  void loadScenePvP(){
+    public void loadScenePvP(){
         stage.setTitle("Loading an image");
         Pane tankPane;
         tankPane = new Pane();
-        //Load the map
         MapJungle map = new MapJungle();
-
         map.loadGround(tankPane);
         scene = new Scene(tankPane, 1400, 770);//1400x750
-        //Create Player
-//        Tank b = new Tank(2, 1);
-//        b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), 1);
-        //Create Bot
-//        map.loadBot(tankPane, b, scene);
-        //Adding scene to the stage
-//        map.loadObject(tankPane);
+        Tank b = new Tank(2, 1);
+        b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(),null,true, 1);
         stage.setScene(scene);
         stage.show();
     }
@@ -57,35 +49,44 @@ public class Server extends Application implements Serializable {
     public void start(Stage stage) throws Exception {
         this.stage=stage;
         loadScenePvP();
-
         stage.setScene(scene);
-
-
+        stage.show();
 
         new Thread(() -> {
             //Create socket
             try {
                 ServerSocket serverSocket = new ServerSocket(ConnectionUtil.port);
-
-
                 while (true) {
                     // Listen for a connection request, add new connection to the list
-                    System.out.println("Listening");
+                    System.out.println("[Server]: Awaiting for connections ...");
                     socket = serverSocket.accept();
-
-                    TaskClientConnection connection = new TaskClientConnection(socket, this, connectionList.size());
-                    connectionList.add(connection);
+                    log("[Server]: A client connected from " + socket.getInetAddress() + " running on port " + socket.getPort());
+//                    TaskClientConnection connection = new TaskClientConnection(socket, this, connectionList.size());
+//                    connectionList.add(connection);
 
                     //create a new thread
-                    Thread thread = new Thread(connection);
-                    thread.start();
+//                    Thread thread = new Thread(connection);
+//                    thread.start();
+                    try {
+                        System.out.println("Before input stream");
+                        ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+                        String message = objectInputStream.readObject().toString();
+                        System.out.println("Msg from client: " + message);
 
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                        System.out.println("Error ");
+                    }
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }).start();
-        stage.show();
+
+        new Thread(() -> {
+            while (true) {
+            }
+        }).start();
     }
 
     //send message to all connected clients

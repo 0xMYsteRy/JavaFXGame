@@ -10,10 +10,9 @@ import java.io.*;
 import java.net.Socket;
 
 /**
- *
  * @author topman garbuja,It represents each new connection
  */
-public  class TaskClientConnection implements Runnable,Serializable {
+public class TaskClientConnection implements Runnable, Serializable {
 
     Socket socket;
     Server server;
@@ -21,12 +20,14 @@ public  class TaskClientConnection implements Runnable,Serializable {
     ObjectInputStream input;
     ObjectOutputStream output;
     int playerIndex;
-    public TaskClientConnection(Socket socket, Server server,int index) {
+
+    public TaskClientConnection(Socket socket, Server server, int index) {
         System.out.println("Connected this client to the server");
         this.socket = socket;
         this.server = server;
-        this.playerIndex=index;
+        this.playerIndex = index;
     }
+
     KeyEvent keyEvent;
 
     @Override
@@ -38,34 +39,25 @@ public  class TaskClientConnection implements Runnable,Serializable {
                     socket.getInputStream());
             output = new ObjectOutputStream(
                     socket.getOutputStream());
-                System.out.println("Getting message");
-            int color = input.read();
-            int choice = input.read();
-            server.sendInitial(color,choice,playerIndex);
-            while (true) {
-                // Get message from the client
-//                KeyEvent keyEvent1= (KeyEvent) input.readObject();
-                //send message via server broadcast
+            System.out.println("Getting message");
+//            int color = input.read();
+//            int choice = input.read();
+            //server.sendInitial(color, choice, playerIndex);
+
 //                server.sendKey1(keyEvent1);
 
-//                //append message of the Text Area of UI (GUI Thread)
+            //append message of the Text Area of UI (GUI Thread)
 //                Platform.runLater(() -> {
 //                    server.txtAreaDisplay.appendText(message + "\n");
 //                });
-            }
-
-
-
         } catch (IOException ex) {
             ex.printStackTrace();
-        }finally {
-            try {
-                socket.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
         }
+
+        KeyEvent keyEvent1;
+
     }
+
     //send message back to client
     public void sendMessage(KeyEvent keyEvent) {
         try {
@@ -76,6 +68,7 @@ public  class TaskClientConnection implements Runnable,Serializable {
             ex.printStackTrace();
         }
     }
+
     public void sendInitial(int Color, int Choice, int Pos) {
         try {
             System.out.println("Sending message back ");

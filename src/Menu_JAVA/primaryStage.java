@@ -16,7 +16,10 @@ public class primaryStage extends Application {
     @Override
     public void start(Stage stage1) throws Exception {
         stage=stage1;
+
+        stage.titleProperty().bind(I18N.createStringBinding("window.title"));
         stage.setScene(new Scene(mainMenu.createContent()));
+
         stage.show();
     }
 

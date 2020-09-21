@@ -35,7 +35,7 @@
          </children></HBox>
       <HBox layoutY="50.0" prefHeight="42.0" prefWidth="600.0" spacing="50.0">
          <children>
-            <Text layoutX="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Language">
+            <Text layoutX="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Menu_JAVA.Language">
                <font>
                   <Font size="26.0" />
                </font>
