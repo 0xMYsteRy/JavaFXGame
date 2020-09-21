@@ -49,7 +49,7 @@ public class N_Client extends Application implements EventHandler<KeyEvent>, Ser
     @Override
     public void start(Stage primaryStage) throws Exception  {
         //System.out.println("Not OK");
-        Socket socket = new Socket("127.0.0.1", 80);
+        Socket socket = new Socket("10.247.169.36", 80);
         //System.out.println("OK");
         log("Connecting to Server " + socket.getRemoteSocketAddress() + " running on port " + socket.getPort());
         Pane tankPane;

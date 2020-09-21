@@ -14,24 +14,9 @@ import java.nio.file.Paths;
 import java.time.Duration;
 
 
-public class Sound extends Application {
-
-   MediaPlayer mediaPlayer;
-
-
-    public void start(Stage stage) throws Exception {
-        Scene scene;
-        MediaPlayer mediaPlayer;
-        stage.setTitle("SNOWY DOWNY");
-        Pane pane = new Pane();
-        scene = new Scene(pane, 1565, 770);//1400x750
-        //music();
-        loadSound(2);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void music(){
+public class Sound {
+    MediaPlayer mediaPlayer;
+    public void music() {
         //String musicFile = "src/Map_JAVA/Sound/background.mp3";
         Media media = new Media(Paths.get("src/Map_JAVA/Sound/background.mp3").toUri().toString());
         //Media media = new Media(new File("src/Map_JAVA/Sound/background.mp3").toURI().toString());
@@ -40,9 +25,6 @@ public class Sound extends Application {
         // mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
     }
-
-
-
     public String getSound(int option) {
         switch (option) {
             case 1:
@@ -55,8 +37,10 @@ public class Sound extends Application {
                 return "";
         }
     }
+
+    //Huy
     MediaPlayer player;
-    public void loadSound(int option){
+    public void loadSound(int option) {
         Media sound = new Media(Paths.get(getSound(option)).toUri().toString());
         System.out.println(sound);
         player = new MediaPlayer(sound);

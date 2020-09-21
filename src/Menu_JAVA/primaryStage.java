@@ -1,16 +1,21 @@
 package Menu_JAVA;
 
+import Map_JAVA.Sound;
 import Scene_JAVA.Scene_Map1;
 import Scene_JAVA.Scene_Map2;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 
 public class primaryStage extends Application {
+
     static Stage stage ;
     MainMenu mainMenu = new MainMenu();
+    MediaPlayer player;
+
 
     public primaryStage() throws FileNotFoundException {
     }
@@ -18,10 +23,9 @@ public class primaryStage extends Application {
     @Override
     public void start(Stage stage1) throws Exception {
         stage=stage1;
-
         stage.titleProperty().bind(I18N.createStringBinding("window.title"));
         stage.setScene(new Scene(mainMenu.createContent()));
-
+        //new Sound().loadSound(2);
         stage.show();
     }
     public static void setScene(int choice) throws FileNotFoundException {
