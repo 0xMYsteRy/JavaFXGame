@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class N_Server extends Application {
     private Scene scene;
@@ -23,7 +25,9 @@ public class N_Server extends Application {
 
     private static InputStream inputStream;
     private static OutputStream outputStream;
-
+    private int tankIndex;
+    List<Socket> connectionList = new ArrayList<Socket>();
+    private int playerCount = 0;
 
     private static void log(String str) {
         System.out.println(str);
@@ -35,17 +39,14 @@ public class N_Server extends Application {
         Pane tankPane;
         tankPane = new Pane();
         MapJungle map = new MapJungle();
-
         map.loadGround(tankPane);
         scene = new Scene(tankPane, 1400, 750);//1400x750
-
         //Create Player
         Tank tankClient = new Tank(1, 2);
         Tank tankClient2 = new Tank(2, 3);
 
-        tankClient.createPlayer(0, 630, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), null,true,2);
-        //tankClient2.createPlayer(0, 70, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(),2);
-        tankPane.getChildren().addAll();
+        tankClient.createPlayer(0, 630, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), null, true, 2);
+        tankClient2.createPlayer(0, 70, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), null, true, 3);
         stage.setScene(scene);
         stage.show();
         /*
@@ -60,9 +61,7 @@ public class N_Server extends Application {
         new Thread(() -> {
             ServerSocket ss = null;
             try {
-
                 ss = new ServerSocket(80);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -72,41 +71,56 @@ public class N_Server extends Application {
                     "|  0 | Server |  fork  |   online   |      10.5mb         | \n" +
                     "+----+--------+--------+------------+---------------------+ ");
             System.out.println("\nServer started! Awaiting connections...");
-
-            //while (true) {
             ServerSocket finalSs = ss;
-            try {
-                socket = finalSs.accept();
-                log("+A client connected from " + socket.getInetAddress() + " running on port " + socket.getPort());
-                ObjectInputStream objectInputStream ;
-                objectInputStream = new ObjectInputStream(socket.getInputStream());
+            new Thread(() -> {
+                try {
+                    synchronized (finalSs){
+                    socket = finalSs.accept();}
+                    connectionList.add(socket);
+                    playerCount++;
+                    tankIndex = playerCount;
+                    log("+A client connected from " + socket.getInetAddress() + " running on port " + socket.getPort() + " socket: " + socket + " , index of tank: " + tankIndex);
 
-                while (true) {
-                    try {
+                    outputStream = new DataOutputStream(socket.getOutputStream());
+                    outputStream.write(playerCount);
 
-
-                        System.out.println("Before input stream");
-                        System.out.println("till here is fine");
-                        KeyEvent message = (KeyEvent) objectInputStream.readObject();
-                        System.out.println("till here is fine");
-
-                        Platform.runLater(() -> {
-                            try {
-                                tankClient.moveClient(message);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                    DataInputStream dataInputStream;
+                    dataInputStream = new DataInputStream(socket.getInputStream());
+                    ObjectInputStream objectInputStream;
+                    objectInputStream = new ObjectInputStream(socket.getInputStream());
+                    while (true) {
+                        try {
+                            KeyEvent message = (KeyEvent) objectInputStream.readObject();
+                            switch (tankIndex) {
+                                case 1:
+                                    Platform.runLater(() -> {
+                                        try {
+                                            tankClient.moveClient(message);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        tankClient.ShootClient(message);
+                                    });
+                                    break;
+                                case 2:
+                                    Platform.runLater(() -> {
+                                        try {
+                                            tankClient2.moveClient(message);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        tankClient2.ShootClient(message);
+                                    });
+                                    break;
                             }
-                            tankClient.ShootClient(message);
-                        });
-                        System.out.println("Msg from client: " + message);
-                        objectInputStream.reset();
-                    } catch (IOException | ClassNotFoundException e) {
-                        System.out.println(e.getMessage());
+                        } catch (IOException | ClassNotFoundException e) {
+                            System.out.println(e.getMessage());
+                        }
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            }).start();
             //}
         }).start();
         // Read simutaneously
