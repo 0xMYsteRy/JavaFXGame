@@ -1,5 +1,6 @@
 package Tank_JAVA;
 
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -18,6 +19,7 @@ public class FireBall {
     public FireBall(int choice) {
         for (int i = 0; i < 60; i++) {
             FBImageList[i] = new ImageView(new Image("file:src/Free pack 6" + "/" + choice + "/1_" + i + ".png"));
+
             FBImageList[i].setRotate(90);
             //src/FXpack13/Effect1/1.png
         }

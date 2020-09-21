@@ -38,6 +38,7 @@ public class MapJungle extends Application implements Serializable {
         //Create Player
         Tank b = new Tank(1, 2);
         b.createPlayer(350, 350, tankPane, scene, RectList, objectList, ObjBotList,null,true,1);
+
         map.loadObject(tankPane);
         //Adding scene to the stage
         stage.setScene(scene);

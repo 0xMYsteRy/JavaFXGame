@@ -7,7 +7,6 @@ import Map_JAVA.Mapboss;
 import Nguyen_Net.N_Client;
 import Nguyen_Net.N_Server;
 import javafx.animation.*;
-
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -19,6 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -27,6 +27,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 
 import java.io.Serializable;
 import java.security.PublicKey;
@@ -61,6 +62,7 @@ public class Tank extends Application implements Serializable {
     private double BulletSpeed = 0;
 
     private double Range = 0;
+
     private boolean checkMove = false;
     //Getter and setter methods, incase usefull to call those property from other classes.
     // Finish calling setter and getter methods
@@ -102,8 +104,9 @@ public class Tank extends Application implements Serializable {
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws Exception {
         //Setting title to the Stage
+
         stage.setTitle("Loading an image");
         Pane tankPane;
         tankPane = new Pane();
@@ -172,6 +175,7 @@ public class Tank extends Application implements Serializable {
     N_Client client = new N_Client();
 
     public void createPlayer(int x, int y, Pane tankPane, Scene scene, ArrayList<Rectangle> rectList, ArrayList<ImageView> objList, ArrayList<Bot> BotList, Boss boss, Boolean multiplayer, int tankIndex) {
+
         this.ObjList = objList;
         this.RectList = rectList;
         this.tankPane = tankPane;
@@ -181,6 +185,7 @@ public class Tank extends Application implements Serializable {
         this.y = y;
         this.multiplayer = multiplayer;
         //
+
         this.tankIndex = tankIndex;
         this.boss = boss;
         //
@@ -194,6 +199,7 @@ public class Tank extends Application implements Serializable {
                 tank.setTranslateX(x + gap);
                 tank.setTranslateY(y + gap);
                 tank.setCache(true);
+
                 tank.setRotate(0);
                 //
                 rt = new RotateTransition(Duration.millis(300), tank);
@@ -231,6 +237,7 @@ public class Tank extends Application implements Serializable {
         } else {
             new Thread(() -> {
                 tankPane.getChildren().addAll(tank);
+
                 tank.setTranslateX(x + gap);
                 tank.setTranslateY(y + gap);
                 tank.setCache(true);
@@ -249,6 +256,14 @@ public class Tank extends Application implements Serializable {
     public void moveClient(KeyEvent keyEvent) throws InterruptedException {
         if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0) {
             Move(keyEvent);
+
+        }
+
+    }
+
+    public void ShootClient(KeyEvent keyEvent) {
+        if (tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270) {
+            shootBullet(keyEvent);
         }
     }
 
@@ -258,7 +273,7 @@ public class Tank extends Application implements Serializable {
         }
     }
 
-    public Group createTank(double x) {
+    public Group createTank(double x, int tankIndex) {
         Image weaponI = new Image(weapon.getWeapon());
         Image HullI = new Image(hull.getHull());
         Image trackI_A = new Image(track.getTrack());
@@ -422,6 +437,7 @@ public class Tank extends Application implements Serializable {
         check = 0;
         double prevX = tank.getTranslateX(), prevY = tank.getTranslateY();
         double stepDuration = (500 - 50 * (speed / 10.0 - 1)) / (70 / Step * 35);
+
         rt.setDuration(Duration.millis(200));
         // Testing
         Timeline timeLineMoveTank;
@@ -689,11 +705,13 @@ public class Tank extends Application implements Serializable {
                                                 if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
                                                     checkBullet = 1;
                                                     explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), tankPane, 1);
+
                                                     tankPane.getChildren().remove(imgW);
                                                     ObjList.remove(imgW);
                                                     break;
                                                 }
                                             }
+
                                             if (BulletW.getBoundsInParent().intersects(boss.getBoss().getBoundsInParent())) {
                                                 checkBullet = 1;
                                                 explosion.ExplosionAnimation(boss.getBoss().getTranslateX() + scale * 2 * 5, boss.getBoss().getTranslateY() + scale * 2 * 5, tankPane, 2);
@@ -750,6 +768,7 @@ public class Tank extends Application implements Serializable {
                                                 if (BulletW.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
                                                     checkBullet = 1;
                                                     explosion.ExplosionAnimation(bot.getBot().getTranslateX(), bot.getBot().getTranslateY(), tankPane, 1);
+
                                                     bot.setHealth(BulletDamage);
                                                     if (!bot.checkHealth()) {
                                                         BotList.remove(bot);
@@ -812,6 +831,7 @@ public class Tank extends Application implements Serializable {
                                                 if (BulletW.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
                                                     checkBullet = 1;
                                                     explosion.ExplosionAnimation(boss.getBoss().getTranslateX() + scale * 2 * 5, boss.getBoss().getTranslateY() + scale * 2 * 5, tankPane, 2);
+
                                                     bot.setHealth(BulletDamage);
                                                     if (!bot.checkHealth()) {
                                                         BotList.remove(bot);
@@ -819,6 +839,7 @@ public class Tank extends Application implements Serializable {
                                                     break;
                                                 }
                                             }
+
                                             if (BulletW.getBoundsInParent().intersects(boss.getBoss().getBoundsInParent())) {
                                                 checkBullet = 1;
                                                 explosion.ExplosionAnimation(boss.getBoss().getTranslateX(), boss.getBoss().getTranslateY(), tankPane, 1);
@@ -830,6 +851,7 @@ public class Tank extends Application implements Serializable {
                                                     checkBullet = 1;
                                                     tankPane.getChildren().remove(imgW);
                                                     explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), tankPane, 1);
+
 
                                                     ObjList.remove(imgW);
                                                     break;
@@ -875,6 +897,7 @@ public class Tank extends Application implements Serializable {
                                                 if (BulletW.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
                                                     checkBullet = 1;
                                                     explosion.ExplosionAnimation(bot.getBot().getTranslateX(), bot.getBot().getTranslateY(), tankPane, 1);
+
                                                     bot.setHealth(BulletDamage);
                                                     if (!bot.checkHealth()) {
                                                         BotList.remove(bot);
@@ -882,6 +905,7 @@ public class Tank extends Application implements Serializable {
                                                     break;
                                                 }
                                             }
+
                                             if (BulletW.getBoundsInParent().intersects(boss.getBoss().getBoundsInParent())) {
                                                 checkBullet = 1;
                                                 explosion.ExplosionAnimation(boss.getBoss().getTranslateX() + scale * 2 * 5, boss.getBoss().getTranslateY() + scale * 2 * 5, tankPane, 2);
@@ -893,6 +917,7 @@ public class Tank extends Application implements Serializable {
                                                     checkBullet = 1;
                                                     tankPane.getChildren().remove(imgW);
                                                     explosion.ExplosionAnimation(imgW.getTranslateX(), imgW.getTranslateY(), tankPane, 1);
+
                                                     ObjList.remove(imgW);
                                                     break;
                                                 }

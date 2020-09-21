@@ -235,6 +235,7 @@ public class MainMenu {
 
     private Node createTankContent(int x, int choice, int color) throws FileNotFoundException {
         Tank tank = new Tank(choice, color);
+
         Group tank1 = new Group(tank.createTank(x));
         bgThread.scheduleAtFixedRate(() -> {
             Platform.runLater(() -> {
@@ -266,6 +267,7 @@ public class MainMenu {
 
     private Node createTankContent2(int x, int choice, int color) throws FileNotFoundException {
         Tank tank = new Tank(choice, color);
+
         Group tank2 = new Group(tank.createTank(x));
         return tank2;
     }
