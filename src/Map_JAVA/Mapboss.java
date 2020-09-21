@@ -47,45 +47,29 @@ public class Mapboss extends Application {
     Timeline timeline = new Timeline();
     Label countdown = new Label();
     javafx.scene.text.Font font3 = new javafx.scene.text.Font("Times New Roman",15);
-    public Mapboss() throws FileNotFoundException {
+    private int choice;
+    private int color;
+    public Mapboss(int choice, int color) throws FileNotFoundException {
+        c = new Tank(choice,color);
+        this.choice = choice;
+        this.color = color;
     }
 
 
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("SNOWY DOWNY");
-        // Pane tankPane = new Pane();
-        // tankPane.setPrefSize(1400,750);
-
         Pane tankPane = new Pane();
-
         Font font = new Font("Times New Roman",Font.PLAIN,20);
         DecimalFormat format = new DecimalFormat("00");
-
-//        pane1.getChildren().add(box);
-
-
-        //Load the map
-//        Map = new Map();
         loadGround(tankPane);
         javafx.scene.text.Font font2 = new javafx.scene.text.Font("Times New Roman",20);
-
         scene = new Scene(tankPane,1565,770);//1400x750
-        //Create Player
         c = new Tank(1, 4);
-
-        c.createPlayer(0, 0, tankPane, scene, RectList, objectList,ObjBotList,1);
+        c.createPlayer(0, 0, tankPane, scene, RectList, objectList,ObjBotList,null,null,1);
         Tank c = new Tank(1,4);
-
         loadObject(tankPane);
         loadLayOut(tankPane,stage);
-
-//        countdown.setText("02:00");
-//        second = 0;
-//        minute = 0;
-        //   timer.start();
-
-        //Adding scene to the stage
         stage.setScene(scene);
         stage.show();
     }
@@ -250,11 +234,11 @@ public class Mapboss extends Application {
     public String getImagePath(int choice) {
         switch (choice) {
             case 1:
-                return "file:src\\Map_JAVA\\PNG4\\Background\\grass2.png";
+                return "file:src/Map_JAVA/PNG4/Background/grass2.png";
             case 4:
                 return "file:src\\Map_JAVA\\PNG4\\ground4.png";
             case 2:
-                return "file:src\\Map_JAVA\\PNG4\\Background\\ground2.png";
+                return "file:src/Map_JAVA/PNG4/Background/ground2.png";
             case 3:
                 return "file:src\\Map_JAVA\\PNG4\\ground3.png";
             default:
@@ -268,7 +252,7 @@ public class Mapboss extends Application {
             case 4:
                 return "file:src/Map_JAVA/PNG4/Object/castle2.png";
             case 2:
-                return "file:src\\Map_JAVA\\PNG4\\Background\\ground2.png";
+                return "file:src/Map_JAVA/PNG4/Background/ground2.png";
             case 3:
                 return "file:src\\Map_JAVA\\PNG4\\ground3.png";
             default:
@@ -282,63 +266,63 @@ public class Mapboss extends Application {
                 //return nothing if the no need to add object on that tile.
                 return "file:";
             case 2:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\pine.png";
+                return "file:src/Map_JAVA/PNG4/object/pine.png";
             case 3:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\pine tree.png";
+                return "file:src/Map_JAVA/PNG4/object/pine tree.png";
             case 4:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\pine tree 1.png";
+                return "file:src/Map_JAVA/PNG4/object/pine tree 1.png";
             case 5:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\decoration.png";
+                return "file:src/Map_JAVA/PNG4/object/decoration.png";
             case 6:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\direction.png";
+                return "file:src/Map_JAVA/PNG4/object/direction.png";
             case 7:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\flower.png";
+                return "file:src/Map_JAVA/PNG4/object/flower.png";
             case 8:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\flower3.png";
+                return "file:src/Map_JAVA/PNG4/object/flower3.png";
             case 9:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\flower3a.png";
+                return "file:src/Map_JAVA/PNG4/object/flower3a.png";
             case 10:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\flower3b.png";
+                return "file:src/Map_JAVA/PNG4/object/flower3b.png";
             case 11:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\flower4.png";
+                return "file:src/Map_JAVA/PNG4/object/flower4.png";
             case 12:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\flower5.png";
+                return "file:src/Map_JAVA/PNG4/object/flower5.png";
             case 13:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\grass.png";
+                return "file:src/Map_JAVA/PNG4/object/grass.png";
             case 14:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\jar.png";
+                return "file:src/Map_JAVA/PNG4/object/jar.png";
             case 15:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\pine.png";
+                return "file:src/Map_JAVA/PNG4/object/pine.png";
             case 16:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\pine tree.png";
+                return "file:src/Map_JAVA/PNG4/object/pine tree.png";
             case 17:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\pine tree 1.png";
+                return "file:src/Map_JAVA/PNG4/object/pine tree 1.png";
             case 18:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\rock.png";
+                return "file:src/Map_JAVA/PNG4/object/rock.png";
             case 19:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\rock3.png";
+                return "file:src/Map_JAVA/PNG4/object/rock3.png";
             case 20:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\small house.png";
+                return "file:src/Map_JAVA/PNG4/object/small house.png";
             case 21:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\tomato.png";
+                return "file:src/Map_JAVA/PNG4/object/tomato.png";
             case 22:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\tree.png";
+                return "file:src/Map_JAVA/PNG4/object/tree.png";
             case 23:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\tree2.png";
+                return "file:src/Map_JAVA/PNG4/object/tree2.png";
             case 24:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\tree7.png";
+                return "file:src/Map_JAVA/PNG4/object/tree7.png";
             case 25:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\tree8.png";
+                return "file:src/Map_JAVA/PNG4/object/tree8.png";
             case 26:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\treee.png";
+                return "file:src/Map_JAVA/PNG4/object/treee.png";
             case 27:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\windmill.png";
+                return "file:src/Map_JAVA/PNG4/object/windmill.png";
             case 28:
-                return  "file:src\\Map_JAVA\\PNG4\\Object\\wood.png";
+                return  "file:src/Map_JAVA/PNG4/object/wood.png";
             case 29:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\tree10.png";
+                return "file:src/Map_JAVA/PNG4/object/tree10.png";
             case 30:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\treasure.png";
+                return "file:src/Map_JAVA/PNG4/object/treasure.png";
             default:
                 return "";
         }
@@ -368,25 +352,25 @@ public class Mapboss extends Application {
                 //return nothing if the no need to add object on that tile.
                 return "file:";
             case 2:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\direction.png";
+                return "file:src/Map_JAVA/PNG4/object/direction.png";
             case 3:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\rock.png";
+                return "file:src/Map_JAVA/PNG4/object/rock.png";
             case 4:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\rock3.png";
+                return "file:src/Map_JAVA/PNG4/object/rock3.png";
             case 5:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\tree2.png";
+                return "file:src/Map_JAVA/PNG4/object/tree2.png";
             case 6:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\tree10.png";
+                return "file:src/Map_JAVA/PNG4/object/tree10.png";
             case 7:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\tree7.png";
+                return "file:src/Map_JAVA/PNG4/object/tree7.png";
             case 8:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\castle2.png";
+                return "file:src/Map_JAVA/PNG4/object/castle2.png";
             case 9:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\direction2.png";
+                return "file:src/Map_JAVA/PNG4/object/direction2.png";
             case 10:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\direction3.png";
+                return "file:src/Map_JAVA/PNG4/object/direction3.png";
             case 11:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\direction4.png";
+                return "file:src/Map_JAVA/PNG4/object/direction4.png";
             default:
                 return "file:";
         }
@@ -438,23 +422,23 @@ public class Mapboss extends Application {
                 //return nothing if the no need to add object on that tile.
                 return "file:";
             case 2:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\windmill2.png";
+                return "file:src/Map_JAVA/PNG4/object/windmill2.png";
             case 3:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\bird statue.png";
+                return "file:src/Map_JAVA/PNG4/object/bird statue.png";
             case 4:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\castle 3.png";
+                return "file:src/Map_JAVA/PNG4/object/castle 3.png";
             case 5:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\direction.png";
+                return "file:src/Map_JAVA/PNG4/object/direction.png";
             case 6:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\castle.png";
+                return "file:src/Map_JAVA/PNG4/object/castle.png";
             case 7:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\wood mine.png";
+                return "file:src/Map_JAVA/PNG4/object/wood mine.png";
             case 8:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\gold mine.png";
+                return "file:src/Map_JAVA/PNG4/object/gold mine.png";
             case 9:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\chimmey.png";
+                return "file:src/Map_JAVA/PNG4/object/chimmey.png";
             case 10:
-                return "file:src\\Map_JAVA\\PNG4\\Object\\fountain.png";
+                return "file:src/Map_JAVA/PNG4/object/fountain.png";
             case 11:
                 return "file:src/Map_JAVA/PNG1/object/gift.png";
             case 12:
@@ -561,16 +545,16 @@ public class Mapboss extends Application {
                         stage.close();
                         Platform.runLater( () -> {
                             try {
-                                new Mapboss().start( new Stage() );
+                                new Mapboss(choice,color).start( new Stage() );
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         });
-
+                        stage.setScene(scene);
+                        stage.show();
                     });
 
-                    stage.setScene(scene);
-                    stage.show();
+
                 }
 
 
@@ -628,7 +612,7 @@ public class Mapboss extends Application {
         questionMark.setOnMouseClicked(mouseEvent -> {
             System.out.println("huycute2");
         });
-        Image image1 = new Image("file:src\\Map_JAVA\\PNG1\\pause button.png");
+        Image image1 = new Image("file:src/Map_JAVA/PNG1/pause button.png");
         ImageView pauseButton = new ImageView(image1);
         pauseButton.setTranslateX(1435);
         pauseButton.setTranslateY(200);
@@ -647,15 +631,15 @@ public class Mapboss extends Application {
         text.setFill(Color.SNOW);
 
         text.setFont(javafx.scene.text.Font.font("Times New Roman",FontWeight.BOLD,15));
-
-        Group player1;
-        player1 = c.createTank(5,1);
+//        Tank test = new Tank(1,2);
+        Group player1 = new Group();
+        player1 = c.createTank(5);
         player1.setTranslateX(1400);
         player1.setTranslateY(300);
 
 //        TextField textField = new TextField("Score");
 //        textField.setFont(font3);
-//        textField.setPrefSize(90,15);
+ //        textField.setPrefSize(90,15);
 //        textField.setText("Score");
 //        textField.setAlignment(Pos.CENTER_LEFT);
 //        textField.setTranslateX(1450);

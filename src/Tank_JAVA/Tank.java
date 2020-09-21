@@ -1,7 +1,7 @@
 package Tank_JAVA;
 
 import Map_JAVA.Map2;
-import Map_JAVA.Map3;
+
 import Map_JAVA.MapJungle;
 import Map_JAVA.Mapboss;
 import Nguyen_Net.N_Client;
@@ -35,7 +35,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
-
+/*MAC: --module-path "/Users/s3757937/Downloads/javafx-sdk-11.0.2/lib" --add-modules javafx.controls,javafx.fxml*/
 
 public class Tank extends Application implements Serializable {
     private Group tank;
@@ -168,7 +168,9 @@ public class Tank extends Application implements Serializable {
             System.out.println(Health);
         }
     }
-
+    public double getHealth(){
+        return Health;
+    }
     private boolean multiplayer = false;
     private int x, y;
     N_Server server = new N_Server();

@@ -47,6 +47,11 @@ public class MainMenu {
     private int color;
     private final List<Pair<String, Runnable>> menuData = Arrays.asList(
             new Pair<String, Runnable>("Start", () -> {
+                try {
+                    primaryStage.setScene(1);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
                 System.out.println("Start activated");
             }),
             new Pair<String, Runnable>("Campaign", () -> {

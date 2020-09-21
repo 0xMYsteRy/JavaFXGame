@@ -23,6 +23,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -46,54 +47,21 @@ public class Map extends Application {
     Scene scene;
     Tank c;
     MainMenu mainMenu = new MainMenu();
-    private final Integer startTime = 2;
+    private final Integer startTime = 60;
     private Integer seconds = startTime;
     Timeline timeline = new Timeline();
     Label countdown = new Label();
-    javafx.scene.text.Font font3 = new javafx.scene.text.Font("Times New Roman",15);
+    javafx.scene.text.Font font3 = new javafx.scene.text.Font("Times New Roman", 15);
 
 
-
-    public Map() throws FileNotFoundException {
+    public Map(Tank tank) throws FileNotFoundException {
+        this.c = tank;
     }
 
 
     @Override
     public void start(Stage stage) throws Exception {
-        stage.setTitle("SNOWY DOWNY");
-        // Pane tankPane = new Pane();
-        // tankPane.setPrefSize(1400,750);
 
-        Pane tankPane = new Pane();
-
-        Font font = new Font("Times New Roman",Font.PLAIN,20);
-        DecimalFormat format = new DecimalFormat("00");
-
-//        pane1.getChildren().add(box);
-
-
-        //Load the map
-//        Map = new Map();
-        loadGround(tankPane);
-        javafx.scene.text.Font font2 = new javafx.scene.text.Font("Times New Roman",20);
-
-        scene = new Scene(tankPane,1565,770);//1400x750
-        //Create Player
-        c = new Tank(1, 4);
-
-        c.createPlayer(0, 0, tankPane, scene, RectList, objectList,ObjBotList,1);
-        Tank c = new Tank(1,4);
-
-        loadObject(tankPane);
-        loadLayOut(tankPane,stage);
-
-//        countdown.setText("02:00");
-//        second = 0;
-//        minute = 0;
-        //   timer.start();
-        //Adding scene to the stage
-        stage.setScene(scene);
-        stage.show();
     }
 
     public void loadObject(Pane tankpane) {
@@ -221,6 +189,7 @@ public class Map extends Application {
     public ArrayList<Bot> getObjBotList() {
         return ObjBotList;
     }
+
     public void loadBot(Pane pane, Tank tank, Scene scene) {
         int[][] botSpawn = {
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -258,32 +227,32 @@ public class Map extends Application {
                 //return nothing if the no need to add object on that tile.
                 return "file:";
             case 2:
-                return "file:src\\Map_JAVA\\PNG1\\object\\glass.png";
+                return "file:src/Map_JAVA/PNG1/object/glass.png";
             case 3:
-                return "file:src\\Map_JAVA\\PNG1\\object\\boom.png";
+                return "file:src/Map_JAVA/PNG1/object/boom.png";
             case 4:
-                return "file:src\\Map_JAVA\\PNG1\\object\\snowman.png";
+                return "file:src/Map_JAVA/PNG1/object/snowman.png";
             case 5:
-                return "file:src\\Map_JAVA\\PNG1\\object\\reindeer.png";
+                return "file:src/Map_JAVA/PNG1/object/reindeer.png";
 
             case 6:
-                return "file:src\\Map_JAVA\\PNG1\\object\\socks.png";
+                return "file:src/Map_JAVA/PNG1/object/socks.png";
             case 7:
-                return "file:src\\Map_JAVA\\PNG1\\object\\gift.png";
+                return "file:src/Map_JAVA/PNG1/object/gift.png";
             case 8:
-                return "file:src\\Map_JAVA\\PNG1\\object\\tree.png";
+                return "file:src/Map_JAVA/PNG1/object/tree.png";
             case 9:
-                return "file:src\\Map_JAVA\\PNG1\\object\\penguin2.png";
+                return "file:src/Map_JAVA/PNG1/object/penguin2.png";
             case 10:
-                return "file:src\\Map_JAVA\\PNG1\\object\\santa2.png";
+                return "file:src/Map_JAVA/PNG1/object/santa2.png";
             case 11:
-                return "file:src\\Map_JAVA\\PNG1\\object\\snowman.png";
+                return "file:src/Map_JAVA/PNG1/object/snowman.png";
             case 12:
-                return "file:src\\Map_JAVA\\PNG1\\object\\ObjectTree.png";
+                return "file:src/Map_JAVA/PNG1/object/ObjectTree.png";
             case 13:
-                return "file:src\\Map_JAVA\\PNG1\\object\\Background_Castle.png";
+                return "file:src/Map_JAVA/PNG1/object/Background_Castle.png";
             case 14:
-                return "file:src\\Map_JAVA\\PNG1\\object\\Puddle.png";
+                return "file:src/Map_JAVA/PNG1/object/Puddle.png";
             default:
                 return "";
         }
@@ -306,6 +275,7 @@ public class Map extends Application {
             }
         }
     }
+
     // Draw circle
     public String getCircleImagePath(int choice) {
         switch (choice) {
@@ -313,7 +283,7 @@ public class Map extends Application {
                 //return nothing if the no need to add object on that tile.
                 return "file:";
             case 6:
-                return "file:src\\Map_JAVA\\PNG1\\object\\santa.png";
+                return "file:src/Map_JAVA/PNG1/object/santa.png";
             default:
                 return "file:";
         }
@@ -346,27 +316,27 @@ public class Map extends Application {
                 //return nothing if the no need to add object on that tile.
                 return "file:";
             case 2:
-                return "file:src\\Map_JAVA\\PNG1\\object\\HouseObject.png";
+                return "file:src/Map_JAVA/PNG1/object/HouseObject.png";
             case 3:
-                return "file:src\\Map_JAVA\\PNG1\\object\\snowman2.png";
+                return "file:src/Map_JAVA/PNG1/object/snowman2.png";
             case 4:
-                return "file:src\\Map_JAVA\\PNG1\\object\\tree2.png";
+                return "file:src/Map_JAVA/PNG1/object/tree2.png";
             case 5:
-                return "file:src\\Map_JAVA\\PNG1\\object\\santa2.png";
+                return "file:src/Map_JAVA/PNG1/object/santa2.png";
             case 6:
-                return "file:src\\Map_JAVA\\PNG1\\object\\santA/Png";
+                return "file:src/Map_JAVA/PNG1/object/santA/Png";
             case 7:
-                return "file:src\\Map_JAVA\\PNG1\\object\\penguin2.png";
+                return "file:src/Map_JAVA/PNG1/object/penguin2.png";
             case 8:
-                return "file:src\\Map_JAVA\\PNG1\\object\\penguin.png";
+                return "file:src/Map_JAVA/PNG1/object/penguin.png";
             case 9:
-                return "file:src\\Map_JAVA\\PNG1\\object\\pine.png";
+                return "file:src/Map_JAVA/PNG1/object/pine.png";
             case 10:
-                return "file:src\\Map_JAVA\\PNG1\\object\\tree.png";
+                return "file:src/Map_JAVA/PNG1/object/tree.png";
             case 11:
-                return "file:src\\Map_JAVA\\PNG1\\object\\gift.png";
+                return "file:src/Map_JAVA/PNG1/object/gift.png";
             case 12:
-                return "file:src\\Map_JAVA\\PNG1\\object\\reindeer.png";
+                return "file:src/Map_JAVA/PNG1/object/reindeer.png";
             default:
                 return "file:";
         }
@@ -411,10 +381,10 @@ public class Map extends Application {
     }
 
     public void doTime(Pane tankPane, Stage stage) {
-        Timeline time= new Timeline();
+        Timeline time = new Timeline();
 
 
-        KeyFrame frame= new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>(){
+        KeyFrame frame = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
@@ -423,18 +393,18 @@ public class Map extends Application {
                 seconds--;
                 DecimalFormat df = new DecimalFormat("00");
                 String sec = df.format(seconds);
-                countdown.setText("Times \n"+ "00"+":"+ sec);
+                countdown.setText("Times \n" + "00" + ":" + sec);
                 countdown.setTranslateX(30);
                 countdown.setTranslateY(10);
                 countdown.setTextFill(Color.SNOW);
-                countdown.setFont(javafx.scene.text.Font.font("Times New Roman",FontWeight.EXTRA_BOLD,25));
+                countdown.setFont(javafx.scene.text.Font.font("Times New Roman", FontWeight.EXTRA_BOLD, 25));
 
-                if(seconds <= 0){
+                if (seconds <= 0) {
                     time.stop();
                     Label label = new Label();
                     label.setText("GAME OVER");
                     label.setTextFill(Color.FIREBRICK);
-                    javafx.scene.text.Font font = new javafx.scene.text.Font("Times New Roman",100);
+                    javafx.scene.text.Font font = new javafx.scene.text.Font("Times New Roman", 100);
                     label.setFont(font);
                     label.setTranslateX(430);
                     label.setTranslateY(300);
@@ -442,43 +412,50 @@ public class Map extends Application {
                     pane.getChildren().add(label);
                     ColorAdjust colorAdjust = new ColorAdjust();
                     colorAdjust.setContrast(2);
-                   tankPane.setEffect(colorAdjust);
-                   pane.setEffect(new Glow(2.5));
-                   tankPane.getChildren().add(pane);
-                   Label newGame = new Label("New Game");
-                   newGame.setTranslateX(600);
-                   newGame.setTranslateY(450);
-                   newGame.setFont(javafx.scene.text.Font.font("Times New Roman", FontPosture.ITALIC,50));
-                   newGame.setTextFill(Color.MEDIUMBLUE);
+                    tankPane.setEffect(colorAdjust);
+                    pane.setEffect(new Glow(2.5));
+                    tankPane.getChildren().add(pane);
+                    Label playAgain = new Label("Play Again");
+                    playAgain.setTranslateX(600);
+                    playAgain.setTranslateY(450);
+                    playAgain.setEffect(new Glow(2.5));
+                    playAgain.setFont(javafx.scene.text.Font.font("Times New Roman", FontPosture.ITALIC, 50));
+                    playAgain.setTextFill(Color.MEDIUMBLUE);
 
-                   Label exit = new Label("Exit");
-                   exit.setTextFill(Color.MEDIUMBLUE);
-                   exit.setTranslateX(600);
-                   exit.setTranslateY(520);
-                    tankPane.getChildren().addAll(newGame,exit);
-                   exit.setFont(javafx.scene.text.Font.font("Times New Roman", FontPosture.ITALIC,50));
-                   exit.setOnMouseClicked(event2 -> {
-                       try {
-                           stage.setScene(new Scene(mainMenu.createContent()));
-                           stage.show();
-                       } catch (FileNotFoundException e) {
-                           e.printStackTrace();
-                       }
-                   });
-                   newGame.setOnMouseClicked(event1 -> {
-                       stage.close();
-                       Platform.runLater( () -> {
-                           try {
-                               new Map().start( new Stage() );
-                           } catch (Exception e) {
-                               e.printStackTrace();
-                           }
-                       });
+                    Label exit = new Label("Exit");
+                    exit.setTextFill(Color.MEDIUMBLUE);
+                    exit.setTranslateX(600);
+                    exit.setTranslateY(520);
+                    exit.setEffect(new Glow(2.5));
 
-                   });
+                    exit.setFont(javafx.scene.text.Font.font("Times New Roman", FontPosture.ITALIC, 50));
+                    exit.setOnMouseClicked(event2 -> {
+                        try {
+                            stage.setScene(new Scene(mainMenu.createContent()));
+                            stage.show();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    playAgain.setOnMouseClicked(event1 -> {
+                        stage.close();
+                        Platform.runLater(() -> {
+                            try {
+                                new Map(c).start(new Stage());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                        stage.setScene(scene);
+                        stage.show();
+                    });
+                    Label nextLevel = new Label("Next Level");
+                    nextLevel.setTextFill(Color.MEDIUMBLUE);
+                    nextLevel.setTranslateX(600);
+                    nextLevel.setTranslateY(520);
+                    nextLevel.setFont(Font.font("Times New Roman",FontWeight.EXTRA_BOLD,FontPosture.ITALIC,50));
+                    tankPane.getChildren().addAll(playAgain, nextLevel, exit);
 
-                   stage.setScene(scene);
-                   stage.show();
                 }
 
 
@@ -489,7 +466,7 @@ public class Map extends Application {
 
         time.setCycleCount(Timeline.INDEFINITE);
         time.getKeyFrames().add(frame);
-        if(time!=null){
+        if (time != null) {
             time.stop();
         }
         time.playFromStart();
@@ -497,11 +474,11 @@ public class Map extends Application {
 
     }
 
-    public void loadLayOut (Pane tankPane, Stage stage) throws FileNotFoundException {
+    public void loadLayOut(Pane tankPane, Stage stage) throws FileNotFoundException {
         Pane pane1 = new Pane();
 
 
-        doTime(tankPane,stage);
+        doTime(tankPane, stage);
 
 //        Rectangle rectangle=new Rectangle(120,70);
 //        rectangle.setTranslateX(1407);
@@ -514,7 +491,7 @@ public class Map extends Application {
         VBox box = new VBox();
         box.setTranslateX(1410);
         box.setTranslateY(0);
-        box.setPrefSize(140,70);
+        box.setPrefSize(140, 70);
 //        Text text2 = new Text("Time");
 //        text2.setTranslateX(1405);
 //        text2.setFill(Color.GRAY);
@@ -522,7 +499,7 @@ public class Map extends Application {
 //        Label label = new Label();
 //        label.setText("countdown");
         //    label.setPrefSize(140,70);
-        Rectangle rectangle2=new Rectangle(140,770);
+        Rectangle rectangle2 = new Rectangle(140, 770);
         rectangle2.setTranslateX(1400);
         rectangle2.setFill(Color.STEELBLUE);
         rectangle2.setStroke(Color.ROYALBLUE);
@@ -536,7 +513,7 @@ public class Map extends Application {
         questionMark.setOnMouseClicked(mouseEvent -> {
             System.out.println("huycute2");
         });
-        Image image1 = new Image("file:src\\Map_JAVA\\PNG1\\pause button.png");
+        Image image1 = new Image("file:src/Map_JAVA/PNG1/pause button.png");
         ImageView pauseButton = new ImageView(image1);
         pauseButton.setTranslateX(1435);
         pauseButton.setTranslateY(200);
@@ -545,8 +522,8 @@ public class Map extends Application {
         });
 
         HBox box1 = new HBox();
-        box1.setPrefSize(140,770);
-        box1.setTranslateX(1430 );
+        box1.setPrefSize(140, 770);
+        box1.setTranslateX(1430);
         box1.setTranslateY(50);
         Text text = new Text("Player 1");
         text.setTextAlignment(TextAlignment.CENTER);
@@ -554,10 +531,10 @@ public class Map extends Application {
 //        text.setTranslateY(320);
         text.setFill(Color.SNOW);
 
-        text.setFont(javafx.scene.text.Font.font("Times New Roman",FontWeight.BOLD,15));
+        text.setFont(javafx.scene.text.Font.font("Times New Roman", FontWeight.BOLD, 15));
 
         Group player1;
-        player1 = c.createTank(5,1);
+        player1 = c.createTank(5);
         player1.setTranslateX(1400);
         player1.setTranslateY(300);
 
@@ -575,7 +552,7 @@ public class Map extends Application {
 
         ProgressBar health = new ProgressBar();
         health.setProgress(1);
-        health.setPrefSize(80,20);
+        health.setPrefSize(80, 20);
         ColorInput colorInput2 = new ColorInput();
         colorInput2.setPaint(Color.RED);
         health.setStyle("-fx-accent: RED");
@@ -588,19 +565,19 @@ public class Map extends Application {
         label.setTextFill(Color.SNOW);
         label.setTranslateX(1410);
         label.setTranslateY(400);
-        label.setFont(javafx.scene.text.Font.font("Times New Roman", FontWeight.EXTRA_BOLD,15));
+        label.setFont(javafx.scene.text.Font.font("Times New Roman", FontWeight.EXTRA_BOLD, 15));
 
         Label score = new Label("Score");
         score.setTextFill(Color.SNOW);
         score.setTranslateX(1440);
         score.setTranslateY(460);
-        score.setFont(javafx.scene.text.Font.font("Times New Roman", FontWeight.EXTRA_BOLD,FontPosture.ITALIC,30));
+        score.setFont(javafx.scene.text.Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.ITALIC, 30));
 
         HBox box4 = new HBox();
-        box4.setPrefSize(140,30);
+        box4.setPrefSize(140, 30);
         box4.setTranslateX(1410);
         box4.setTranslateY(350);
-        box4.getChildren().addAll(health2,health);
+        box4.getChildren().addAll(health2, health);
 
 //        box3.getChildren().add(textField);
         //box1.getChildren().add(player1);
@@ -608,12 +585,14 @@ public class Map extends Application {
 //        ProgressBar huy;
 //        huy.setProgress(a2);
         // pane1.getChildren().add(player1);
-        pane1.getChildren().addAll(rectangle2,box,questionMark,pauseButton);
-        pane1.setPrefSize(1560,770);
-        tankPane.getChildren().addAll(pane1,player1,box2,box4,label,score);
+        pane1.getChildren().addAll(rectangle2, box, questionMark, pauseButton);
+        pane1.setPrefSize(1560, 770);
+        tankPane.getChildren().addAll(pane1, player1, box2, box4, label, score);
         //tankPane.getChildren().add(box3);
 
 
     }
 
 }
+
+
