@@ -55,6 +55,7 @@ public class MainMenu {
     private int color;
     Locale setDefault = Locale.ENGLISH;
     ResourceBundle bundle = ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", Locale.getDefault());
+
     public void switchLocaleVN(){
         bundle = ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", new Locale("vi", "VN"));
     }
