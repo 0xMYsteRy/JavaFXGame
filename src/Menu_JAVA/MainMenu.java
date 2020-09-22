@@ -91,8 +91,8 @@ public class MainMenu {
         // Tank selection display
         ContentFrame frame1 = new ContentFrame(createTankContent(20, 1, 1));
         frame1.setOnMouseClicked(e -> {
+            new Sound().loadSound(4);
             primaryStage.setSound(3);
-
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 1, 1));
@@ -107,6 +107,7 @@ public class MainMenu {
         });
         ContentFrame frame2 = new ContentFrame(createTankContent(20, 2, 2));
         frame2.setOnMouseClicked(e -> {
+            new Sound().loadSound(5);
             primaryStage.setSound(3);
             ContentFrame frame5 = null;
             try {
@@ -122,7 +123,7 @@ public class MainMenu {
         });
         ContentFrame frame3 = new ContentFrame(createTankContent(20, 3, 3));
         frame3.setOnMouseClicked(e -> {
-
+            new Sound().loadSound(6);
             primaryStage.setSound(3);
             ContentFrame frame5 = null;
             try {
@@ -138,6 +139,7 @@ public class MainMenu {
         });
         ContentFrame frame4 = new ContentFrame(createTankContent(20, 4, 4));
         frame4.setOnMouseClicked(e -> {
+            new Sound().loadSound(7);
             primaryStage.setSound(3);
             ContentFrame frame5 = null;
             try {
