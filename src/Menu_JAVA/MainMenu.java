@@ -1,5 +1,6 @@
 package Menu_JAVA;
 
+import Map_JAVA.Sound;
 import Tank_JAVA.Tank;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -90,6 +91,8 @@ public class MainMenu {
         // Tank selection display
         ContentFrame frame1 = new ContentFrame(createTankContent(20, 1, 1));
         frame1.setOnMouseClicked(e -> {
+            primaryStage.setSound(3);
+
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 1, 1));
@@ -104,6 +107,7 @@ public class MainMenu {
         });
         ContentFrame frame2 = new ContentFrame(createTankContent(20, 2, 2));
         frame2.setOnMouseClicked(e -> {
+            primaryStage.setSound(3);
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 2, 1));
@@ -118,6 +122,8 @@ public class MainMenu {
         });
         ContentFrame frame3 = new ContentFrame(createTankContent(20, 3, 3));
         frame3.setOnMouseClicked(e -> {
+
+            primaryStage.setSound(3);
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 3, 1));
@@ -132,6 +138,7 @@ public class MainMenu {
         });
         ContentFrame frame4 = new ContentFrame(createTankContent(20, 4, 4));
         frame4.setOnMouseClicked(e -> {
+            primaryStage.setSound(3);
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 4, 1));
@@ -240,7 +247,6 @@ public class MainMenu {
 
     private Node createTankContent(int x, int choice, int color) throws FileNotFoundException {
         Tank tank = new Tank(choice, color);
-
         Group tank1 = new Group(tank.createTank(x));
         bgThread.scheduleAtFixedRate(() -> {
             Platform.runLater(() -> {
