@@ -17,7 +17,8 @@ public class Scene_Map2 {
     Scene scene;
 
     public Scene setScene2(Stage stage) throws FileNotFoundException {
-        stage.setTitle("Son of the BEACH");
+        this.stage = stage;
+      //  stage.setTitle("Son of the BEACH");
         Pane tankPane;
         Map2 map2 = new Map2();
         tankPane = new Pane();

@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public class MapPVP extends Application {
+public class MapPVP  {
     // Constructor
     Scene scene;
     Tank tank;
@@ -59,23 +59,6 @@ public class MapPVP extends Application {
     public MapPVP() throws FileNotFoundException {
     }
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        stage.setTitle("Farm");
-        Pane tankPane;
-
-        tankPane = new Pane();
-
-        loadGround(tankPane);
-        loadObject(tankPane);
-        scene = new Scene(tankPane, 1565, 770);
-        tank = new Tank(1, 4);
-        tank.createPlayer(0, 0, tankPane, scene, RectList, objectList, ObjBotList,null,null, 1);
-
-        loadLayOut(tankPane, stage,tank);
-        stage.setScene(scene);
-        stage.show();
-    }
 
     private final ArrayList<ImageView> objectList = new ArrayList<ImageView>();
     private final ArrayList<Rectangle> RectList = new ArrayList<Rectangle>();
@@ -417,7 +400,8 @@ public class MapPVP extends Application {
 
     public void doTime(Pane tankPane,Stage stage) {
         Timeline time = new Timeline();
-
+        Sound sound = new Sound();
+        sound.loadSound(4);
 
         KeyFrame frame = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
 
@@ -436,6 +420,7 @@ public class MapPVP extends Application {
 
                 if (seconds <= 0) {
                     time.stop();
+                    sound.stopSound();
                     Label label = new Label();
                     label.setText("GAME OVER");
                     label.setTextFill(Color.FIREBRICK);
@@ -487,16 +472,7 @@ public class MapPVP extends Application {
                     });
                     tankPane.getChildren().addAll(newGame,nextLevel,exit);
                     newGame.setOnMouseClicked(event1 -> {
-                        stage.close();
-                        Platform.runLater(() -> {
-                            try {
-                                new MapPVP().start(new Stage());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
-                        stage.setScene(scene);
-                        stage.show();
+
                     });
 
 

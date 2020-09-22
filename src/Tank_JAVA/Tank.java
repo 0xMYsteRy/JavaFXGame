@@ -1,5 +1,6 @@
 package Tank_JAVA;
 
+import Map_JAVA.Map;
 import Map_JAVA.Map2;
 
 import Map_JAVA.MapJungle;
@@ -28,6 +29,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.security.PublicKey;
 import java.sql.Timestamp;
@@ -102,26 +104,29 @@ public class Tank extends Application implements Serializable {
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws FileNotFoundException {
         //Setting title to the Stage
         stage.setTitle("Loading an image");
         Pane tankPane;
         tankPane = new Pane();
         //Load the map
-        MapJungle map = new MapJungle();
+        Tank c = new Tank(1,2);
+        Mapboss map = new Mapboss(1,2);
         //
         Boss boss = new Boss(280 / 9);
-        Tank b = new Tank(2, 1);
+
         Group BossAI = boss.createBoss();
         BossAI.setTranslateX(630);
         BossAI.setTranslateY(280);
-        boss.Shooting(tankPane, b);
+        boss.Shooting(tankPane,c);
         //
         map.loadGround(tankPane);
+        map.loadObject(tankPane);
+        map.loadLayOut(tankPane,stage);
         scene = new Scene(tankPane, 1400, 770);//1400x750
         //Create Player
         tankPane.getChildren().add(BossAI);
-        b.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), boss, false, 1);
+        c.createPlayer(350, 350, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), boss, false, 1);
         //Create Bot
 //        map.loadBot(tankPane, b, scene);
         //Adding scene to the stage

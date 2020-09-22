@@ -1,5 +1,6 @@
 package Menu_JAVA;
 
+import Map_JAVA.Sound;
 import Tank_JAVA.Tank;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -45,6 +46,7 @@ public class MainMenu {
     private final Setting setting= new Setting();
     private int type;
     private int color;
+
     private final List<Pair<String, Runnable>> menuData = Arrays.asList(
             new Pair<String, Runnable>("Start", () -> {
                 try {
@@ -59,6 +61,11 @@ public class MainMenu {
             }),
             new Pair<String, Runnable>("Multiplayer", () -> {
                 System.out.println("Multiplayer activated");
+                try {
+                    primaryStage.setScene(4);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }),
             new Pair<String, Runnable>("Setting", () -> {
                 System.out.println("Game options activated");
