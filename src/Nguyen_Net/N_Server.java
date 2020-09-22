@@ -19,15 +19,16 @@ public class N_Server extends Application {
     private Scene scene;
     private ServerSocket serverSocket;
     private Socket socket;
-    private DataInputStream input;
-    private DataOutputStream output;
+
     private int numOfConnected;
 
     private static InputStream inputStream;
     private static OutputStream outputStream;
-    private int tankIndex;
     List<Socket> connectionList = new ArrayList<Socket>();
     private int playerCount = 0;
+    private List<Integer> Choices = new ArrayList<>();
+    private List<Integer> Colors = new ArrayList<>();
+
 
     private static void log(String str) {
         System.out.println(str);
@@ -72,21 +73,25 @@ public class N_Server extends Application {
                     "+----+--------+--------+------------+---------------------+ ");
             System.out.println("\nServer started! Awaiting connections...");
             ServerSocket finalSs = ss;
-            new Thread(()->{
+            new Thread(() -> {
                 try {
                     assert finalSs != null;
-                    synchronized (finalSs){
-                        socket = finalSs.accept();}
+                    synchronized (finalSs) {
+                        socket = finalSs.accept();
+                    }
                     connectionList.add(socket);
                     playerCount++;
-                    tankIndex = playerCount;
+                    int tankIndex = playerCount;
                     log("+A client connected from " + socket.getInetAddress() + " running on port " + socket.getPort() + " socket: " + socket + " , index of tank: " + tankIndex);
-
-                    outputStream = new DataOutputStream(socket.getOutputStream());
-                    outputStream.write(tankIndex);
-
                     DataInputStream dataInputStream;
                     dataInputStream = new DataInputStream(socket.getInputStream());
+                    dataInputStream.readInt();
+                    Choices.add(dataInputStream.readInt());
+                    Colors.add(dataInputStream.readInt());
+                    outputStream = new DataOutputStream(socket.getOutputStream());
+                    outputStream.write(tankIndex);
+                    System.out.println("Choice and color:  "+Choices.get(tankIndex - 1) + " " + Colors.get(tankIndex - 1));
+
                     ObjectInputStream objectInputStream;
                     objectInputStream = new ObjectInputStream(socket.getInputStream());
                     while (true) {
@@ -120,7 +125,8 @@ public class N_Server extends Application {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                }}).start();
+                }
+            }).start();
         }).start();
         // Read simutaneously
 

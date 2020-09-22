@@ -29,40 +29,47 @@ public class N_Client extends Application implements Serializable {
         System.out.println(str);
     }
 
+    private static int color =3, choice=1;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         //System.out.println("Not OK");
-         try {
-                Socket socket = new Socket("localhost", 80);
-                log("Connecting to Server " + socket.getRemoteSocketAddress() + " running on port " + socket.getPort());
-                Pane tankPane;
-                tankPane = new Pane();
-                //Load the map
-                MapJungle map = new MapJungle();
-                map.loadGround(tankPane);
-                scene = new Scene(tankPane, 1400, 770);
-                log("Connecting to Server " + socket.getRemoteSocketAddress() + " running on port " + socket.getPort());
+        //  10.247.215.173
+        try {
+            Socket socket = new Socket("localhost", 80);
+            log("Connecting to Server " + socket.getRemoteSocketAddress() + " running on port " + socket.getPort());
+            output = new ObjectOutputStream(socket.getOutputStream());
+            inputData = new DataInputStream(socket.getInputStream());
+            outputData = new DataOutputStream(socket.getOutputStream());
+            outputData.writeInt(choice);
+            outputData.writeInt(color);
+            outputData.flush();
+            //Create Main tank
+            Pane tankPane;
+            tankPane = new Pane();
+            //Load the map
+            MapJungle map = new MapJungle();
+            map.loadGround(tankPane);
+            scene = new Scene(tankPane, 1400, 770);
+            log("Connecting to Server " + socket.getRemoteSocketAddress() + " running on port " + socket.getPort());
 
-                //Create Player
-                Tank b = new Tank(1, 2);
-                b.createPlayer(0, 630, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), null, true, 1);
-                output = new ObjectOutputStream(socket.getOutputStream());
-                inputData = new DataInputStream(socket.getInputStream());
-                outputData = new DataOutputStream(socket.getOutputStream());
-                log("Connecting to Server " + socket.getRemoteSocketAddress() + " running on port " + socket.getPort());
+            //Create Player
+            Tank b = new Tank(choice, color);
+            b.createPlayer(0, 630, tankPane, scene, map.getRectList(), map.getobjectList(), map.getObjBotList(), null, true, 1);
 
-                tankIndex = inputData.read();
+            log("Connecting to Server " + socket.getRemoteSocketAddress() + " running on port " + socket.getPort());
 
-                System.out.println("Tank index: " + tankIndex);
+            tankIndex = inputData.read();
+            System.out.println("Tank index: " + tankIndex);
+            b.setClient(this);
+            primaryStage.setTitle("Client Tank Battle");
+            primaryStage.setScene(scene);
+            primaryStage.show();
 
-                b.setClient(this);
-                primaryStage.setTitle("Client Tank Battle");
-                primaryStage.setScene(scene);
-                primaryStage.show();
-            } catch (IOException e2) {
-                e2.printStackTrace();
-            }
+        } catch (IOException e2) {
+            e2.printStackTrace();
         }
+    }
 
     public void movingClient(KeyEvent e) {
         switch (e.getCode()) {
