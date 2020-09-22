@@ -37,7 +37,17 @@ public class Sound {
                 return "src/Map_JAVA/Sound/background.mp3";
             //Tank Selection
             case 3:
-                return "src/Map_JAVA/Sound/TankSelect.mp3";
+                return "src/Map_JAVA/Sound/TankSelectBackGround.mp3";
+            case 4:
+                return "src/Map_JAVA/Sound/EngageSound1.mpeg";
+            case 5:
+                return "src/Map_JAVA/Sound/EngageSound2.mpeg";
+            case 6:
+                return "src/Map_JAVA/Sound/EngageSound3.mpeg";
+            case 7:
+                return "src/Map_JAVA/Sound/EngageSound4.mpeg";
+            case 8:
+                return "src/Map_JAVA/Sound/bossappear.mp3";
             default:
                 return "";
         }
@@ -54,7 +64,11 @@ public class Sound {
         player.setCycleCount(MediaPlayer.INDEFINITE);
 
         //Fire bullet
-        if (option == 1) {
+        if (option == 1 ) {
+            player.setCycleCount(1);
+        }
+        if (option == 4 || option == 5 || option == 6 || option ==7){
+            player.setStopTime(Duration.millis(7000));
             player.setCycleCount(1);
         }
         player.play();

@@ -125,6 +125,17 @@ public class N_Client extends Application implements Serializable {
         }
     }
 
+    public void shootingClient(KeyEvent e) {
+        System.out.println("Space");
+        try {
+//                        output = new ObjectOutputStream(socket.getOutputStream());
+            output.writeObject(e);
+            output.flush();
+            output.reset();
+            System.out.println("Send to the server " + output);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
 
     public void shootingClient(KeyEvent e){
                 System.out.println("Space");
