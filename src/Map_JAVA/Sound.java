@@ -38,6 +38,10 @@ public class Sound {
             //Tank Selection
             case 3:
                 return "src/Map_JAVA/Sound/TankSelectBackGround.mp3";
+            case 33:
+                return "src/Map_JAVA/Sound/BackGroundChooseTank.mpeg";
+            case 333:
+                return "src/Map_JAVA/Sound/BackGroundChooseTank2.mpeg";
             case 4:
                 return "src/Map_JAVA/Sound/EngageSound1.mpeg";
             case 5:
@@ -53,7 +57,6 @@ public class Sound {
         }
     }
 
-    //Huy
     MediaPlayer player;
 
     public void loadSound(int option) {
