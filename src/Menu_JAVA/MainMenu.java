@@ -1,5 +1,6 @@
 package Menu_JAVA;
 
+import Map_JAVA.Sound;
 import Tank_JAVA.Tank;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -28,6 +29,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -41,6 +43,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.ResourceBundle;
 
 public class MainMenu {
     CreditPopup creditPopup = new CreditPopup();
@@ -50,9 +53,17 @@ public class MainMenu {
     private final Setting setting= new Setting();
     private int type;
     private int color;
+    Locale setDefault = Locale.ENGLISH;
     ResourceBundle bundle = ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", Locale.getDefault());
+    public void switchLocaleVN(){
+        bundle = ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", new Locale("vi", "VN"));
+    }
+    public void switchLocaleEN(){
+        bundle = ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", Locale.ENGLISH);
+    }
+
     private final List<Pair<String, Runnable>> menuData = Arrays.asList(
-            new Pair<String, Runnable>("Start", () -> {
+            new Pair<String, Runnable>(bundle.getString("menu.start"), () -> {
                 try {
                     primaryStage.setScene(1);
                 } catch (FileNotFoundException e) {
@@ -60,13 +71,13 @@ public class MainMenu {
                 }
                 System.out.println("Start activated");
             }),
-            new Pair<String, Runnable>("Campaign", () -> {
+            new Pair<String, Runnable>(bundle.getString("menu.campaign"), () -> {
                 System.out.println("Campaign activated");
             }),
-            new Pair<String, Runnable>("Multiplayer", () -> {
+            new Pair<String, Runnable>(bundle.getString("menu.multiplayer"), () -> {
                 System.out.println("Multiplayer activated");
             }),
-            new Pair<String, Runnable>("Setting", () -> {
+            new Pair<String, Runnable>(bundle.getString("menu.setting"), () -> {
                 System.out.println("Game options activated");
                 try {
                     primaryStage.getStage().setScene(new Scene(setting.createSettingContent()));
@@ -102,6 +113,8 @@ public class MainMenu {
         // Tank selection display
         ContentFrame frame1 = new ContentFrame(createTankContent(20, 1, 1));
         frame1.setOnMouseClicked(e -> {
+            new Sound().loadSound(4);
+            primaryStage.setSound(3);
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 1, 1));
@@ -116,6 +129,8 @@ public class MainMenu {
         });
         ContentFrame frame2 = new ContentFrame(createTankContent(20, 2, 2));
         frame2.setOnMouseClicked(e -> {
+            new Sound().loadSound(5);
+            primaryStage.setSound(33);
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 2, 1));
@@ -130,6 +145,8 @@ public class MainMenu {
         });
         ContentFrame frame3 = new ContentFrame(createTankContent(20, 3, 3));
         frame3.setOnMouseClicked(e -> {
+            new Sound().loadSound(6);
+            primaryStage.setSound(333);
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 3, 1));
@@ -144,6 +161,8 @@ public class MainMenu {
         });
         ContentFrame frame4 = new ContentFrame(createTankContent(20, 4, 4));
         frame4.setOnMouseClicked(e -> {
+            new Sound().loadSound(7);
+            primaryStage.setSound(3);
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 4, 1));
@@ -315,7 +334,7 @@ public class MainMenu {
             Text text = new Text(name);
             text.setTranslateX(5);
             text.setTranslateY(20);
-            text.setFont(Font.loadFont(MainMenu.class.getResource("res/Penumbra-HalfSerif-Std_35114.ttf").toExternalForm(), 30));
+            text.setFont(Font.font("",FontWeight.BOLD, 30));
             text.setFill(Color.WHITE);
 
             Effect blur = new BoxBlur(1, 1, 3);

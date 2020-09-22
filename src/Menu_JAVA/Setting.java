@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Setting extends Application {
     CreditPopup creditPopup = new CreditPopup();
@@ -30,10 +31,10 @@ public class Setting extends Application {
     boolean lang;
 
     public Setting() throws FileNotFoundException {
-
     }
+
     public Parent createSettingContent() throws FileNotFoundException {
-        mainMenu= new MainMenu();
+        mainMenu = new MainMenu();
 
         root.setPrefSize(1280, 720);
 
@@ -45,7 +46,7 @@ public class Setting extends Application {
         settingTitle.setTranslateY(100);
         settingTitle.setFill(Color.GREY);
         settingTitle.setStroke(Color.WHITE);
-        settingTitle.setOnMouseClicked(e->{
+        settingTitle.setOnMouseClicked(e -> {
             settingTitle.setFill(Color.BLACK);
         });
         settingTitle.setFont(Font.font("", FontWeight.BOLD, 100));
@@ -54,14 +55,24 @@ public class Setting extends Application {
         language.setFill(Color.WHITE);
         language.setFont(Font.font("", FontWeight.BOLD, 40));
         Button eng = I18N.buttonForKey("button.english");
-        eng.setTooltip(I18N.tooltipForKey("button.english.tooltip"));
-        eng.setOnAction((evt) -> switchLanguage(Locale.ENGLISH));
+        //eng.setTooltip(I18N.tooltipForKey("button.english.tooltip"));
+        eng.setOnAction((evt) -> {
+            switchLanguage(Locale.ENGLISH);
+            ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", Locale.ENGLISH);
+            //mainMenu.switchLocaleVN();
+            System.out.println("Change to EN");
+        });
         eng.setMinWidth(200);
         eng.setMinHeight(40);
 
         Button vn = I18N.buttonForKey("button.vietnam");
-        vn.setTooltip(I18N.tooltipForKey("button.vietnam.tooltip"));
-        vn.setOnAction((evt) -> switchLanguage((new Locale("vi", "VN"))));
+        //vn.setTooltip(I18N.tooltipForKey("button.vietnam.tooltip"));
+        vn.setOnAction((evt) -> {
+            switchLanguage((new Locale("vi", "VN")));
+            ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", new Locale("vi", "VN"));
+            //mainMenu.switchLocaleEN();
+            System.out.println("Change to VN");
+        });
         vn.setMinWidth(200);
         vn.setMinHeight(40);
         HBox languageBox = new HBox(20, language, eng, vn);
