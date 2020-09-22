@@ -12,13 +12,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.util.Locale;
 
-public class Setting{
+public class Setting extends Application {
     CreditPopup creditPopup = new CreditPopup();
     Guide guide = new Guide();
     Pane root = new Pane();
@@ -26,6 +27,7 @@ public class Setting{
     Scene creditScene = new Scene(creditPopup.popupContent());
     Scene guideScene = new Scene(guide.guideWindow());
     private Integer numSwitches = 0;
+    boolean lang;
 
     public Setting() throws FileNotFoundException {
 
@@ -38,7 +40,7 @@ public class Setting{
         String imagePath = "file:src/Menu_JAVA/res/background.png";
         ImageView background = new ImageView(new Image(imagePath));
 
-        Text settingTitle = new Text("SETTING");
+        Text settingTitle = I18N.textForValue("window.title");
         settingTitle.setTranslateX(450);
         settingTitle.setTranslateY(100);
         settingTitle.setFill(Color.GREY);
@@ -46,29 +48,27 @@ public class Setting{
         settingTitle.setOnMouseClicked(e->{
             settingTitle.setFill(Color.BLACK);
         });
-        settingTitle.setFont(Font.loadFont(MainMenu.class.getResource("res/Penumbra-HalfSerif-Std_35114.ttf").toExternalForm(), 100));
+        settingTitle.setFont(Font.font("", FontWeight.BOLD, 100));
 
-        Text language = new Text("Language");
+        Text language = I18N.textForValue("label.setting.lang");
         language.setFill(Color.WHITE);
-        language.setFont(Font.loadFont(MainMenu.class.getResource("res/Penumbra-HalfSerif-Std_35114.ttf").toExternalForm(), 40));
-
-        Button eng = new Button("English");
+        language.setFont(Font.font("", FontWeight.BOLD, 40));
+        Button eng = I18N.buttonForKey("button.english");
         eng.setTooltip(I18N.tooltipForKey("button.english.tooltip"));
         eng.setOnAction((evt) -> switchLanguage(Locale.ENGLISH));
         eng.setMinWidth(200);
         eng.setMinHeight(40);
 
-        Button vn = new Button("Tiếng Việt");
+        Button vn = I18N.buttonForKey("button.vietnam");
         vn.setTooltip(I18N.tooltipForKey("button.vietnam.tooltip"));
         vn.setOnAction((evt) -> switchLanguage((new Locale("vi", "VN"))));
         vn.setMinWidth(200);
         vn.setMinHeight(40);
-        HBox languageBox = new HBox(40, language, eng, vn);
-
+        HBox languageBox = new HBox(20, language, eng, vn);
         languageBox.setTranslateX(400);
         languageBox.setTranslateY(200);
 
-        Button control = new Button("How to play");
+        Button control = I18N.buttonForKey("button.setting.guide");
         control.setMinWidth(200);
         control.setMinHeight(40);
         control.setOnMouseClicked(e -> {
@@ -76,17 +76,17 @@ public class Setting{
             guideStage.setTitle("How to play");
             guideStage.setScene(guideScene);
             guideStage.setX(300);
-            guideStage.setY(250);
+            guideStage.setY(150);
             guideStage.show();
         });
-        Button faq = new Button("FAQ");
+        Button faq = I18N.buttonForKey("button.setting.faq");
         faq.setMinHeight(40);
         faq.setMinWidth(200);
-        HBox hbox1 = new HBox(40, control, faq);
+        HBox hbox1 = new HBox(20, control, faq);
         hbox1.setTranslateX(400);
         hbox1.setTranslateY(280);
 
-        Button credit = new Button("Credits");
+        Button credit = I18N.buttonForKey("button.setting.credit");
         credit.setMinWidth(200);
         credit.setMinHeight(40);
         credit.setOnMouseClicked(e -> {
@@ -97,14 +97,14 @@ public class Setting{
             creditStage.setTitle("Credits");
             creditStage.show();
         });
-        Button contact = new Button("Contact us");
+        Button contact = I18N.buttonForKey("button.setting.contact");
         contact.setMinWidth(200);
         contact.setMinHeight(40);
         HBox hbox2 = new HBox(20, credit, contact);
         hbox2.setTranslateX(400);
         hbox2.setTranslateY(360);
 
-        Button closeButton = new Button("Close");
+        Button closeButton = I18N.buttonForKey("button.setting.close");
         closeButton.setMinWidth(600);
         closeButton.setMinHeight(40);
         closeButton.setAlignment(Pos.BOTTOM_CENTER);
@@ -125,8 +125,17 @@ public class Setting{
     public void handleCloseButtonAction(MouseEvent event) throws FileNotFoundException {
         primaryStage.getStage().setScene(new Scene(mainMenu.createContent()));
     }
-    private void switchLanguage(Locale locale) {
-        numSwitches++;
+
+    public void switchLanguage(Locale locale) {
         I18N.setLocale(locale);
     }
+
+    @Override
+    public void start(Stage settingStage) throws Exception {
+        Scene scene = new Scene(createSettingContent());
+        settingStage.setTitle("Setting");
+//        settingStage.setScene(scene);
+        settingStage.show();
+    }
+
 }

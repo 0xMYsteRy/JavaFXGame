@@ -38,12 +38,6 @@ public class primaryStage extends Application {
                 Scene_Map2 scene_map2 = new Scene_Map2();
                 stage.setScene(scene_map2.setScene2(stage));
                 break;
-//            case 3:
-//                Scene_MapBoss scene_mapBoss = new Scene_MapBoss();
-//                stage.setScene(scene_mapBoss.setSceneBoss(stage));
-//            case 4:
-//                Scene_MapPVP scene_mapPVP = new Scene_MapPVP();
-//                stage.setScene(scene_mapPVP.setSc);
         }
     }
     public static Stage getStage() {

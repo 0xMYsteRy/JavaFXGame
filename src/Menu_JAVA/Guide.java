@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -29,13 +30,13 @@ public class Guide extends Application {
         space.setFitWidth(300);
         space.setFitHeight(100);
 
-        Text move = new Text("To move");
-        move.setFont(Font.loadFont(Guide.class.getResource("res/Penumbra-HalfSerif-Std_35114.ttf").toExternalForm(), 30));
+        Text move = I18N.textForValue("guide.move");
+        move.setFont(Font.font("", FontWeight.BOLD, 30));
         move.setTranslateX(350);
         move.setTranslateY(80);
 
-        Text shoot = new Text("To shoot the enemies");
-        shoot.setFont(Font.loadFont(Guide.class.getResource("res/Penumbra-HalfSerif-Std_35114.ttf").toExternalForm(), 30));
+        Text shoot = I18N.textForValue("guide.shoot");
+        shoot.setFont(Font.font("", FontWeight.BOLD, 30));
         shoot.setTranslateX(350);
         shoot.setTranslateY(280);
 

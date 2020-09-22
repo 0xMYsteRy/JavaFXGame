@@ -1,6 +1,5 @@
 package Menu_JAVA;
 
-import Map_JAVA.Sound;
 import Tank_JAVA.Tank;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -9,6 +8,7 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -36,16 +36,21 @@ import javafx.util.Pair;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class MainMenu {
+    CreditPopup creditPopup = new CreditPopup();
+    Scene creditScene = new Scene(creditPopup.popupContent());
     private final Pane root = new Pane();
     private final VBox menuBox = new VBox(-5);
     private final Setting setting= new Setting();
     private int type;
     private int color;
+    ResourceBundle bundle = ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", Locale.getDefault());
     private final List<Pair<String, Runnable>> menuData = Arrays.asList(
             new Pair<String, Runnable>("Start", () -> {
                 try {
@@ -71,6 +76,12 @@ public class MainMenu {
             }),
             new Pair<String, Runnable>("Credits", () -> {
                 System.out.println("Credits");
+                Stage creditStage = new Stage();
+                creditStage.setScene(creditScene);
+                creditStage.setX(450);
+                creditStage.setY(400);
+                creditStage.setTitle("Credits");
+                creditStage.show();
             }),
             new Pair<String, Runnable>("Exit", Platform::exit)
     );
@@ -91,8 +102,6 @@ public class MainMenu {
         // Tank selection display
         ContentFrame frame1 = new ContentFrame(createTankContent(20, 1, 1));
         frame1.setOnMouseClicked(e -> {
-            new Sound().loadSound(4);
-            primaryStage.setSound(3);
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 1, 1));
@@ -107,8 +116,6 @@ public class MainMenu {
         });
         ContentFrame frame2 = new ContentFrame(createTankContent(20, 2, 2));
         frame2.setOnMouseClicked(e -> {
-            new Sound().loadSound(5);
-            primaryStage.setSound(33);
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 2, 1));
@@ -123,8 +130,6 @@ public class MainMenu {
         });
         ContentFrame frame3 = new ContentFrame(createTankContent(20, 3, 3));
         frame3.setOnMouseClicked(e -> {
-            new Sound().loadSound(6);
-            primaryStage.setSound(333);
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 3, 1));
@@ -139,8 +144,6 @@ public class MainMenu {
         });
         ContentFrame frame4 = new ContentFrame(createTankContent(20, 4, 4));
         frame4.setOnMouseClicked(e -> {
-            new Sound().loadSound(7);
-            primaryStage.setSound(3);
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 4, 1));
@@ -240,15 +243,13 @@ public class MainMenu {
         });
         name.setFont(Font.loadFont(MainMenu.class.getResource("res/Penumbra-HalfSerif-Std_35114.ttf").toExternalForm(), 100));
 
-        MenuItem itemExit = new MenuItem("Exit");
-        itemExit.setOnActivate(() -> System.exit(0));
-
         root.getChildren().addAll(background, hbox, menuBox, colorPane, name);
         return root;
     }
 
     private Node createTankContent(int x, int choice, int color) throws FileNotFoundException {
         Tank tank = new Tank(choice, color);
+
         Group tank1 = new Group(tank.createTank(x));
         bgThread.scheduleAtFixedRate(() -> {
             Platform.runLater(() -> {
@@ -299,7 +300,6 @@ public class MainMenu {
     }
 
     public static class MenuItem extends Pane {
-        private Runnable script;
 
         public MenuItem(String name) {
             Polygon bg = new Polygon(0, 0, 200, 0, 215, 15, 200, 30, 0, 30);
@@ -333,9 +333,6 @@ public class MainMenu {
             setOnMouseClicked(e -> action.run());
         }
 
-        public void setOnActivate(Runnable r) {
-            script = r;
-        }
     }
 
     private void startAnimation() {
@@ -373,6 +370,5 @@ public class MainMenu {
 
         root.getChildren().add(menuBox);
     }
+
 }
-
-
