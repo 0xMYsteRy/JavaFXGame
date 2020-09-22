@@ -41,6 +41,7 @@ public class N_Server extends Application {
         tankPane = new Pane();
         MapJungle map = new MapJungle();
         map.loadGround(tankPane);
+        //map.loadObject(tankPane);
         scene = new Scene(tankPane, 1400, 750);//1400x750
         //Create Player
         Tank tankClient = new Tank(1, 2);

@@ -1,2 +1,0 @@
-FireBall fireball = new FireBall(rand.nextInt(6)+1);
-                        fireball.FireBallAnimation(x,y,90,150,tankPane);
