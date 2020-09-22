@@ -191,25 +191,26 @@ public class Tank extends Application implements Serializable {
         Random rand = new Random();
         //
         tank = createTank(scale);
+
+        tankPane.getChildren().addAll(tank);
+        tank.setTranslateX(x + gap);
+        tank.setTranslateY(y + gap);
+        tank.setCache(true);
+        tank.setRotate(0);
+        //
+        rt = new RotateTransition(Duration.millis(300), tank);
         //Displaying the contents of the stage
         if (tankIndex == 1) {
             new Thread(() -> {
-                tankPane.getChildren().addAll(tank);
-                tank.setTranslateX(x + gap);
-                tank.setTranslateY(y + gap);
-                tank.setCache(true);
-                tank.setRotate(0);
-                //
-                rt = new RotateTransition(Duration.millis(300), tank);
                 scene.setOnKeyPressed(keyEvent -> {
-                    if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0) {
+                    if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0 &(tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270)) {
                         try {
                             Move(keyEvent);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
-                    if (multiplayer) {
+                    if (multiplayer&(tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0 &(tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270)) {
                         try {
                             client.movingClient(keyEvent);
                         } catch (Exception e) {
@@ -232,17 +233,6 @@ public class Tank extends Application implements Serializable {
                 }
                 });
             }).start();
-        } else {
-            new Thread(() -> {
-                tankPane.getChildren().addAll(tank);
-                tank.setTranslateX(x + gap);
-                tank.setTranslateY(y + gap);
-                tank.setCache(true);
-                tank.setRotate(0);
-                //
-                rt = new RotateTransition(Duration.millis(300), tank);
-
-            }).start();
         }
     }
 
@@ -251,7 +241,7 @@ public class Tank extends Application implements Serializable {
     }
 
     public void moveClient(KeyEvent keyEvent) throws InterruptedException {
-        if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0) {
+        if ((tank.getTranslateX() - gap) % Step == 0 & (tank.getTranslateY() - gap) % Step == 0 &(tank.getRotate() == 0 | tank.getRotate() == 90 | tank.getRotate() == 180 | tank.getRotate() == 270)) {
             Move(keyEvent);
         }
     }
@@ -698,11 +688,13 @@ public class Tank extends Application implements Serializable {
                                                     break;
                                                 }
                                             }
-                                            if (BulletW.getBoundsInParent().intersects(boss.getBoss().getBoundsInParent())) {
-                                                checkBullet = 1;
-                                                explosion.ExplosionAnimation(boss.getBoss().getTranslateX() + scale * 2 * 5, boss.getBoss().getTranslateY() + scale * 2 * 5, tankPane, 2);
-                                                boss.setHealth(BulletDamage);
-                                                boss.checkHealth();
+                                            if (boss!=null){
+                                                if (BulletW.getBoundsInParent().intersects(boss.getBoss().getBoundsInParent())) {
+                                                    checkBullet = 1;
+                                                    explosion.ExplosionAnimation(boss.getBoss().getTranslateX() + scale * 2 * 5, boss.getBoss().getTranslateY() + scale * 2 * 5, tankPane, 2);
+                                                    boss.setHealth(BulletDamage);
+                                                    boss.checkHealth();
+                                                }
                                             }
                                             for (Bot bot : BotList) {
                                                 if (BulletW.getBoundsInParent().intersects(bot.getBot().getBoundsInParent())) {
@@ -761,12 +753,14 @@ public class Tank extends Application implements Serializable {
                                                     break;
                                                 }
                                             }
-                                            if (BulletW.getBoundsInParent().intersects(boss.getBoss().getBoundsInParent())) {
+                                            if (boss!=null){
+
+                                                if (BulletW.getBoundsInParent().intersects(boss.getBoss().getBoundsInParent())) {
                                                 checkBullet = 1;
                                                 explosion.ExplosionAnimation(boss.getBoss().getTranslateX() + scale * 2 * 5, boss.getBoss().getTranslateY() + scale * 2 * 5, tankPane, 2);
                                                 boss.setHealth(BulletDamage);
                                                 boss.checkHealth();
-                                            }
+                                            }}
                                             for (ImageView imgW : ObjList) {
                                                 if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
                                                     checkBullet = 1;
@@ -823,12 +817,14 @@ public class Tank extends Application implements Serializable {
                                                     break;
                                                 }
                                             }
-                                            if (BulletW.getBoundsInParent().intersects(boss.getBoss().getBoundsInParent())) {
+                                            if (boss!=null){
+
+                                                if (BulletW.getBoundsInParent().intersects(boss.getBoss().getBoundsInParent())) {
                                                 checkBullet = 1;
                                                 explosion.ExplosionAnimation(boss.getBoss().getTranslateX(), boss.getBoss().getTranslateY(), tankPane, 1);
                                                 boss.setHealth(BulletDamage);
                                                 boss.checkHealth();
-                                            }
+                                            }}
                                             for (ImageView imgW : ObjList) {
                                                 if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
                                                     checkBullet = 1;
@@ -886,12 +882,14 @@ public class Tank extends Application implements Serializable {
                                                     break;
                                                 }
                                             }
-                                            if (BulletW.getBoundsInParent().intersects(boss.getBoss().getBoundsInParent())) {
+                                            if (boss!=null){
+
+                                                if (BulletW.getBoundsInParent().intersects(boss.getBoss().getBoundsInParent())) {
                                                 checkBullet = 1;
                                                 explosion.ExplosionAnimation(boss.getBoss().getTranslateX() + scale * 2 * 5, boss.getBoss().getTranslateY() + scale * 2 * 5, tankPane, 2);
                                                 boss.setHealth(BulletDamage);
                                                 boss.checkHealth();
-                                            }
+                                            }}
                                             for (ImageView imgW : ObjList) {
                                                 if (BulletW.getBoundsInParent().intersects(imgW.getBoundsInParent())) {
                                                     checkBullet = 1;
