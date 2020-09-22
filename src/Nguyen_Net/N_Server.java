@@ -37,6 +37,7 @@ public class N_Server extends Application {
         MapJungle map = new MapJungle();
 
         map.loadGround(tankPane);
+        //map.loadObject(tankPane);
         scene = new Scene(tankPane, 1400, 750);//1400x750
 
         //Create Player

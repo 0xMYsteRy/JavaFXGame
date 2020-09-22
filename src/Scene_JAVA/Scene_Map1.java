@@ -32,7 +32,7 @@ public class Scene_Map1 {
         scene = new Scene(tankPane,1565,770);//1400x750
         //Create Player
 
-        c.createPlayer(0, 0, tankPane, scene, map.getRectList(), map.getobjectList(),map.getObjBotList(),null,null,1);
+        c.createPlayer(0, 0, tankPane, scene, map.getRectList(), map.getobjectList(),map.getObjBotList(),null,false,1);
 
         map.loadObject(tankPane);
         map.loadLayOut(tankPane,stage);
