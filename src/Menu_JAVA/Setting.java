@@ -16,14 +16,16 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.util.Locale;
 
-public class Setting extends Application {
+public class Setting{
     CreditPopup creditPopup = new CreditPopup();
     Guide guide = new Guide();
     Pane root = new Pane();
     MainMenu mainMenu;
     Scene creditScene = new Scene(creditPopup.popupContent());
     Scene guideScene = new Scene(guide.guideWindow());
+    private Integer numSwitches = 0;
 
     public Setting() throws FileNotFoundException {
 
@@ -49,17 +51,20 @@ public class Setting extends Application {
         Text language = new Text("Language");
         language.setFill(Color.WHITE);
         language.setFont(Font.loadFont(MainMenu.class.getResource("res/Penumbra-HalfSerif-Std_35114.ttf").toExternalForm(), 40));
+
         Button eng = new Button("English");
+        eng.setTooltip(I18N.tooltipForKey("button.english.tooltip"));
+        eng.setOnAction((evt) -> switchLanguage(Locale.ENGLISH));
         eng.setMinWidth(200);
         eng.setMinHeight(40);
-        eng.setOnMouseClicked(e -> {
-        });
+
         Button vn = new Button("Tiếng Việt");
+        vn.setTooltip(I18N.tooltipForKey("button.vietnam.tooltip"));
+        vn.setOnAction((evt) -> switchLanguage((new Locale("vi", "VN"))));
         vn.setMinWidth(200);
         vn.setMinHeight(40);
-        vn.setOnMouseClicked(e -> {
-        });
         HBox languageBox = new HBox(40, language, eng, vn);
+
         languageBox.setTranslateX(400);
         languageBox.setTranslateY(200);
 
@@ -120,12 +125,8 @@ public class Setting extends Application {
     public void handleCloseButtonAction(MouseEvent event) throws FileNotFoundException {
         primaryStage.getStage().setScene(new Scene(mainMenu.createContent()));
     }
-
-    @Override
-    public void start(Stage settingStage) throws Exception {
-        Scene scene = new Scene(createSettingContent());
-        settingStage.setTitle("Setting");
-//        settingStage.setScene(scene);
-        settingStage.show();
+    private void switchLanguage(Locale locale) {
+        numSwitches++;
+        I18N.setLocale(locale);
     }
 }

@@ -5,6 +5,7 @@ import Map_JAVA.Map2;
 
 import Map_JAVA.MapJungle;
 import Map_JAVA.Mapboss;
+import Map_JAVA.Sound;
 import Nguyen_Net.N_Client;
 import Nguyen_Net.N_Server;
 import javafx.animation.*;
@@ -39,6 +40,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /*MAC: --module-path "/Users/s3757937/Downloads/javafx-sdk-11.0.2/lib" --add-modules javafx.controls,javafx.fxml*/
 
 public class Tank extends Application implements Serializable {
+    Sound sound;
     private Group tank;
     private Hull hull;
     private Bullet bullet;
@@ -660,7 +662,7 @@ public class Tank extends Application implements Serializable {
             BulletW.setFitHeight(scale * 9);
             BulletW.setRotate(Direction);
             tankPane.getChildren().addAll(BulletW);
-
+            new Sound().loadSound(1);
             // Timeline
             double steps = scale * Range * 4 / 2.0;
             double stepDuration = 100 * Speed / steps;
