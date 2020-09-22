@@ -19,7 +19,8 @@ public class N_Server extends Application {
     private Scene scene;
     private ServerSocket serverSocket;
     private Socket socket;
-
+    private DataInputStream input;
+    private DataOutputStream output;
     private int numOfConnected;
 
     private static InputStream inputStream;
