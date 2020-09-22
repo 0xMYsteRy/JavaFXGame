@@ -32,7 +32,7 @@ public class N_Client extends Application implements Serializable {
     @Override
     public void start(Stage primaryStage) throws Exception {
         //System.out.println("Not OK");
-
+         try {
                 Socket socket = new Socket("localhost", 80);
                 log("Connecting to Server " + socket.getRemoteSocketAddress() + " running on port " + socket.getPort());
                 Pane tankPane;
@@ -41,6 +41,7 @@ public class N_Client extends Application implements Serializable {
                 MapJungle map = new MapJungle();
                 map.loadGround(tankPane);
                 scene = new Scene(tankPane, 1400, 770);
+                log("Connecting to Server " + socket.getRemoteSocketAddress() + " running on port " + socket.getPort());
 
                 //Create Player
                 Tank b = new Tank(1, 2);
@@ -48,16 +49,20 @@ public class N_Client extends Application implements Serializable {
                 output = new ObjectOutputStream(socket.getOutputStream());
                 inputData = new DataInputStream(socket.getInputStream());
                 outputData = new DataOutputStream(socket.getOutputStream());
+                log("Connecting to Server " + socket.getRemoteSocketAddress() + " running on port " + socket.getPort());
+
                 tankIndex = inputData.read();
+
                 System.out.println("Tank index: " + tankIndex);
 
                 b.setClient(this);
                 primaryStage.setTitle("Client Tank Battle");
                 primaryStage.setScene(scene);
                 primaryStage.show();
-
-
-    }
+            } catch (IOException e2) {
+                e2.printStackTrace();
+            }
+        }
 
     public void movingClient(KeyEvent e) {
         switch (e.getCode()) {

@@ -72,17 +72,18 @@ public class N_Server extends Application {
                     "+----+--------+--------+------------+---------------------+ ");
             System.out.println("\nServer started! Awaiting connections...");
             ServerSocket finalSs = ss;
-            new Thread(() -> {
+            new Thread(()->{
                 try {
+                    assert finalSs != null;
                     synchronized (finalSs){
-                    socket = finalSs.accept();}
+                        socket = finalSs.accept();}
                     connectionList.add(socket);
                     playerCount++;
                     tankIndex = playerCount;
                     log("+A client connected from " + socket.getInetAddress() + " running on port " + socket.getPort() + " socket: " + socket + " , index of tank: " + tankIndex);
 
                     outputStream = new DataOutputStream(socket.getOutputStream());
-                    outputStream.write(playerCount);
+                    outputStream.write(tankIndex);
 
                     DataInputStream dataInputStream;
                     dataInputStream = new DataInputStream(socket.getInputStream());
@@ -119,9 +120,7 @@ public class N_Server extends Application {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
-            }).start();
-            //}
+                }}).start();
         }).start();
         // Read simutaneously
 
