@@ -9,6 +9,9 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -28,6 +31,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -36,19 +40,36 @@ import javafx.util.Pair;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+
 public class MainMenu {
+    CreditPopup creditPopup = new CreditPopup();
+    Scene creditScene = new Scene(creditPopup.popupContent());
     private final Pane root = new Pane();
     private final VBox menuBox = new VBox(-5);
     private final Setting setting= new Setting();
     private int type;
     private int color;
 
+
+
+    ResourceBundle bundle = ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", Locale.getDefault());
+
+    public void switchLocaleVN(){
+        bundle = ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", new Locale("vi", "VN"));
+    }
+    public void switchLocaleEN(){
+        bundle = ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", Locale.ENGLISH);
+    }
+
+
     private final List<Pair<String, Runnable>> menuData = Arrays.asList(
-            new Pair<String, Runnable>("Start", () -> {
+            new Pair<String, Runnable>(bundle.getString("menu.start"), () -> {
                 try {
                     primaryStage.setScene(1);
                 } catch (FileNotFoundException e) {
@@ -56,10 +77,10 @@ public class MainMenu {
                 }
                 System.out.println("Start activated");
             }),
-            new Pair<String, Runnable>("Campaign", () -> {
+            new Pair<String, Runnable>(bundle.getString("menu.campaign"), () -> {
                 System.out.println("Campaign activated");
             }),
-            new Pair<String, Runnable>("Multiplayer", () -> {
+            new Pair<String, Runnable>(bundle.getString("menu.multiplayer"), () -> {
                 System.out.println("Multiplayer activated");
                 try {
                     primaryStage.setScene(4);
@@ -67,7 +88,7 @@ public class MainMenu {
                     e.printStackTrace();
                 }
             }),
-            new Pair<String, Runnable>("Setting", () -> {
+            new Pair<String, Runnable>(bundle.getString("menu.setting"), () -> {
                 System.out.println("Game options activated");
                 try {
                     primaryStage.getStage().setScene(new Scene(setting.createSettingContent()));
@@ -75,10 +96,15 @@ public class MainMenu {
                     e.printStackTrace();
                 }
             }),
-            new Pair<String, Runnable>("Credits", () -> {
-                System.out.println("Credits");
+            new Pair<String, Runnable>(("Credits"), () -> {
+                Stage creditStage = new Stage();
+                creditStage.setScene(creditScene);
+                creditStage.setX(450);
+                creditStage.setY(400);
+                creditStage.setTitle("Credits");
+                creditStage.show();
             }),
-            new Pair<String, Runnable>("Exit", Platform::exit)
+            new Pair<String, Runnable>(bundle.getString("menu.exit"), Platform::exit)
     );
 
     private ScheduledExecutorService bgThread = Executors.newSingleThreadScheduledExecutor();
@@ -97,8 +123,8 @@ public class MainMenu {
         // Tank selection display
         ContentFrame frame1 = new ContentFrame(createTankContent(20, 1, 1));
         frame1.setOnMouseClicked(e -> {
+            new Sound().loadSound(4);
             primaryStage.setSound(3);
-
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 1, 1));
@@ -113,7 +139,8 @@ public class MainMenu {
         });
         ContentFrame frame2 = new ContentFrame(createTankContent(20, 2, 2));
         frame2.setOnMouseClicked(e -> {
-            primaryStage.setSound(3);
+            new Sound().loadSound(5);
+            primaryStage.setSound(33);
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 2, 1));
@@ -128,8 +155,8 @@ public class MainMenu {
         });
         ContentFrame frame3 = new ContentFrame(createTankContent(20, 3, 3));
         frame3.setOnMouseClicked(e -> {
-
-            primaryStage.setSound(3);
+            new Sound().loadSound(6);
+            primaryStage.setSound(333);
             ContentFrame frame5 = null;
             try {
                 frame5 = new ContentFrame(createTankContent2(20, 3, 1));
@@ -144,6 +171,7 @@ public class MainMenu {
         });
         ContentFrame frame4 = new ContentFrame(createTankContent(20, 4, 4));
         frame4.setOnMouseClicked(e -> {
+            new Sound().loadSound(7);
             primaryStage.setSound(3);
             ContentFrame frame5 = null;
             try {
@@ -244,15 +272,13 @@ public class MainMenu {
         });
         name.setFont(Font.loadFont(MainMenu.class.getResource("res/Penumbra-HalfSerif-Std_35114.ttf").toExternalForm(), 100));
 
-        MenuItem itemExit = new MenuItem("Exit");
-        itemExit.setOnActivate(() -> System.exit(0));
-
         root.getChildren().addAll(background, hbox, menuBox, colorPane, name);
         return root;
     }
 
     private Node createTankContent(int x, int choice, int color) throws FileNotFoundException {
         Tank tank = new Tank(choice, color);
+
         Group tank1 = new Group(tank.createTank(x));
         bgThread.scheduleAtFixedRate(() -> {
             Platform.runLater(() -> {
@@ -303,7 +329,6 @@ public class MainMenu {
     }
 
     public static class MenuItem extends Pane {
-        private Runnable script;
 
         public MenuItem(String name) {
             Polygon bg = new Polygon(0, 0, 200, 0, 215, 15, 200, 30, 0, 30);
@@ -319,7 +344,7 @@ public class MainMenu {
             Text text = new Text(name);
             text.setTranslateX(5);
             text.setTranslateY(20);
-            text.setFont(Font.loadFont(MainMenu.class.getResource("res/Penumbra-HalfSerif-Std_35114.ttf").toExternalForm(), 30));
+            text.setFont(Font.font("",FontWeight.BOLD, 30));
             text.setFill(Color.WHITE);
 
             Effect blur = new BoxBlur(1, 1, 3);
@@ -337,9 +362,6 @@ public class MainMenu {
             setOnMouseClicked(e -> action.run());
         }
 
-        public void setOnActivate(Runnable r) {
-            script = r;
-        }
     }
 
     private void startAnimation() {
@@ -377,6 +399,5 @@ public class MainMenu {
 
         root.getChildren().add(menuBox);
     }
+
 }
-
-

@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.text.Text;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -78,5 +79,9 @@ public final class I18N {
         tooltip.textProperty().bind(createStringBinding(key, args));
         return tooltip;
     }
-
+    public static Text textForValue(final String key, final Object...args) {
+        Text text = new Text();
+        text.textProperty().bind(createStringBinding(key,args));
+        return text;
+    }
 }
