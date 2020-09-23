@@ -1,6 +1,7 @@
 package Map_JAVA;
 
 import Menu_JAVA.MainMenu;
+import Menu_JAVA.primaryStage;
 import Tank_JAVA.Bot;
 import Tank_JAVA.Tank;
 import javafx.animation.KeyFrame;
@@ -575,7 +576,8 @@ public class   Map2 extends Application {
     public void doTime(Pane tankPane, Stage stage) {
         Timeline time= new Timeline();
 
-
+        Sound sound = new Sound();
+        sound.loadSound(6);
         KeyFrame frame= new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>(){
 
             @Override
@@ -593,6 +595,7 @@ public class   Map2 extends Application {
 
                 if(seconds <= 0){
                     time.stop();
+                    sound.stopSound();
                     Label label = new Label();
                     label.setText("GAME OVER");
                     label.setTextFill(Color.FIREBRICK);
@@ -620,30 +623,41 @@ public class   Map2 extends Application {
                     exit.setFont(javafx.scene.text.Font.font("Times New Roman", FontPosture.ITALIC,50));
                     exit.setOnMouseClicked(event2 -> {
                         try {
-                            stage.setScene(new Scene(mainMenu.createContent()));
-                            stage.show();
+                            primaryStage.setScene(5);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
                     });
                     playAgain.setOnMouseClicked(event1 -> {
-                        stage.close();
-                        Platform.runLater( () -> {
-                            try {
-                                new Map2().start( new Stage() );
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
-                        stage.setScene(scene);
-                        stage.show();
+                        try {
+                            primaryStage.setScene(2);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
                     });
                     Label nextLevel = new Label("Next Level");
                     nextLevel.setTextFill(Color.MEDIUMBLUE);
                     nextLevel.setTranslateX(600);
                     nextLevel.setTranslateY(520);
                     nextLevel.setFont(javafx.scene.text.Font.font("Times New Roman",FontWeight.EXTRA_BOLD,FontPosture.ITALIC,50));
+                    nextLevel.setOnMouseClicked(event3 ->{
+                        try {
+                            primaryStage.setScene(3);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    });
                     tankPane.getChildren().addAll(playAgain,nextLevel,exit);
+
+                    Label victory = new Label("Victory");
+                    victory.setTextFill(Color.FIREBRICK);
+                    victory.setFont(font);
+                    victory.setTranslateX(430);
+                    victory.setTranslateY(300);
+                    Pane pane2 = new Pane();
+                    pane2.getChildren().add(victory);
+                    pane2.setEffect(new Glow(2.5));
+                    tankPane.getChildren().addAll(pane2,playAgain,nextLevel,exit);
 
                 }
 

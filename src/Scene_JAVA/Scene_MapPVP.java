@@ -16,7 +16,7 @@ public class Scene_MapPVP {
     }
     Scene scene;
 
-    public Scene setScene2(Stage stage) throws FileNotFoundException {
+    public Scene setScenePVP(Stage stage) throws FileNotFoundException {
         stage.setTitle("Farm");
         Pane tankPane;
         MapPVP mapPVP = new MapPVP();

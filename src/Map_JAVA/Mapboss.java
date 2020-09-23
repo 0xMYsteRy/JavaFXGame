@@ -1,6 +1,7 @@
 package Map_JAVA;
 
 import Menu_JAVA.MainMenu;
+import Menu_JAVA.primaryStage;
 import Tank_JAVA.Bot;
 import Tank_JAVA.Tank;
 import javafx.animation.KeyFrame;
@@ -21,6 +22,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -33,6 +36,7 @@ import javafx.util.Duration;
 
 import java.awt.*;
 import java.io.FileNotFoundException;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
@@ -42,13 +46,16 @@ public class Mapboss extends Application {
     Scene scene;
     Tank c;
     MainMenu mainMenu = new MainMenu();
-    private final Integer startTime = 20;
+    private final Integer startTime = 5;
     private Integer seconds = startTime;
     Timeline timeline = new Timeline();
     Label countdown = new Label();
     javafx.scene.text.Font font3 = new javafx.scene.text.Font("Times New Roman",15);
     private int choice;
     private int color;
+    Sound sound = new Sound();
+    Media media;
+    MediaPlayer player;
     public Mapboss(int choice, int color) throws FileNotFoundException {
         c = new Tank(choice,color);
         this.choice = choice;
@@ -488,8 +495,12 @@ public class Mapboss extends Application {
 
     public void doTime(Pane tankPane, Stage stage) {
         Timeline time= new Timeline();
+        sound.loadSound(5);
 
-
+//        media = new Media(sound.getSound(1));
+//        player = new MediaPlayer(media);
+//        player.setCycleCount(MediaPlayer.INDEFINITE);
+//        player.play();
         KeyFrame frame= new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>(){
 
             @Override
@@ -507,6 +518,10 @@ public class Mapboss extends Application {
 
                 if(seconds <= 0){
                     time.stop();
+                    sound.stopSound();
+                    //sound.loadSound(7);
+
+
                     Label label = new Label();
                     label.setText("GAME OVER");
                     label.setTextFill(Color.FIREBRICK);
@@ -520,40 +535,42 @@ public class Mapboss extends Application {
                     colorAdjust.setContrast(2);
                     tankPane.setEffect(colorAdjust);
                     pane.setEffect(new Glow(2.5));
-                    tankPane.getChildren().add(pane);
-                    Label newGame = new Label("New Game");
-                    newGame.setTranslateX(600);
-                    newGame.setTranslateY(450);
-                    newGame.setFont(javafx.scene.text.Font.font("Times New Roman", FontPosture.ITALIC,50));
-                    newGame.setTextFill(Color.MEDIUMBLUE);
+                    Label playAgain = new Label("Play Again");
+                    playAgain.setTranslateX(600);
+                    playAgain.setTranslateY(450);
+                    playAgain.setFont(javafx.scene.text.Font.font("Times New Roman", FontPosture.ITALIC,50));
+                    playAgain.setTextFill(Color.MEDIUMBLUE);
+                    playAgain.setOnMouseClicked(event1 -> {
+                        try {
+                            primaryStage.setScene(4);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    });
 
                     Label exit = new Label("Exit");
                     exit.setTextFill(Color.MEDIUMBLUE);
                     exit.setTranslateX(600);
                     exit.setTranslateY(520);
-                    tankPane.getChildren().addAll(newGame,exit);
                     exit.setFont(javafx.scene.text.Font.font("Times New Roman", FontPosture.ITALIC,50));
                     exit.setOnMouseClicked(event2 -> {
                         try {
-                            stage.setScene(new Scene(mainMenu.createContent()));
-                            stage.show();
+                            primaryStage.setScene(5);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
                     });
-                    newGame.setOnMouseClicked(event1 -> {
-                        stage.close();
-                        Platform.runLater( () -> {
-                            try {
-                                new Mapboss(choice,color).start( new Stage() );
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
-                        stage.setScene(scene);
-                        stage.show();
-                    });
+                    tankPane.getChildren().addAll(pane,playAgain,exit);
 
+                    Label victory = new Label("Victory");
+                    victory.setTextFill(Color.FIREBRICK);
+                    victory.setFont(font);
+                    victory.setTranslateX(430);
+                    victory.setTranslateY(300);
+                    Pane pane2 = new Pane();
+                    pane2.getChildren().add(victory);
+                    pane2.setEffect(new Glow(2.5));
+                    tankPane.getChildren().add(pane2);
 
                 }
 

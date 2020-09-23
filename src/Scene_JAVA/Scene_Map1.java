@@ -20,24 +20,17 @@ public class Scene_Map1 {
         this.stage=stage;
 
         Pane tankPane = new Pane();
-
-        DecimalFormat format = new DecimalFormat("00");
-
-        //Load the map
         Tank c = new Tank(1, 4);
         Map map= new Map(c);
         map.loadGround(tankPane);
         javafx.scene.text.Font font2 = new javafx.scene.text.Font("Times New Roman",20);
-
         scene = new Scene(tankPane,1565,770);//1400x750
         //Create Player
-
-        c.createPlayer(0, 0, tankPane, scene, map.getRectList(), map.getobjectList(),map.getObjBotList(),null,false,1);
+        c.createPlayer(0, 0, tankPane, scene, map.getRectList(), map.getobjectList(),map.getObjBotList(),null,false,1);  map.loadObject(tankPane);
 
         map.loadObject(tankPane);
-        map.loadLayOut(tankPane,stage);
+        map.loadLayOut(tankPane);
         return scene;
-
         //Adding scene to the stage
     }
 }

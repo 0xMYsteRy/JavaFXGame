@@ -57,6 +57,7 @@ public class MainMenu {
     private int color;
 
 
+
     ResourceBundle bundle = ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", Locale.getDefault());
 
     public void switchLocaleVN(){
@@ -65,6 +66,7 @@ public class MainMenu {
     public void switchLocaleEN(){
         bundle = ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", Locale.ENGLISH);
     }
+
 
     private final List<Pair<String, Runnable>> menuData = Arrays.asList(
             new Pair<String, Runnable>(bundle.getString("menu.start"), () -> {
@@ -80,6 +82,11 @@ public class MainMenu {
             }),
             new Pair<String, Runnable>(bundle.getString("menu.multiplayer"), () -> {
                 System.out.println("Multiplayer activated");
+                try {
+                    primaryStage.setScene(4);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }),
             new Pair<String, Runnable>(bundle.getString("menu.setting"), () -> {
                 System.out.println("Game options activated");

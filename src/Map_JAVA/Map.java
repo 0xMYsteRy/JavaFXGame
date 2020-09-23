@@ -1,6 +1,7 @@
 package Map_JAVA;
 
 import Menu_JAVA.MainMenu;
+import Menu_JAVA.primaryStage;
 import Tank_JAVA.Bot;
 import Tank_JAVA.Tank;
 import javafx.animation.KeyFrame;
@@ -20,6 +21,8 @@ import javafx.scene.effect.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -42,26 +45,19 @@ import java.util.ArrayList;
 import java.util.Random;
 
 //--module-path  "C:\Users\bmhuyquoc104\Downloads\openjfx-11.0.2_windows-x64_bin-sdk (1)\javafx-sdk-11.0.2\lib"  --add-modules javafx.controls,javafx.fxml
-public class Map extends Application {
+public class Map {
     // Constructor
     Scene scene;
     Tank c;
     MainMenu mainMenu = new MainMenu();
-    private final Integer startTime = 60;
+    private final Integer startTime = 3;
     private Integer seconds = startTime;
     Timeline timeline = new Timeline();
     Label countdown = new Label();
     javafx.scene.text.Font font3 = new javafx.scene.text.Font("Times New Roman", 15);
 
-
-    public Map(Tank tank) throws FileNotFoundException {
-        this.c = tank;
-    }
-
-
-    @Override
-    public void start(Stage stage) throws Exception {
-
+    public Map(Tank tank2) throws FileNotFoundException {
+        this.c = tank2;
     }
 
     public void loadObject(Pane tankpane) {
@@ -380,9 +376,10 @@ public class Map extends Application {
         }
     }
 
-    public void doTime(Pane tankPane, Stage stage) {
+    public void doTime(Pane tankPane) {
         Timeline time = new Timeline();
-
+        Sound sound = new Sound();
+        sound.loadSound(1);
 
         KeyFrame frame = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
 
@@ -401,6 +398,11 @@ public class Map extends Application {
 
                 if (seconds <= 0) {
                     time.stop();
+                    try {
+                        sound.stopSound();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     Label label = new Label();
                     label.setText("GAME OVER");
                     label.setTextFill(Color.FIREBRICK);
@@ -421,64 +423,70 @@ public class Map extends Application {
                     playAgain.setEffect(new Glow(2.5));
                     playAgain.setFont(javafx.scene.text.Font.font("Times New Roman", FontPosture.ITALIC, 50));
                     playAgain.setTextFill(Color.MEDIUMBLUE);
-
-                    Label exit = new Label("Exit");
-                    exit.setTextFill(Color.MEDIUMBLUE);
-                    exit.setTranslateX(600);
-                    exit.setTranslateY(520);
-                    exit.setEffect(new Glow(2.5));
-
-                    exit.setFont(javafx.scene.text.Font.font("Times New Roman", FontPosture.ITALIC, 50));
-                    exit.setOnMouseClicked(event2 -> {
+                    playAgain.setOnMouseClicked(event1 -> {
                         try {
-                            stage.setScene(new Scene(mainMenu.createContent()));
-                            stage.show();
+                            primaryStage.setScene(1);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
                     });
-                    playAgain.setOnMouseClicked(event1 -> {
-                        stage.close();
-                        Platform.runLater(() -> {
-                            try {
-                                new Map(c).start(new Stage());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
-                        stage.setScene(scene);
-                        stage.show();
+                    Label exit = new Label("Exit");
+                    exit.setTextFill(Color.MEDIUMBLUE);
+                    exit.setTranslateX(600);
+                    exit.setTranslateY(570);
+                    exit.setEffect(new Glow(2.5));
+                    exit.setFont(javafx.scene.text.Font.font("Times New Roman", FontPosture.ITALIC, 50));
+                    exit.setOnMouseClicked(event2 -> {
+                        try {
+                            primaryStage.setScene(5);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
                     });
+
                     Label nextLevel = new Label("Next Level");
                     nextLevel.setTextFill(Color.MEDIUMBLUE);
                     nextLevel.setTranslateX(600);
                     nextLevel.setTranslateY(520);
-                    nextLevel.setFont(Font.font("Times New Roman",FontWeight.EXTRA_BOLD,FontPosture.ITALIC,50));
+                    nextLevel.setEffect(new Glow(2.5));
+                    nextLevel.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.ITALIC, 50));
+
                     tankPane.getChildren().addAll(playAgain, nextLevel, exit);
+                    nextLevel.setOnMouseClicked(event3 -> {
+                        try {
+                            primaryStage.setScene(2);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    });
+
+                    Label victory = new Label("Victory");
+                    victory.setTextFill(Color.FIREBRICK);
+                    victory.setFont(font);
+                    victory.setTranslateX(430);
+                    victory.setTranslateY(300);
+                    Pane pane2 = new Pane();
+                    pane2.getChildren().add(victory);
+                    pane2.setEffect(new Glow(2.5));
+                    tankPane.getChildren().addAll(pane2,playAgain,nextLevel,exit);
 
                 }
-
-
             }
-
-
         });
-
         time.setCycleCount(Timeline.INDEFINITE);
         time.getKeyFrames().add(frame);
         if (time != null) {
             time.stop();
         }
         time.playFromStart();
-
-
     }
 
-    public void loadLayOut(Pane tankPane, Stage stage) throws FileNotFoundException {
+
+    public void loadLayOut(Pane tankPane) throws FileNotFoundException {
         Pane pane1 = new Pane();
 
 
-        doTime(tankPane, stage);
+        doTime(tankPane);
 
 //        Rectangle rectangle=new Rectangle(120,70);
 //        rectangle.setTranslateX(1407);
@@ -590,9 +598,9 @@ public class Map extends Application {
         tankPane.getChildren().addAll(pane1, player1, box2, box4, label, score);
         //tankPane.getChildren().add(box3);
 
-
     }
-
 }
+
+
 
 
