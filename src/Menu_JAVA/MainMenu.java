@@ -10,6 +10,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -43,7 +45,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.ResourceBundle;
+
 
 public class MainMenu {
     CreditPopup creditPopup = new CreditPopup();
@@ -53,7 +55,8 @@ public class MainMenu {
     private final Setting setting= new Setting();
     private int type;
     private int color;
-    Locale setDefault = Locale.ENGLISH;
+
+
     ResourceBundle bundle = ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", Locale.getDefault());
 
     public void switchLocaleVN(){
@@ -86,8 +89,7 @@ public class MainMenu {
                     e.printStackTrace();
                 }
             }),
-            new Pair<String, Runnable>("Credits", () -> {
-                System.out.println("Credits");
+            new Pair<String, Runnable>(("Credits"), () -> {
                 Stage creditStage = new Stage();
                 creditStage.setScene(creditScene);
                 creditStage.setX(450);
@@ -95,7 +97,7 @@ public class MainMenu {
                 creditStage.setTitle("Credits");
                 creditStage.show();
             }),
-            new Pair<String, Runnable>("Exit", Platform::exit)
+            new Pair<String, Runnable>(bundle.getString("menu.exit"), Platform::exit)
     );
 
     private ScheduledExecutorService bgThread = Executors.newSingleThreadScheduledExecutor();

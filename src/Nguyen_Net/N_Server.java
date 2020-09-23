@@ -90,6 +90,7 @@ public class N_Server extends Application {
                     dataInputStream = new DataInputStream(socket.getInputStream());
                     ObjectInputStream objectInputStream;
                     objectInputStream = new ObjectInputStream(socket.getInputStream());
+
                     while (true) {
                         try {
                             KeyEvent message = (KeyEvent) objectInputStream.readObject();
@@ -140,7 +141,6 @@ public class N_Server extends Application {
             }
         }).start();
     }
-
 
     // In case want to close server
     public void closeServer() {

@@ -29,6 +29,7 @@ public class Setting extends Application {
     Scene guideScene = new Scene(guide.guideWindow());
     private Integer numSwitches = 0;
     boolean lang;
+    private ResourceBundle resourceBundle;
 
     public Setting() throws FileNotFoundException {
     }
@@ -59,8 +60,8 @@ public class Setting extends Application {
         eng.setOnAction((evt) -> {
             switchLanguage(Locale.ENGLISH);
             ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", Locale.ENGLISH);
-            //mainMenu.switchLocaleVN();
-            System.out.println("Change to EN");
+            mainMenu.switchLocaleEN();
+            //System.out.println("Change to EN");
         });
         eng.setMinWidth(200);
         eng.setMinHeight(40);
@@ -70,8 +71,8 @@ public class Setting extends Application {
         vn.setOnAction((evt) -> {
             switchLanguage((new Locale("vi", "VN")));
             ResourceBundle.getBundle("Menu_JAVA/Language/LanguageBundle", new Locale("vi", "VN"));
-            //mainMenu.switchLocaleEN();
-            System.out.println("Change to VN");
+            mainMenu.switchLocaleVN();
+            //System.out.println("Change to VN");
         });
         vn.setMinWidth(200);
         vn.setMinHeight(40);
